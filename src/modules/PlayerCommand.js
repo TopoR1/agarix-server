@@ -34,7 +34,7 @@ PlayerCommand.prototype.executeCommandLine = function (commandLine) {
     var args = commandLine.split(" ");
 
     // Process the first string value
-    var first = args[0].toLowerCase();
+    var first = args[0];
 
     // Get command function
     var execute = playerCommands[first];
