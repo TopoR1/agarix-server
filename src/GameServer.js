@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 const Entity = require('./entity');
 const Vec2 = require('./modules/Vec2');
 const Logger = require('./modules/Logger');
+const request = require('request');
 
 // GameServer implementation
 function GameServer() {
@@ -33,7 +34,7 @@ function GameServer() {
     this.leaderboard = []; // For leaderboard
     this.leaderboardType = -1; // No type
 
-    var BotLoader = require('./ai/BotLoader');
+    const BotLoader = require('./ai/BotLoader');
     this.bots = new BotLoader(this);
 
     // Main loop tick
@@ -47,179 +48,94 @@ function GameServer() {
     this.tickCounter = 0;
     this.disableSpawn = false;
     this.db = null;
+    this.dbAuth = {
+        host: 'main.agarix.ru',
+        port: 52859,
+        user: 'TopoR',
+        password: 'Egoregor12',
+        name: 'agarix-db'
+    }
+    this.validDB = false;
 
     // Config
-    this.config = {
-        /** LOGGING **/
-        logVerbosity: 4, // Console log level (0=NONE; 1=FATAL; 2=ERROR; 3=WARN; 4=INFO; 5=DEBUG)
-        logFileVerbosity: 5, // File log level
+    this.config = {};
 
-        /** SERVER **/
-        serverTimeout: 300, // Seconds to keep connection alive for non-responding client
-        serverWsModule: 'ws', // WebSocket module: 'ws' or 'uws' (install npm package before using uws)
-        serverMaxConnections: 500, // Maximum number of connections to the server. (0 for no limit)
-        serverPort: 443, // Server port which will be used to listen for incoming connections
-        serverBind: '0.0.0.0', // Server network interface which will be used to listen for incoming connections (0.0.0.0 for all IPv4 interfaces)
-        serverTracker: 0, // Set to 1 if you want to show your server on the tracker http://ogar.mivabe.nl/master (check that your server port is opened for external connections first!)
-        serverGamemode: 0, // Gamemodes: 0 = FFA, 1 = Teams, 2 = Experimental, 3 = Rainbow
-        serverBots: 0, // Number of player bots to spawn (Experimental)
-        serverViewBaseX: 1920, // Base view distance of players. Warning: high values may cause lag! Min value is 1920x1080
-        serverViewBaseY: 1080, // min value is 1920x1080
-        serverMinScale: 0.15, // Minimum viewbox scale for player (low value leads to lags due to large visible area for big cell)
-        serverSpectatorScale: 0.4, // Scale (field of view) used for free roam spectators (low value leads to lags, vanilla = 0.4, old vanilla = 0.25)
-        serverStatsPort: 88, // Port for stats server. Having a negative number will disable the stats server.
-        serverStatsUpdate: 60, // Update interval of server stats in seconds
-        mobilePhysics: 0, // Whether or not the server uses mobile agar.io physics
-        badWordFilter: 1, // Toggle whether you want the bad word filter on (0 to disable, 1 to enable)
-        serverRestart: 0, // Toggle whether you want your server to auto restart in minutes. (0 to disable)
-        serverRestartTimes: '00:00:00 - 06:00:00 - 12:00:00 - 18:00:00', //Restart the server at a certain time of the day (eg: 00:00:00 - 06:00:00 - 12:00:00 - 18:00:00) [Use ' - ' to seperate more restarts by time]
-
-        /** DB-MONGODB **/
-        db_name: 'agarix_db',
-        db_host: 'localhost',
-        db_port: 27017,
-        db_username: 'user',
-        db_pass: 'pass',
-
-        /** AUTO-RESTART WITH MASS **/
-        massRestart: 100000,
-        maxMassRestart: 200000,
-        timeRestart: 30,
-
-
-        /** CLIENT **/
-        serverMaxLB: 10, // Controls the maximum players displayed on the leaderboard.
-        serverChat: 1, // Allows the usage of server chat. 0 = no chat, 1 = use chat.
-        serverChatAscii: 1, // Set to 1 to disable non-ANSI letters in the chat (english only)
-        separateChatForTeams: 0, // Set to 1 to separate chat for game modes with teams like 'Teams'
-        serverName: 'MultiOgar-Edited #1', // Server name
-        serverWelcome1: 'Welcome to MultiOgar-Edited!', // First server welcome message
-        serverWelcome2: '', // Second server welcome message (optional, for info, etc)
-        clientBind: '', // Only allow connections to the server from specified client (eg: http://agar.io - http://mywebsite.com - http://more.com) [Use ' - ' to seperate different websites]
-        minProtocol: 1,
-        maxProtocol: 15,
-
-        /** ANTI-BOT **/
-        serverIpLimit: 4, // Controls the maximum number of connections from the same IP (0 for no limit)
-        serverScrambleLevel: 1, // Toggles scrambling of coordinates. 0 = No scrambling, 1 = lightweight scrambling. 2 = full scrambling (also known as scramble minimap); 3 - high scrambling (no border)
-        playerBotGrow: 0, // Cells greater than 625 mass cannot grow from cells under 17 mass (set to 1 to disable)
-
-        /** BORDER **/
-        borderWidth: 14142.135623730952, // Map border size (Vanilla value: 14142)
-        borderHeight: 14142.135623730952, // Map border size (Vanilla value: 14142)
-
-        /** FOOD **/
-        foodMinSize: 10, // Minimum food size (vanilla 10)
-        foodMaxSize: 20, // Maximum food size (vanilla 20)
-        foodMinAmount: 1000, // Minimum food cells on the map
-        foodMaxAmount: 2000, // Maximum food cells on the map
-        foodSpawnAmount: 30, // The number of food to spawn per interval
-        foodMassGrow: 1, // Enable food mass grow ?
-        spawnInterval: 20, // The interval between each food cell spawn in ticks (1 tick = 40 ms)
-		
-        /** COIN **/
-        coinSpawnAmount: 20, // The number of food to spawn per interval
-        coinMassGrow: 0, // Enable food mass grow ?
-        coinSpawnInterval: 3000, // The interval between each food cell spawn in ticks (1 tick = 40 ms)
-        coinApp: 10,
-        coinExp: 5,
-
-        /** PORTAL **/
-        portalSpawnAmount: 30, // The number of food to spawn per interval
-        portalMassGrow: 1, // Enable food mass grow ?
-        portalSpawnInterval: 20, // The interval between each food cell spawn in ticks (1 tick = 40 ms)
-
-        /** VIRUSES **/
-        virusMinSize: 100, // Minimum virus size. (vanilla: mass = val*val/100 = 100 mass)
-        virusMaxSize: 141.421356237, // Maximum virus size (vanilla: mass = val*val/100 = 200 mass)
-        virusMaxPoppedSize: 60, // Maximum size a popped cell can have
-        virusEqualPopSize: 0, // Whether popped cells have equal size or not (1 to enable)
-        virusMinAmount: 50, // Minimum number of viruses on the map.
-        virusMaxAmount: 100, // Maximum number of viruses on the map. If this number is reached, then ejected cells will pass through viruses.
-        motherCellMaxMass: 0, // Maximum amount of mass a mothercell is allowed to have (0 for no limit)
-        virusVelocity: 780, // Velocity of moving viruses (speed and distance)
-        virusMaxCells: 16, // Maximum cells a player can have from viruses.
-
-        /** EJECTED MASS **/
-        ejectSize: 36.06, // vanilla: mass = val*val/100 = 13 mass?
-        ejectSizeLoss: 42.43, // Eject size which will be substracted from player cell (vanilla: mass = val*val/100 = 18 mass?)
-        ejectCooldown: 3, // Tick count until a player can eject mass again in ticks (1 tick = 40 ms)
-        ejectSpawnPercent: 0.5, // Chance for a player to spawn from ejected mass. 0.5 = 50% (set to 0 to disable)
-        ejectVirus: 0, // Whether or not players can eject viruses instead of mass
-        ejectVelocity: 780, // Velocity of ejecting cells (speed and distance)
-
-        /** PLAYERS **/
-        playerMinSize: 31.6227766017, // Minimum size a player cell can decay too. (vanilla: val*val/100 = 10 mass)
-        playerMaxSize: 1500, // Maximum size a player cell can achive before auto-splitting. (vanilla: mass = val*val/100 = 22500 mass)
-        playerMinSplitSize: 59.16079783, // Mimimum size a player cell has to be to split. (vanilla: mass = val*val/100 = 35 mass)
-        playerMinEjectSize: 59.16079783, // Minimum size a player cell has to be to eject mass. (vanilla: mass = val*val/100 = 35 mass)
-        playerAutoSplit: 1, 
-		playerStartSize: 31.6227766017, // Start size of the player cell. (vanilla: mass = val*val/100 = 10 mass)
-        playerMaxCells: 16, // Maximum cells a player is allowed to have.
-        playerSpeed: 1, // Player speed multiplier (1 = normal speed, 2 = twice the normal speed)
-        playerDecayRate: 0.998, // Amount of player cell size lost per second
-        playerDecayCap: 0, // Maximum mass a cell can have before it's decayrate multiplies by 10. (0 to disable)
-        playerRecombineTime: 30, // Base time in seconds before a cell is allowed to recombine
-        playerDisconnectTime: -1, // Time in seconds before a disconnected player's cell is removed (Set to -1 to never remove)
-        playerMaxNickLength: 15, // Maximum nick length
-        splitVelocity: 780, // Velocity of splitting cells (speed and distance)
-        gravitationalPushsplits: 0, // Allows for "gravitational pushsplits"
-
-        /** MINIONS **/
-        minionStartSize: 31.6227766017, // Start size of minions (mass = 32*32/100 = 10.24)
-        minionMaxStartSize: 31.6227766017, // Maximum value of random start size for minions (set value higher than minionStartSize to enable)
-        minionCollideTeam: 0, //Determines whether minions colide with their team in the Teams gamemode (0 = OFF, 1 = ON)
-        disableERTP: 1, // Whether or not to disable ERTP controls for minions. (must use ERTPcontrol script in /scripts) (Set to 0 to enable)
-        disableQ: 0, // Whether or not to disable Q controls for minions. (Set 0 to enable)
-        serverMinions: 0, // Amount of minions each player gets once they spawn
-        collectPellets: 0, // Enable collect pellets mode. To use just press P or Q. (Warning: this disables Q controls, so make sure that disableERT is 0)
-        defaultName: "minion", // Default name for all minions if name is not specified using command (put <r> before the name for random skins!)
-        minionsOnLeaderboard: 0, // Whether or not to show minions on the leaderboard. (Set 0 to disable)
-
-        /** TOURNAMENT **/
-        tourneyMaxPlayers: 12, // Maximum number of participants for tournament style game modes
-        tourneyPrepTime: 10, // Number of ticks to wait after all players are ready (1 tick = 1000 ms)
-        tourneyEndTime: 30, // Number of ticks to wait after a player wins (1 tick = 1000 ms)
-        tourneyTimeLimit: 20, // Time limit of the game, in minutes.
-        tourneyAutoFill: 0, // If set to a value higher than 0, the tournament match will automatically fill up with bots after this amount of seconds
-        tourneyAutoFillPlayers: 1, // The timer for filling the server with bots will not count down unless there is this amount of real players
-        tourneyLeaderboardToggleTime: 10, //Time for toggling the leaderboard, in seconds.If value set to 0, leaderboard will not toggle.
-    };
-
-    this.ipBanList = [];
+    this.ipBanList = []; ///**
     //this.ipTokens = {};
     this.userList = [];
     this.badWords = [];
-    this.loadFiles();
-
-    // Set border, quad-tree
-    var QuadNode = require('./modules/QuadNode.js');
-    this.setBorder(this.config.borderWidth, this.config.borderHeight);
-    this.quadTree = new QuadNode(this.border);
 }
 
 module.exports = GameServer;
 
-GameServer.prototype.start = function () {
+const getReq = function(options) {
+    return new Promise((resolve,reject) => {
+        request(options, (error, response, body) => {
+            if (response) {
+                return resolve(response);
+            }
+            if (error) {
+                return reject(error);
+            }
+        });
+    });
+};
+
+GameServer.prototype.start = async function () {
+    await this.dbConnect();
+
+    const reqIP = await getReq({
+        url: "http://agarix.ru/getipaddress.php",
+        method: "POST",
+        json: true,
+        body: {}
+    });
+    const ip = reqIP.body;
+
+    if (ip.split('.').length < 4) {
+        Logger.error('Error get IP!');
+        return setTimeout(this.start(), 10000);
+    }
+
+    const server = await this.db.db('agarix-db').collection('servers').findOne({ip: ip});
+
+    if (!server) {
+        Logger.error(`Server not found!`);
+        process.exit(1);
+    }
+
+    this.config = server.config;
+    this.badWords = server.badwords;
+
+    // Set border, quad-tree
+    const QuadNode = require('./modules/QuadNode.js');
+
+    this.setBorder(this.config.borderWidth, this.config.borderHeight);
+    this.quadTree = new QuadNode(this.border);
+
     this.timerLoopBind = this.timerLoop.bind(this);
     this.mainLoopBind = this.mainLoop.bind(this);
 
     // Set up gamemode(s)
     const Gamemode = require('./gamemodes');
+
     this.gameMode = Gamemode.get(this.config.serverGamemode);
     this.gameMode.onServerInit(this);
 
     // Client Binding
     const bind = String(this.config.clientBind);
+
     this.clientBind = bind.split(' - ');
 
     // Start the server
     this.httpServer = http.createServer();
+
     const wsOptions = {
         server: this.httpServer,
         perMessageDeflate: false,
         maxPayload: 4096
     };
+
     Logger.info(`WebSocket: ${this.config.serverWsModule}`);
     this.WebSocket = require(this.config.serverWsModule);
     this.wsServer = new this.WebSocket.Server(wsOptions);
@@ -230,8 +146,6 @@ GameServer.prototype.start = function () {
     // Start stats port (if needed)
     if (this.config.serverStatsPort > 0)
         this.startStatsServer(this.config.serverStatsPort);
-	
-    this.dbConnect();
 };
 
 GameServer.prototype.sleep = (ms) => {
@@ -239,28 +153,31 @@ GameServer.prototype.sleep = (ms) => {
 }
 
 GameServer.prototype.dbConnect = async function() {
-    const client = await MongoClient.connect(`mongodb://${this.config.db_host}:${this.config.db_port}`, {
+    const client = await MongoClient.connect(`mongodb://${this.dbAuth.host}:${this.dbAuth.port}`, {
         useNewUrlParser: true,
         auth: {
-            username: this.config.db_username,
-            password: this.config.db_pass
+            username: this.dbAuth.user,
+            password: this.dbAuth.password
         },
-        authSource: this.config.db_name,
-        reconnectTries: Number.MAX_VALUE,
-        reconnectInterval: 1000,
-        autoReconnect: true,
-       //bufferMaxEntries: -1
-    }).catch(err => {
-		Logger.error('MongoDb not connect (catch)');
-        return this.dbConnect();
-	});
+        authSource: this.dbAuth.name,
+        //reconnectTries: Number.MAX_VALUE,
+        //reconnectInterval: 1000,
+        autoReconnect: false,
+        //bufferMaxEntries: -1
+    }).catch(err => {});
+
     if (client) {
         this.db = client;
+        this.validDB = false;
         Logger.info('MongoDb connected!');
     } else {
         Logger.error('MongoDb not connect');
         this.dbConnect();
     }
+};
+
+GameServer.prototype.checkDBConnect = function () {
+    return !!this.db && !!this.db.topology && this.db.topology.isConnected();
 };
 
 GameServer.prototype.onHttpServerOpen = function () {
@@ -799,7 +716,7 @@ GameServer.prototype.mainLoop = function () {
     var dateFormatted = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     //Restart times
-    var restarts = this.config.serverRestartTimes + "";
+    var restarts = String(this.config.serverRestartTimes);
     this.serverRestartTimes = restarts.split(' - ');
 
     // Restart
@@ -814,6 +731,13 @@ GameServer.prototype.mainLoop = function () {
     });
 
     //};
+
+    // Check DB connection
+    if (!this.checkDBConnect() && !this.validDB) {
+        Logger.error('Database connection lost!');
+        this.validDB = true;
+        this.dbConnect();
+    }
 
     // Loop main functions
     if (this.run) {
@@ -1310,76 +1234,6 @@ GameServer.prototype.shootVirus = function (parent, angle) {
     var newVirus = new Entity.Virus(this, null, pos, this.config.virusMinSize);
     newVirus.setBoost(this.config.virusVelocity, angle);
     this.addNode(newVirus);
-};
-
-GameServer.prototype.loadFiles = function () {
-    // Load config
-    var fs = require("fs");
-    var fileNameConfig = this.srcFiles + '/gameserver.ini';
-    var ini = require(this.srcFiles + '/modules/ini.js');
-    try {
-        if (!fs.existsSync(fileNameConfig)) {
-            // No config
-            Logger.warn("Config not found... Generating new config");
-            // Create a new config
-            fs.writeFileSync(fileNameConfig, ini.stringify(this.config), 'utf-8');
-        } else {
-            // Load the contents of the config file
-            var load = ini.parse(fs.readFileSync(fileNameConfig, 'utf-8'));
-            // Replace all the default config's values with the loaded config's values
-            for (var key in load) {
-                if (this.config.hasOwnProperty(key)) this.config[key] = load[key];
-                else Logger.error("Unknown gameserver.ini value: " + key);
-            }
-        }
-    } catch (err) {
-        Logger.error(err.stack);
-        Logger.error("Failed to load " + fileNameConfig + ": " + err.message);
-    }
-    Logger.setVerbosity(this.config.logVerbosity);
-    Logger.setFileVerbosity(this.config.logFileVerbosity);
-
-    // Load bad words
-    var fileNameBadWords = this.srcFiles + '/badwords.txt';
-    try {
-        if (!fs.existsSync(fileNameBadWords)) {
-            Logger.warn(fileNameBadWords + " not found");
-        } else {
-            var words = fs.readFileSync(fileNameBadWords, 'utf-8');
-            words = words.split(/[\r\n]+/);
-            words = words.map(function (arg) {
-                return arg.trim().toLowerCase();
-            });
-            words = words.filter(function (arg) {
-                return !!arg;
-            });
-            this.badWords = words;
-            Logger.info(this.badWords.length + " bad words loaded");
-        }
-    } catch (err) {
-        Logger.error(err.stack);
-        Logger.error("Failed to load " + fileNameBadWords + ": " + err.message);
-    }
-
-    // Load ip ban list
-    var fileNameIpBan = this.srcFiles + '/ipbanlist.txt';
-    try {
-        if (fs.existsSync(fileNameIpBan)) {
-            // Load and input the contents of the ipbanlist file
-            this.ipBanList = fs.readFileSync(fileNameIpBan, "utf8").split(/[\r\n]+/).filter(function (x) {
-                return x != ''; // filter empty lines
-            });
-            Logger.info(this.ipBanList.length + " IP ban records loaded.");
-        } else {
-            Logger.warn(fileNameIpBan + " is missing.");
-        }
-    } catch (err) {
-        Logger.error(err.stack);
-        Logger.error("Failed to load " + fileNameIpBan + ": " + err.message);
-    }
-
-    // Convert config settings
-    this.config.serverRestart = this.config.serverRestart === 0 ? 1e999 : this.config.serverRestart * 1500;
 };
 
 GameServer.prototype.SendMiniMap = function() {
