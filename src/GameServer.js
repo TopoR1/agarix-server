@@ -82,8 +82,6 @@ const getReq = function(options) {
 };
 
 GameServer.prototype.start = async function () {
-    await this.dbConnect();
-
     const reqIP = await getReq({
         url: "http://agarix.ru/getipaddress.php",
         method: "POST",
@@ -96,6 +94,9 @@ GameServer.prototype.start = async function () {
         Logger.error('Error get IP!');
         return setTimeout(this.start(), 10000);
     }
+	
+    await this.dbConnect();
+
 
     const server = await this.db.db('agarix-db').collection('servers').findOne({ip: ip});
 
