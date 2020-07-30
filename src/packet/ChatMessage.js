@@ -6,28 +6,31 @@ class ChatMessage {
     build(protocol) {
         const gameServer = require('../GameServer.js');
         let text = this.message;
-        if (text == null) text = "";
-        let name = "Server";
+        let mes_user = '';
+        let player_id = '';
+        
+        if (!text) text = '';
+        else text = text.trim()
+        
+        let name = 'Server';
         let color = {
             'r': 0x9B,
             'g': 0x9B,
             'b': 0x9B
         };
 
-        if (this.sender != null) {
+        if (this.sender) {
             name = this.sender._name;
+            
+            if (name) name = name.trim();
 
-            reg = /\{([\w\W]+)\}/.exec(name);
-            if (reg) name = name.replace(reg[0], '').trim();
-
-            if (name == null || name.trim().length == 0) {
-                if (this.sender.cells.length > 0) name = "An unnamed cell";
-                else name = "Spectator";
+            if (!name || !name.length) {
+                if (this.sender.cells.length) name = 'An unnamed cell';
+                else name = 'Spectator';
             }
-            //mes_user = this.sender.user_auth ? "[User] " : "[Guest] ";
-            mes_user = '';
+            
             player_id = this.sender.user_auth ? `[UID: ${this.sender.user.id}] ` : `[ID: ${this.sender.pID}] `
-            if (this.sender.cells.length > 0) color = this.sender.cells[0].color;
+            if (this.sender.cells.length) color = this.sender.cells[0].color;
             if (this.sender.checkVIP()) {
                 if (this.sender.user.vip.chatCrown) {
                     mes_user = "👑 ";
