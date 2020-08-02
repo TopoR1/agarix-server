@@ -159,21 +159,25 @@ PacketHandler.prototype.handshake_onCompleted = function (protocol, key) {
         this.gameServer.sendChatMessage(null, this.socket.playerTracker, "WARNING: Protocol " + this.protocol + " assumed" + this.gameServer.config.minProtocol + "!");
 };
 
+PacketHandler.prototype.textConvert = function (message) {
+    const reader = new BinaryReader(message);
+    reader.skipBytes(1);
+	
+    if (this.protocol < 6) return reader.readStringZeroUnicode();
+	
+    return reader.readStringZeroUtf8();
+};
 
 PacketHandler.prototype.message_onJoin = function (message) {
+	if (!this.socket.playerTracker._accessPlay) return;
+	
     var tick = this.gameServer.tickCounter;
     var dt = tick - this.lastJoinTick;
     this.lastJoinTick = tick;
     /*if (dt < 25 || this.socket.playerTracker.cells.length !== 0) {
         return;
     }*/
-    var reader = new BinaryReader(message);
-    reader.skipBytes(1);
-    var text = null;
-    if (this.protocol < 6)
-        text = reader.readStringZeroUnicode();
-    else
-        text = reader.readStringZeroUtf8();
+    let text = this.textConvert(message);
 	
 	text = text.trim();
 	const badLets = ['⠀', 'ᅠ', ' '];
@@ -187,9 +191,8 @@ PacketHandler.prototype.message_onJoin = function (message) {
 };
 
 PacketHandler.prototype.message_onSpectate = function (message) {
-    if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) {
-        return;
-    }
+    if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) return;
+	
     this.socket.playerTracker.spectate = true;
 };
 
@@ -201,26 +204,14 @@ PacketHandler.prototype.message_onMouse = function (message) {
 };
 
 PacketHandler.prototype.message_onMinionsName = function (message) {
-    var reader = new BinaryReader(message);
-    reader.skipBytes(1);
-    var text = null;
-    if (this.protocol < 6)
-        text = reader.readStringZeroUnicode();
-    else
-        text = reader.readStringZeroUtf8();
+    let text = this.textConvert(message);
 	
     var nameAndSkin = /^(?:\{([^}]*)\})?([^]*)/.exec(text);
     this.socket.playerTracker._miName = nameAndSkin[2].trim();
 };
 
 PacketHandler.prototype.message_onBotsActivity = function(message) {
-    let reader = new BinaryReader(message);
-    reader.skipBytes(1);
-    let text = null;
-    if (this.protocol < 6)
-        text = reader.readStringZeroUnicode();
-    else
-        text = reader.readStringZeroUtf8();
+    let text = this.textConvert(message);
 	
     this.socket.playerTracker.minionActivity = Math.floor(text) ? true : false;
 };
@@ -232,7 +223,7 @@ PacketHandler.prototype.message_onBonus = function (message) {
         self.socket.playerTracker.setSkin(rSkin);
     }, 1000); // Every 5 seconds
 
-    minions = 5; //add minions
+    let minions = 5; //add minions
     self.socket.playerTracker.miNum += minions;
     for (var i = 0; i < minions; i++) {
         this.gameServer.bots.addMinion(self.socket.playerTracker);
@@ -257,36 +248,27 @@ PacketHandler.prototype.message_onKeySpace = function (message) {
 };
 
 PacketHandler.prototype.message_onUUID = function (message) {
-    var reader = new BinaryReader(message);
-    reader.skipBytes(1);
-    var text = null;
-    if (this.protocol < 6)
-        text = reader.readStringZeroUnicode();
-    else
-        text = reader.readStringZeroUtf8();
-    this.socket.playerTracker._uuid = text;
+    let text = this.textConvert(message);
+    const client = this.socket.playerTracker;
+	
+	if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "");
+	
+	client._accessPlay = true;
+    client._uuid = text;
 };
 
 PacketHandler.prototype.message_onGameVersion = function (message) {
-    var reader = new BinaryReader(message);
-    reader.skipBytes(1);
-    var text = null;
-    if (this.protocol < 6)
-        text = reader.readStringZeroUnicode();
-    else
-        text = reader.readStringZeroUtf8();
+    let text = this.textConvert(message);
     this.socket.playerTracker.clientV = text;
 };
 
 PacketHandler.prototype.message_onToken = function (message) {
-    var reader = new BinaryReader(message);
-    reader.skipBytes(1);
-    var text = null;
-    if (this.protocol < 6)
-        text = reader.readStringZeroUnicode();
-    else
-        text = reader.readStringZeroUtf8();
-    this.socket.playerTracker._token = text;
+    let text = this.textConvert(message);
+    const client = this.socket.playerTracker;
+	
+	if (client.gameServer.clients.find(item => item._token == text)) this.socket.close(1002, "");
+	
+    client._token = text;
 };
 
 PacketHandler.prototype.message_onKeyQ = function (message) {
@@ -373,8 +355,8 @@ PacketHandler.prototype.message_onIncreaseMass = async function (message) {
     if (client.user.mass_1000 > 0 && !client.mass_1000) {
         client.mass_1000 = true;
         client.user.mass_1000--;
-        ran_cell = Math.floor(Math.random() * (client.cells.length));
-        size = client.cells[ran_cell]._size;
+        let ran_cell = Math.floor(Math.random() * (client.cells.length));
+        let size = client.cells[ran_cell]._size;
         size = size * size / 100;
         size += 1000;
         size = Math.sqrt(size * 100)
@@ -616,6 +598,9 @@ PacketHandler.prototype.message_onKeyP = function (message) {
 
 PacketHandler.prototype.message_onChat = function (message) {
     if (message.length < 3) return;
+	
+	if (!this.socket.playerTracker._accessPlay) return;
+	
     var tick = this.gameServer.tickCounter;
     var dt = tick - this.lastChatTick;
     this.lastChatTick = tick;
