@@ -18,6 +18,7 @@ function PlayerTracker(gameServer, socket) {
     this.color_bonus = "";
     this._uuid = "";
     this._token = "";
+    this._accessPlay = false;
     this._bonus = false;
     this._nameUtf8 = null;
     this._skinUtf8protocol11 = null;
@@ -43,7 +44,7 @@ function PlayerTracker(gameServer, socket) {
 
     this.user = null;
     this.user_auth = false;
-	this.notEat = {val: false, visible: false};
+    this.notEat = {val: false, visible: false};
     this.collectPoints = 0;
     this.allowCollectPoints = true;
     this.tickNodes = 0;
@@ -92,7 +93,7 @@ function PlayerTracker(gameServer, socket) {
     this.minionEject = false;
     this.minionFrozen = false;
     this.minionControl = false;
-	this.minionActivity = true;
+    this.minionActivity = true;
     this.collectPellets = false;
 
     this.botsUserActive = false;
