@@ -78,6 +78,8 @@ class BotPlayer extends PlayerTracker {
                     // can eat
                     influence = check._size;
             }
+            
+            if (check.name == 'coin' || check.name == 'portal') influence = 0;
 
             // Apply influence if it isn't 0
             if (!influence) continue;
