@@ -583,7 +583,7 @@ PlayerTracker.prototype.sendUpdate = function() {
 		this.tickLeaderboard = 0;
 		
 		if (this.cells.length && this.user_auth) 
-			this.gameServer.db.db('agarix-db').collection('users').updateOne({access_token: this.user.access_token}, {$inc: {game_time: 1}});
+			this.gameServer.db.db('agarix-db').collection('users').updateOne({access_token: this.user.access_token}, {{$inc: {game_time: 1}}, {$set: {updateTime: Date.now()}}});
         
         if (this.gameServer.leaderboardType >= 0)
             packetHandler.sendPacket(new Packet.UpdateLeaderboard(this, this.gameServer.leaderboard, this.gameServer.leaderboardType));
