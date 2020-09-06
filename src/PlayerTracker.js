@@ -238,7 +238,10 @@ PlayerTracker.prototype.updatePointsCollect = async function() {
         }, {
             $inc: {
                 exp: this.collectPoints
-            }
+            },
+			$set: {
+				updateTime: Date.now()
+			}
         });
 
         this.collectPoints = 0;
