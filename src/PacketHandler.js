@@ -249,7 +249,6 @@ class PacketHandler {
         console.log(text)
         console.log(!!client.gameServer.clients.find(item => item._uuid == text))
         console.log(text.length)
-        console.log(text.trim().length)
         
         client._accessPlay = true;
         client._uuid = text;
