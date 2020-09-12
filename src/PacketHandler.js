@@ -28,7 +28,7 @@ class PacketHandler {
         };
         this.checkPacketSend = false;
     }
-    startCheckSendPacket(message) {
+    async startCheckSendPacket(message) {
         for (let i = 0; i < 5; i++) {
             if (this.checkPacketSend) return;
             
@@ -280,7 +280,7 @@ class PacketHandler {
         //if (message.length !== 1) return;
         //this.pressH = true;
     }
-    message_onSpawnVirus(message) {
+    async message_onSpawnVirus(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth) return;
@@ -301,7 +301,7 @@ class PacketHandler {
             client.virus_spawn = false;
         }
     }
-    message_onSpawnPortal(message) {
+    async message_onSpawnPortal(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth) return;
@@ -322,7 +322,7 @@ class PacketHandler {
             client.spawn_portal = false;
         }
     }
-    message_onIncreaseMass(message) {
+    async message_onIncreaseMass(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth || !client.cells.length) return;
@@ -347,7 +347,7 @@ class PacketHandler {
             client.mass_1000 = false;
         }
     }
-    message_onInviteClan(message) {
+    async message_onInviteClan(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
         const reader = new BinaryReader(Buffer.concat([message]));
@@ -413,7 +413,7 @@ class PacketHandler {
             new Packet.Alert('success', `Clan invitation sent to player ${player.user.username}`)
         );
     }
-    message_onAddFriend(message) {
+    async message_onAddFriend(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
         const reader = new BinaryReader(Buffer.concat([message]));
@@ -478,7 +478,7 @@ class PacketHandler {
             new Packet.Alert('success', `Friend request sent to player '${player.user.username}'!`)
         );
     }
-    message_onSpeedUp(message) {
+    async message_onSpeedUp(message) {
         if (message.length !== 1) return;
         
         const client = this.socket.playerTracker;
@@ -524,7 +524,7 @@ class PacketHandler {
             };
         }
     }
-    message_onInstantCompound(message) {
+    async message_onInstantCompound(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth || !client.cells.length) return;
