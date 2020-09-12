@@ -614,6 +614,8 @@ class PacketHandler {
         if (text.length > 4)
             text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
         
+        console.log(this.textConvert(message))
+        
         this.gameServer.onChatMessage(this.socket.playerTracker, null, text.trim());
     }
     message_onStat(message) {
