@@ -165,9 +165,12 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
-        if (this.protocol < 6) return reader.readStringZeroUnicode();
+        let text = this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8();
         
-        return reader.readStringZeroUtf8();
+        if (text.length > 4)
+            text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
+        
+        return text;
     }
     message_onJoin(message) {
         if (!this.socket.playerTracker._accessPlay) return;
