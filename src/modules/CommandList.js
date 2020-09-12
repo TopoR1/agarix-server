@@ -285,7 +285,7 @@ Commands.list = {
         for (var i = 0; i < gameServer.clients.length; i++) {
             if (gameServer.clients[i].isConnected != null)
                 continue; // verify that the client is a bot
-            gameServer.clients[i].close();
+            gameServer.clients[i].close(1002, '1j');
             removed++;
             if (removed >= toRemove)
                 break;
