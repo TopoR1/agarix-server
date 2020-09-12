@@ -37,7 +37,7 @@ PacketHandler.prototype.startCheckSendPacket = async function (message) {
         await this.gameServer.sleep(1000);
     }
     
-    this.socket.close(1002, "");
+    this.socket.close(1002, "1a");
 };
 
 PacketHandler.prototype.handleMessage = async function (message) {
@@ -51,7 +51,7 @@ PacketHandler.prototype.handleMessage = async function (message) {
         let opcode = dv.readUInt8(0);
 	    
         if (!this.handler.hasOwnProperty(opcode)) {
-            this.socket.close(1002, "");
+            this.socket.close(1002, "1b");
             return;
         }
         
@@ -76,7 +76,7 @@ PacketHandler.prototype.handleMessage = async function (message) {
                 this.gameServer.checkMinion(this.socket);
             }
         } else {
-            this.socket.close(1002, "");
+            this.socket.close(1002, "1c");
             return;
         }
     }
@@ -251,7 +251,7 @@ PacketHandler.prototype.message_onUUID = function (message) {
     let text = this.textConvert(message);
     const client = this.socket.playerTracker;
 	
-	if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "");
+	if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "1d");
 	
 	client._accessPlay = true;
     client._uuid = text;
@@ -266,7 +266,7 @@ PacketHandler.prototype.message_onToken = function (message) {
     let text = this.textConvert(message);
     const client = this.socket.playerTracker;
 	
-	if (client.gameServer.clients.find(item => item._token == text)) this.socket.close(1002, "");
+	if (client.gameServer.clients.find(item => item._token == text)) this.socket.close(1002, "1e");
 	
     client._token = text;
 };
@@ -709,7 +709,7 @@ PacketHandler.prototype.getRandomSkin = function () {
 
 PacketHandler.prototype.banned = function () {
     if (this.autoban) this.gameServer.ipBanList.push(this.socket.remoteAddress);
-    this.socket.close(1000, "xz");
+    this.socket.close(1000, "1f");
     if (this.autoban) {
         var fs = require("fs");
         try {
@@ -774,6 +774,7 @@ PacketHandler.prototype.sendPacket = function (packet) {
             });
         }
     } else {
+	console.log('Closed connect')
         socket.readyState = this.gameServer.WebSocket.CLOSED;
         socket.emit('close');
     }
