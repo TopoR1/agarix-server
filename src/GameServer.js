@@ -657,20 +657,12 @@ GameServer.prototype.onChatMessage = function (from, to, message) {
 GameServer.prototype.checkBadWord = function (value, from) {
     if (!value) return value;
 
-    value_check = value.toLowerCase().replace(/\s/g, '').replace(/[^a-zA-ZА-Яа-яЁё]/gi, '').replace(/\s+/gi, ', '); //trim()
+    let value_check = value.toLowerCase().replace(/\s/g, '').replace(/[^a-zA-ZА-Яа-яЁё]/gi, '').replace(/\s+/gi, ', ');
 
-    if (!value) return value;
-
-    if (value_check.search('clonebots') != -1) from.socket.close();
-    for (var i = 0; i < this.badWords.length; i++) {
-        if (value_check.search(this.badWords[i]) != -1) {
-            var uMSG = "";
-            for (var d = 0; d < this.badWords[i].length; d++) {
-                uMSG += "*";
-            };
-            return value.replace(this.badWords[i], uMSG);
-        }
+    for (const word in this.badWords) {
+        if (value_check.search(word) != -1) value.replace(word, '*'.repeat(word.length));
     }
+	
     return value;
 };
 
