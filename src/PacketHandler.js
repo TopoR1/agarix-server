@@ -245,7 +245,8 @@ class PacketHandler {
         const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
-        if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "1d");
+        //if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "1d");
+        console.log(text)
         
         client._accessPlay = true;
         client._uuid = text;
@@ -759,7 +760,6 @@ class PacketHandler {
                 });
             }
         } else {
-            console.log('Closed connect')
             socket.close(1002, '1g');
             socket.readyState = this.gameServer.WebSocket.CLOSED;
             socket.emit('close');
