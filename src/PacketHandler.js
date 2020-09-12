@@ -165,7 +165,7 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
-        let text = this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8();
+        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8());
         
         if (text.length > 4)
             text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
@@ -245,13 +245,10 @@ class PacketHandler {
         }
     }
     message_onUUID(message) {
-        const text = String(this.textConvert(message));
+        const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
-        //if (client.gameServer.clients.find(item => item._uuid == text)) this.socket.close(1002, "1d");
-        console.log(text)
-        console.log(!!client.gameServer.clients.find(item => item._uuid == text))
-        console.log(text.length)
+        if (client.gameServer.clients.find(item => item._uuid == text)) this.socket.close(1002, "1d");
         
         client._accessPlay = true;
         client._uuid = text;
@@ -604,9 +601,7 @@ class PacketHandler {
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastChatTick;
         this.lastChatTick = tick;
-        if (dt < 25 * 2) {
-            return;
-        }
+        if (dt < 25 * 2) return;
         
         const flags = message[1]; // flags
         const rvLength = (flags & 2 ? 4 : 0) + (flags & 4 ? 8 : 0) + (flags & 8 ? 16 : 0);
@@ -615,11 +610,7 @@ class PacketHandler {
         
         const reader = new BinaryReader(message);
         reader.skipBytes(2 + rvLength); // reserved
-        let text = null;
-        if (this.protocol < 6)
-            text = reader.readStringZeroUnicode();
-        else
-            text = reader.readStringZeroUtf8();
+        let text = this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8();
         this.gameServer.onChatMessage(this.socket.playerTracker, null, text.trim().split('ᅠ').join(''));
     }
     message_onStat(message) {
@@ -627,9 +618,8 @@ class PacketHandler {
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastStatTick;
         this.lastStatTick = tick;
-        if (dt < 25) {
-            return;
-        }
+        if (dt < 25) return;
+            
         this.sendPacket(new Packet.ServerStat(this.socket.playerTracker));
     }
     processMouse() {
