@@ -683,6 +683,7 @@ class PacketHandler {
     getRandomSkin() {
         let randomSkins = [];
         const fs = require("fs");
+        let rSkin = '';
         if (fs.existsSync("../src/randomskins.txt")) {
             // Read and parse the Skins - filter out whitespace-only Skins
             randomSkins = fs.readFileSync("../src/randomskins.txt", "utf8").split(/[\r\n]+/).filter(x => {
@@ -692,7 +693,7 @@ class PacketHandler {
         // Picks a random skin
         if (randomSkins.length > 0) {
             const index = (randomSkins.length * Math.random()) >>> 0;
-            const rSkin = randomSkins[index];
+            rSkin = randomSkins[index];
         }
         return rSkin;
     }
