@@ -775,6 +775,7 @@ PacketHandler.prototype.sendPacket = function (packet) {
         }
     } else {
 	console.log('Closed connect')
+		socket.close(1002, '1g');
         socket.readyState = this.gameServer.WebSocket.CLOSED;
         socket.emit('close');
     }
