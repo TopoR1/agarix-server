@@ -242,18 +242,14 @@ class PacketHandler {
         }
     }
     message_onUUID(message) {
-        const text = this.textConvert(message);
+        const text = String(this.textConvert(message));
         const client = this.socket.playerTracker;
         
         //if (client.gameServer.clients.find(item => item._uuid == text)) this.socket.close(1002, "1d");
         console.log(text)
         console.log(!!client.gameServer.clients.find(item => item._uuid == text))
         console.log(text.length)
-        console.log('\n')
-        for (const item of client.gameServer.clients) {
-            console.log(item._uuid)
-        }
-        console.log('\n')
+        console.log(text.trim().length)
         
         client._accessPlay = true;
         client._uuid = text;
