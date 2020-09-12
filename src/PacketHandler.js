@@ -245,10 +245,10 @@ class PacketHandler {
         const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
-        //if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "1d");
+        //if (client.gameServer.clients.find(item => item._uuid == text)) this.socket.close(1002, "1d");
         console.log(text)
         console.log(!!client.gameServer.clients.find(item => item._uuid == text))
-        console.log(text.length != 23)
+        console.log(text.length)
         console.log('\n')
         for (const item of client.gameServer.clients) {
             console.log(item._uuid)
