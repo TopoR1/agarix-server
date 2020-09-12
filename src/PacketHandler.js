@@ -246,9 +246,12 @@ class PacketHandler {
         const client = this.socket.playerTracker;
         
         //if (client.gameServer.clients.find(item => item._uuid == text) || text.length != 23) this.socket.close(1002, "1d");
+        console.log(text)
+        console.log(!!client.gameServer.clients.find(item => item._uuid == text))
+        console.log(text.length != 23)
         console.log('\n')
-        for (const i of client.gameServer.clients) {
-            console.log(i._uuid)
+        for (const item of client.gameServer.clients) {
+            console.log(item._uuid)
         }
         console.log('\n')
         
