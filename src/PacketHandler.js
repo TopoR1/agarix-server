@@ -199,9 +199,8 @@ class PacketHandler {
         this.socket.playerTracker.spectate = true;
     }
     message_onMouse(message) {
-        if (message.length !== 13 && message.length !== 9 && message.length !== 21) {
-            return;
-        }
+        if (message.length !== 13 && message.length !== 9 && message.length !== 21) return;
+        
         this.mouseData = Buffer.concat([message]);
     }
     message_onMinionsName(message) {
@@ -248,7 +247,7 @@ class PacketHandler {
         const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
-        if (client.gameServer.clients.find(item => item._uuid == text)) this.socket.close(1002, "1d");
+        if (client.gameServer.clients.find(item => item._uuid == text)) return this.socket.close(1002, "1d");
         
         client._accessPlay = true;
         client._uuid = text;
@@ -261,7 +260,7 @@ class PacketHandler {
         const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
-        if (client.gameServer.clients.find(item => item._token == text)) this.socket.close(1002, "1e");
+        if (client.gameServer.clients.find(item => item._token == text)) return this.socket.close(1002, "1e");
         
         client._token = text;
     }
@@ -611,7 +610,11 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(2 + rvLength); // reserved
         let text = this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8();
-        this.gameServer.onChatMessage(this.socket.playerTracker, null, text.trim().split('ᅠ').join(''));
+        
+        if (text.length > 4)
+            text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
+        
+        this.gameServer.onChatMessage(this.socket.playerTracker, null, text.trim());
     }
     message_onStat(message) {
         if (message.length !== 1) return;
