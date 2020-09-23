@@ -97,7 +97,6 @@ GameServer.prototype.start = async function () {
 	
     await this.dbConnect();
 
-
     const server = await this.db.db('agarix-db').collection('servers').findOne({ip: ip});
 
     if (!server) {
@@ -173,7 +172,7 @@ GameServer.prototype.dbConnect = async function() {
         Logger.info('MongoDb connected!');
     } else {
         Logger.error('MongoDb not connect');
-        this.dbConnect();
+        await this.dbConnect();
     }
 };
 
