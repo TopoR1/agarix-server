@@ -68,7 +68,7 @@ function GameServer() {
 
 module.exports = GameServer;
 
-const getReq = function(options) {
+GameServer.prototype.request = function(options) {
     return new Promise((resolve,reject) => {
         request(options, (error, response, body) => {
             if (response) {
@@ -82,7 +82,7 @@ const getReq = function(options) {
 };
 
 GameServer.prototype.start = async function () {
-    const reqIP = await getReq({
+    const reqIP = await this.request({
         url: "http://agarix.ru/getipaddress.php",
         method: "POST",
         json: true,
