@@ -285,7 +285,7 @@ GameServer.prototype.onClientSocketOpen = function (ws) {
             message = parseInt(process.version[1]) < 6 ? new Buffer(message) : Buffer.from(message);
 
         if (!message.length) return;
-        if (message.length > 256)
+        if (message.length > 456)
             return ws.close(1009, 'Spam');
 		
         ws.packetHandler.handleMessage(message);
