@@ -1,7 +1,6 @@
 const Packet = require('./packet');
 const BinaryReader = require('./packet/BinaryReader');
 const Entity = require('./entity');
-const request = require('request-promise');
 
 class PacketHandler {
     constructor(gameServer, socket) {
