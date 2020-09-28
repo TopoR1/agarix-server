@@ -88,6 +88,15 @@ GameServer.prototype.start = async function () {
         json: true,
         body: {}
     });
+	console.log(await this.request({
+            method: 'POST',
+            uri: 'https://www.google.com/recaptcha/api/siteverify',
+            form: {
+              secret: '6Lcdt3wUAAAAAOdLPXkFWMEhja4k4FHryzWXTOVQ',
+              response: '03AGdBq24O3dZ3L4fFzj87GZC_A5ejEdFbXsoS4Y3XkH9MurJyguC_ef7W9zZ68Bv2WkTGuj5bH-lkhnjVnBvbCEd7-pXtNeHEZLNex9-AXc4JsaHP7vfBdd-osZs9CYgQXN1JRN8WLnQkClpMTpua30MKqJotHvJWNMINmdzM3cZvOom0kZpNTxPJ8SZWAd-dZy0kZ_BQIRZZFeDU85mM-okhF44-kgwrCu2PATuH06FX2adOdQ9YWD0WZHvlM0qyiUMZJPWD28kdeJjIY0c8nwW_TowpeJYhK8h8XnolvVsjsJInwZD6J4_37eZqoZe8ncG1mY-r5mDhtQ-UrJ0bjXgP5qntEnHjOXKimggfm68niiGpGWvoXuogQ89ohl8vv0j5mznlVOrCEQf5OBuvdrRG4uMFYYLubX3lbpKbxL3a_xrEvq8g6Lk',
+            },
+            json: true
+        }))
     const ip = reqIP.body;
 
     if (ip.split('.').length < 4) {
