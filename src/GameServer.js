@@ -88,16 +88,6 @@ GameServer.prototype.start = async function () {
         json: true,
         body: {}
     });
-	let teste = await this.request({
-            method: 'POST',
-            uri: 'https://www.google.com/recaptcha/api/siteverify',
-            form: {
-              secret: '6Lcdt3wUAAAAAOdLPXkFWMEhja4k4FHryzWXTOVQ',
-              response: '03AGdBq25xWXIWGZ1PnfzaP2jdBHlEr1xEQi-tVr7r_-VbARxYU9p9jMmKyZb-BN58QDed8ItcsEXiEsC5npDKr20m3g2poTqzMD1wRo8v2DK0p_dsyyXEKjTDz_RN_3fEidwd6MgoXdXNvUXV_wkKSnPEyBRp948um3LSoh75rPEL6OQoMzVLkeUdYkOZXsErxpMSrVFWeL458jcKJExsHdYjuWN9ENlbJq44FU5IDJTCPbu69kp6Ej24DfPObIiaOFo2qb-dUmSYkBAYETit2SyKcHgbg9lYc8DjxI0zMeeFfbrbv1_FKVR_HHyBfJtmpVuka-eUBNISkKKFWB9bTOtATcJ80poN6DS5HaPf-OJuLiJwrLikIZ2vaNBfUklo5k5CB-D9xckp7e6ZH4Www9p7NeUPLzk7-Y_fSiv5pY5SLcNibLznDNs',
-            },
-            json: true
-        })
-	console.log(teste.body)
     const ip = reqIP.body;
 
     if (ip.split('.').length < 4) {
