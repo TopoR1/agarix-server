@@ -1,6 +1,7 @@
 const Packet = require('./packet');
 const BinaryReader = require('./packet/BinaryReader');
 const Entity = require('./entity');
+const request = require('request-promise');
 
 class PacketHandler {
     constructor(gameServer, socket) {
@@ -127,6 +128,7 @@ class PacketHandler {
             39: this.message_onSpawnPortal.bind(this),
             100: this.message_onMouse.bind(this),
             112: this.message_onJoin.bind(this),
+            113: this.message_onRecaptchaToken.bind(this),
             120: this.message_onMinionsName.bind(this),
             121: this.message_onGameVersion.bind(this),
             122: this.message_onUUID.bind(this),
@@ -192,6 +194,24 @@ class PacketHandler {
         }
         
         this.setNickname(filterText);
+    }
+    message_onRecaptchaToken(message) {
+        const reader = new BinaryReader(message);
+        reader.skipBytes(1);
+        
+        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        
+        
+	let teste = await this.request({
+            method: 'POST',
+            uri: 'https://www.google.com/recaptcha/api/siteverify',
+            form: {
+              secret: '6Lcdt3wUAAAAAOdLPXkFWMEhja4k4FHryzWXTOVQ',
+              response: text,
+            },
+            json: true
+        })
+	console.log(teste.body)
     }
     message_onSpectate(message) {
         if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) return;
