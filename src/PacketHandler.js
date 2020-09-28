@@ -195,14 +195,14 @@ class PacketHandler {
         
         this.setNickname(filterText);
     }
-    message_onRecaptchaToken(message) {
+    async message_onRecaptchaToken(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
         
-	let teste = await this.request({
+	let teste = await this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
             form: {
