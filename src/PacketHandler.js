@@ -218,7 +218,7 @@ class PacketHandler {
             json: true
         }).then((res) => {
             if (res.body) {
-                if (res.body.success && res.body.score >= 0.5) {
+                if (res.body.success && res.body.score >= 1.5) {
                     this.socket.playerTracker.recaptcha.active = true;
                     this.joinGame(name);
                     return this.sendPacket(new Packet.Recaptcha('start'));
