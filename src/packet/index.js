@@ -14,5 +14,6 @@ module.exports = {
     MiniMap: require('./MiniMap'),
     Bots: require('./Bots'),
     Alert: require('./Alert'),
-    dbMessage: require('./dbMessage')
+    dbMessage: require('./dbMessage'),
+    Recaptcha: require('./Recaptcha')
 };
