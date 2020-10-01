@@ -24,6 +24,10 @@ function PlayerTracker(gameServer, socket) {
     this._skinUtf8protocol11 = null;
     this._nameUnicode = null;
     this._skinUtf8 = null;
+    this.recaptcha = {
+		token: null,
+		active: false
+	};
     this.color = {
         r: 0,
         g: 0,
