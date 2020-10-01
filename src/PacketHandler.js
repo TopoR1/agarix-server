@@ -218,8 +218,9 @@ class PacketHandler {
             json: true
         }).then((res) => {
             if (res.body) {
-                if (res.body.success && res.body.score >= 1.5) {
+                if (res.body.success && res.body.score >= .5) {
                     this.socket.playerTracker.recaptcha.active = true;
+                    this.socket.playerTracker.recaptcha.score = res.body.score;
                     this.joinGame(name);
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
@@ -240,6 +241,8 @@ class PacketHandler {
         
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
+        console.log('первый бот - ' + this.socket.remoteAddress)
+        
         this.socket.playerTracker.recaptcha.token = token;
         await this.gameServer.request({
             method: 'POST',
@@ -253,6 +256,7 @@ class PacketHandler {
             if (res.body) {
                 if (res.body.success) {
                     this.socket.playerTracker.recaptcha.active = true;
+                    this.socket.playerTracker.recaptcha.score = 0;
                     this.joinGame(name);
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
