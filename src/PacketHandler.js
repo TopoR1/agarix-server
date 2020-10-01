@@ -196,7 +196,7 @@ class PacketHandler {
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         let name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
 	
-	this.gameServer.request({
+	await this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
             form: {
