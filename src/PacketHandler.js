@@ -186,23 +186,16 @@ class PacketHandler {
         let text = this.textConvert(message);
         
         text = text.trim();
-        const badLets = ['⠀', 'ᅠ', ' '];
-        let filterText = '';
         
-        for (let val of text) {
-            if (!badLets.find(item => item == val)) filterText += val;
-        }
-        
-        this.setNickname(filterText);
+        this.setNickname(text);
     }
     async message_onRecaptchaTokenV3(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        let text1 = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-	console.log(text)
-	console.log(text1)
+        let name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+	
 	this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
@@ -214,7 +207,10 @@ class PacketHandler {
         }).then((res) => {
 	    console.log(res.body)
 	    if (res.body) {
-	        if (res.body.success && res.body.score >= 0.5) return this.sendPacket(new Packet.Recaptcha('start'));
+	        if (res.body.success && res.body.score >= 0.5) {
+		    this.setNickname(name);
+		    return this.sendPacket(new Packet.Recaptcha('start'));
+		}
 	    }
 		
 	    this.sendPacket(new Packet.Recaptcha('recaptchav2'));
@@ -762,7 +758,14 @@ class PacketHandler {
             }
         }
     }
-    setNickname(text) {
+    setNickname(origText) {
+        const badLets = ['⠀', 'ᅠ', ' '];
+        let text = '';
+        
+        for (let val of origText) {
+            if (!badLets.find(item => item == val)) text += val;
+        }
+	    
         let name = "",
             skin = null;
         if (text != null && text.length > 0) {
