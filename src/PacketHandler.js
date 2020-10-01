@@ -200,6 +200,9 @@ class PacketHandler {
         reader.skipBytes(1);
         
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        let text1 = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+	console.log(text)
+	console.log(text1)
 	this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
@@ -208,12 +211,15 @@ class PacketHandler {
               response: text,
             },
             json: true
-        }).then((res, body, xz) => {
-	    console.log(res);
-	    console.log(body);
-	    console.log(xz);
+        }).then((res) => {
+	    if (res.body) {
+	        if (res.body.success && res.body.score >= 0.5) return this.sendPacket(new Packet.Recaptcha('start'));
+	    }
+		
+	    this.sendPacket(new Packet.Recaptcha('recaptchav2'));
 	}).catch(err => {
 	    console.log(err);
+	    this.sendPacket(new Packet.Recaptcha('error'));
 	});
     }
     async message_onRecaptchaTokenV2(message) {
