@@ -189,47 +189,47 @@ class PacketHandler {
         
         this.setNickname(text);
     }
-	joinGame(name) {
-	    if (!this.socket.playerTracker._accessPlay) return;
+    joinGame(name) {
+        if (!this.socket.playerTracker._accessPlay) return;
         
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastJoinTick;
         this.lastJoinTick = tick;
         
         this.setNickname(name);
-	}
+    }
     async message_onRecaptchaTokenV3(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
-		
+        
         const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-		
-		if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
-		
-		this.socket.playerTracker.recaptcha.token = token;
+        
+        if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
+        
+        this.socket.playerTracker.recaptcha.token = token;
         await this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
             form: {
-              secret: '6Lcdt3wUAAAAAOdLPXkFWMEhja4k4FHryzWXTOVQ',
-              response: token,
+                secret: '6Lcdt3wUAAAAAOdLPXkFWMEhja4k4FHryzWXTOVQ',
+                response: token,
             },
             json: true
         }).then((res) => {
-	        if (res.body) {
-	            if (res.body.success && res.body.score >= 0.5) {
-					this.socket.playerTracker.recaptcha.active = true;
-		            this.joinGame(name);
-		            return this.sendPacket(new Packet.Recaptcha('start'));
-		        }
-	        }
-		
-	        this.sendPacket(new Packet.Recaptcha('recaptchav2'));
-	    }).catch(err => {
-	        console.log(err);
-	        this.sendPacket(new Packet.Recaptcha('error'));
-	    });
+            if (res.body) {
+                if (res.body.success && res.body.score >= 0.5) {
+                    this.socket.playerTracker.recaptcha.active = true;
+                    this.joinGame(name);
+                    return this.sendPacket(new Packet.Recaptcha('start'));
+                }
+            }
+            
+            this.sendPacket(new Packet.Recaptcha('recaptchav2'));
+        }).catch(err => {
+            console.log(err);
+            this.sendPacket(new Packet.Recaptcha('error'));
+        });
     }
     async message_onRecaptchaTokenV2(message) {
         const reader = new BinaryReader(message);
@@ -237,32 +237,32 @@ class PacketHandler {
         
         const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-		
-		if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
-	
-		this.socket.playerTracker.recaptcha.token = token;
+        
+        if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
+        
+        this.socket.playerTracker.recaptcha.token = token;
         await this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
             form: {
-              secret: '6LdfUU0UAAAAAPFP9k7HKhM_cUzpnFsupf78A6kq',
-              response: token,
+                secret: '6LdfUU0UAAAAAPFP9k7HKhM_cUzpnFsupf78A6kq',
+                response: token,
             },
             json: true
         }).then((res) => {
-	        if (res.body) {
-	            if (res.body.success) {
-					this.socket.playerTracker.recaptcha.active = true;
-		            this.joinGame(name);
-		            return this.sendPacket(new Packet.Recaptcha('start'));
-		        }
-	        }
-		
-	        this.sendPacket(new Packet.Recaptcha('error-recaptchav2'));
-	    }).catch(err => {
-	        console.log(err);
-	        this.sendPacket(new Packet.Recaptcha('error'));
-	    });
+            if (res.body) {
+                if (res.body.success) {
+                    this.socket.playerTracker.recaptcha.active = true;
+                    this.joinGame(name);
+                    return this.sendPacket(new Packet.Recaptcha('start'));
+                }
+            }
+            
+            this.sendPacket(new Packet.Recaptcha('error-recaptchav2'));
+        }).catch(err => {
+            console.log(err);
+            this.sendPacket(new Packet.Recaptcha('error'));
+        });
     }
     message_onSpectate(message) {
         if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) return;
@@ -695,7 +695,7 @@ class PacketHandler {
         const dt = tick - this.lastStatTick;
         this.lastStatTick = tick;
         if (dt < 25) return;
-            
+        
         this.sendPacket(new Packet.ServerStat(this.socket.playerTracker));
     }
     processMouse() {
@@ -788,15 +788,15 @@ class PacketHandler {
         }
     }
     setNickname(origText) {
-		if (!this.socket.playerTracker.recaptcha.active) return;
-		
+        if (!this.socket.playerTracker.recaptcha.active && !this.socket.playerTracker.isBot) return;
+        
         const badLets = ['⠀', 'ᅠ', ' '];
         let text = '';
         
         for (let val of origText) {
             if (!badLets.find(item => item == val)) text += val;
         }
-	    
+        
         let name = "",
             skin = null;
         if (text != null && text.length > 0) {
