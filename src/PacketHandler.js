@@ -127,7 +127,8 @@ class PacketHandler {
             39: this.message_onSpawnPortal.bind(this),
             100: this.message_onMouse.bind(this),
             112: this.message_onJoin.bind(this),
-            113: this.message_onRecaptchaToken.bind(this),
+            113: this.message_onRecaptchaTokenV3.bind(this),
+            114: this.message_onRecaptchaTokenV2.bind(this),
             120: this.message_onMinionsName.bind(this),
             121: this.message_onGameVersion.bind(this),
             122: this.message_onUUID.bind(this),
@@ -194,18 +195,37 @@ class PacketHandler {
         
         this.setNickname(filterText);
     }
-    async message_onRecaptchaToken(message) {
+    async message_onRecaptchaTokenV3(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        
-        
-	let teste = await this.gameServer.request({
+	this.gameServer.request({
             method: 'POST',
             uri: 'https://www.google.com/recaptcha/api/siteverify',
             form: {
               secret: '6Lcdt3wUAAAAAOdLPXkFWMEhja4k4FHryzWXTOVQ',
+              response: text,
+            },
+            json: true
+        }).then((res, body, xz) => {
+	    console.log(res);
+	    console.log(body);
+	    console.log(xz);
+	}).catch(err => {
+	    console.log(err);
+	});
+    }
+    async message_onRecaptchaTokenV2(message) {
+        const reader = new BinaryReader(message);
+        reader.skipBytes(1);
+        
+        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+	let teste = await this.gameServer.request({
+            method: 'POST',
+            uri: 'https://www.google.com/recaptcha/api/siteverify',
+            form: {
+              secret: '6LdfUU0UAAAAAPFP9k7HKhM_cUzpnFsupf78A6kq',
               response: text,
             },
             json: true
