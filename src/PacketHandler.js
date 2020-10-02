@@ -14,8 +14,8 @@ class PacketHandler {
         this.lastStatTick = 0;
         this.lastQTick = 0;
         this.lastSpaceTick = 0;
-        this.bufKey = 8 ^ 0x146124;
-        this.decodeKey = 8 ^ (0x146124 ^ 0x12673178624);
+        //this.bufKey = 8 ^ 0x146124;
+        //this.decodeKey = 8 ^ (0x146124 ^ 0x12673178624);
         this.autoban = false;
         this.pressQ = false;
         this.pressW = false;
@@ -36,7 +36,7 @@ class PacketHandler {
         }
         
         this.socket.close(1002, "1a");
-    }
+    }/*
     handleMessage(message) {
         if (this.protocol !== 0) {
             const newAb = new Uint8Array(message);
@@ -87,10 +87,31 @@ class PacketHandler {
         data = Math.imul(data ^ data >>> data) ^ data;
         data = data ^ data[0] >>> data;
         return data;
+    }*/
+    handleMessage(message) {
+        if (!this.handler.hasOwnProperty(message[0]))
+            return;
+        this.handler[message[0]](message);
+        this.socket.lastAliveTime = this.server.stepDateTime;
+        
+        if (!this.checkPacketSend) {
+            this.checkPacketSend = true;
+            const PlayerTracker = require('./PlayerTracker');
+            this.socket.playerTracker = new PlayerTracker(this.gameServer, this.socket);
+            const PlayerCommand = require('./modules/PlayerCommand');
+            this.socket.playerCommand = new PlayerCommand(this.gameServer, this.socket.playerTracker);
+
+            this.gameServer.socketCount++;
+            this.gameServer.clients.push(this.socket);
+            // Check for external minions
+            this.gameServer.checkMinion(this.socket);
+        }
     }
     handshake_onProtocol(message) {
         if (message.length !== 5) return this.banned();
+        
         this.handshakeProtocol = message[1] | (message[2] << 8) | (message[3] << 16) | (message[4] << 24);
+        
         if (this.handshakeProtocol < 1 || this.handshakeProtocol > 18) {
             this.socket.close(1002, `Not supperted protocol: ${this.handshakeProtocol}`);
             return this.banned();
@@ -825,7 +846,7 @@ class PacketHandler {
         name = this.gameServer.checkBadWord(name);
         
         this.socket.playerTracker.joinGame(name, skin);
-    }
+    }/*
     sendPacket(packet) {
         const socket = this.socket;
         if (!packet || socket.isConnected == null || !socket.playerTracker || socket.playerTracker.isMi)
@@ -846,6 +867,20 @@ class PacketHandler {
         } else {
             socket.close(1002, '1g');
             socket.readyState = this.gameServer.WebSocket.CLOSED;
+            socket.emit('close');
+        }
+    }*/
+    sendPacket(packet) {
+        const socket = this.socket;
+        if (!packet || !socket.isConnected || socket.playerTracker.isMi ||
+            socket.playerTracker.isBot) return;
+        if (socket.readyState == this.server.WebSocket.OPEN) {
+            const buffer = packet.build(this.protocol);
+            if (buffer)
+                socket.send(buffer, { binary: true });
+        } else {
+            socket.close(1002, '1g');
+            socket.readyState = this.server.WebSocket.CLOSED;
             socket.emit('close');
         }
     }
