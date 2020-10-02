@@ -874,13 +874,13 @@ class PacketHandler {
         const socket = this.socket;
         if (!packet || !socket.isConnected || socket.playerTracker.isMi ||
             socket.playerTracker.isBot) return;
-        if (socket.readyState == this.server.WebSocket.OPEN) {
+        if (socket.readyState == this.gameServer.WebSocket.OPEN) {
             const buffer = packet.build(this.protocol);
             if (buffer)
                 socket.send(buffer, { binary: true });
         } else {
             socket.close(1002, '1g');
-            socket.readyState = this.server.WebSocket.CLOSED;
+            socket.readyState = this.gameServer.WebSocket.CLOSED;
             socket.emit('close');
         }
     }
