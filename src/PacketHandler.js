@@ -92,7 +92,7 @@ class PacketHandler {
         if (!this.handler.hasOwnProperty(message[0]))
             return;
         this.handler[message[0]](message);
-        this.socket.lastAliveTime = this.server.stepDateTime;
+        this.socket.lastAliveTime = this.gameServer.stepDateTime;
         
         if (!this.checkPacketSend) {
             this.checkPacketSend = true;
