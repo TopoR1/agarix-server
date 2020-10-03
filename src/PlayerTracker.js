@@ -25,10 +25,11 @@ function PlayerTracker(gameServer, socket) {
     this._nameUnicode = null;
     this._skinUtf8 = null;
     this.recaptcha = {
-		token: null,
-		active: false,
-		score: 0
-	};
+        token: null,
+        active: false,
+        score: 0,
+	verify: false
+    };
     this.color = {
         r: 0,
         g: 0,
