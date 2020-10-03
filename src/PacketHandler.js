@@ -241,7 +241,10 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
-                    this.joinGame(name);
+                    
+                    if (type == 'play') this.joinGame(name);
+                    else if (type == 'spectate') this.message_onSpectate([1]);
+                    
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
             }
