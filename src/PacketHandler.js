@@ -223,6 +223,7 @@ class PacketHandler {
         
         const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
@@ -260,8 +261,8 @@ class PacketHandler {
         reader.skipBytes(1);
         
         const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
