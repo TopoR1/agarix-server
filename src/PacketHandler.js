@@ -238,6 +238,7 @@ class PacketHandler {
         }).then((res) => {
             if (res.body) {
                 if (res.body.success && res.body.score >= .5) {
+                    if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
                     this.joinGame(name);
@@ -256,6 +257,7 @@ class PacketHandler {
         reader.skipBytes(1);
         
         const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
@@ -274,9 +276,13 @@ class PacketHandler {
         }).then((res) => {
             if (res.body) {
                 if (res.body.success) {
+                    if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
-                    this.joinGame(name);
+                    
+                    if (type == 'play') this.joinGame(name);
+                    else if (type == 'spectate') this.message_onSpectate([1]);
+                    
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
             }
@@ -288,8 +294,9 @@ class PacketHandler {
         });
     }
     message_onSpectate(message) {
-        if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) return;
+        if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0 || !this.socket.playerTracker.recaptcha.active) return;
         
+        this.socket.playerTracker.recaptcha.active = false;
         this.socket.playerTracker.spectate = true;
     }
     message_onMouse(message) {
@@ -687,7 +694,7 @@ class PacketHandler {
         }
     }
     message_onChat(message) {
-        if (message.length < 3 || !this.socket.playerTracker._accessPlay) return;
+        if (message.length < 3 || !this.socket.playerTracker._accessPlay || !this.socket.playerTracker.recaptcha.verify) return;
         
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastChatTick;
@@ -705,8 +712,6 @@ class PacketHandler {
         
         //if (text.length > 4)
             //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
-        
-        console.log(this.textConvert(message))
         
         this.gameServer.onChatMessage(this.socket.playerTracker, null, text);
     }
@@ -810,6 +815,8 @@ class PacketHandler {
     }
     setNickname(origText) {
         if (!this.socket.playerTracker.recaptcha.active && !this.socket.playerTracker.isBot) return;
+        
+        this.socket.playerTracker.recaptcha.active = false;
         
         const badLets = ['⠀', 'ᅠ', ' '];
         let text = '';
