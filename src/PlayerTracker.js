@@ -148,7 +148,7 @@ class PlayerTracker {
         if (this.user.vip.time >= Date.now() / 1000) return true;
         return false;
     }
-    startSession() {
+    async startSession() {
         if (this.isRemoved) return;
         if (this._token && this.gameServer.db) {
             let user = await this.gameServer.db.db('agarix-db').collection('users').findOne({access_token: this._token});
@@ -187,7 +187,7 @@ class PlayerTracker {
     checkSkin() {
         if (this._skin != (typeof (this.user.skin_used) == 'object' ? this.user.skin_used.skin_name : '')) this.setSkin();
     }
-    updatePointsCollect() {
+    async updatePointsCollect() {
         if (this.collectPoints > 5 && this.allowCollectPoints) {
             if (this.collectPoints > 50) {
                 return this.collectPoints = 0;
