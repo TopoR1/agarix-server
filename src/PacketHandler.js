@@ -188,10 +188,10 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
-        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8());
+        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
-        if (text.length > 4)
-            text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
+        //if (text.length > 4)
+            //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
         
         return text;
     }
@@ -205,8 +205,6 @@ class PacketHandler {
             return;
         }*/
         let text = this.textConvert(message);
-        
-        text = text.trim();
         
         this.setNickname(text);
     }
@@ -303,7 +301,7 @@ class PacketHandler {
         const text = this.textConvert(message);
         
         const nameAndSkin = /^(?:\{([^}]*)\})?([^]*)/.exec(text);
-        this.socket.playerTracker._miName = nameAndSkin[2].trim();
+        this.socket.playerTracker._miName = nameAndSkin[2];
     }
     message_onBotsActivity(message) {
         const text = this.textConvert(message);
@@ -689,9 +687,7 @@ class PacketHandler {
         }
     }
     message_onChat(message) {
-        if (message.length < 3) return;
-        
-        if (!this.socket.playerTracker._accessPlay) return;
+        if (message.length < 3 || !this.socket.playerTracker._accessPlay) return;
         
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastChatTick;
@@ -705,14 +701,14 @@ class PacketHandler {
         
         const reader = new BinaryReader(message);
         reader.skipBytes(2 + rvLength); // reserved
-        let text = this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8();
+        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
-        if (text.length > 4)
-            text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
+        //if (text.length > 4)
+            //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
         
         console.log(this.textConvert(message))
         
-        this.gameServer.onChatMessage(this.socket.playerTracker, null, text.trim());
+        this.gameServer.onChatMessage(this.socket.playerTracker, null, text);
     }
     message_onStat(message) {
         if (message.length !== 1) return;
@@ -724,7 +720,7 @@ class PacketHandler {
         this.sendPacket(new Packet.ServerStat(this.socket.playerTracker));
     }
     processMouse() {
-        if (this.mouseData == null) return;
+        if (!this.mouseData) return;
         const client = this.socket.playerTracker;
         const reader = new BinaryReader(this.mouseData);
         reader.skipBytes(1);
