@@ -3,7 +3,8 @@ const PlayerTracker = require('../PlayerTracker');
 class MinionPlayer {
     constructor() {
         console.log(PlayerTracker)
-        new PlayerTracker.apply(this, Array.prototype.slice.call(arguments));
+        this = new PlayerTracker;
+        //new PlayerTracker.apply(this, Array.prototype.slice.call(arguments));
         this.isMi = true; // Marks as minion
     }
 
