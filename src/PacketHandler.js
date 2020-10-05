@@ -243,6 +243,9 @@ class PacketHandler {
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
                     
+                    console.log(token.length)
+                    console.log(res.body.score)
+                    
                     if (type == 'play') this.joinGame(name);
                     else if (type == 'spectate') this.message_onSpectate([1]);
                     
@@ -283,6 +286,8 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
+                    
+                    console.log(token.length)
                     
                     if (type == 'play') this.joinGame(name);
                     else if (type == 'spectate') this.message_onSpectate([1]);
