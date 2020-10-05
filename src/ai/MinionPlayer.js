@@ -1,18 +1,16 @@
 const PlayerTracker = require('../PlayerTracker');
 
 class MinionPlayer extends PlayerTracker {
-    constructor() {
-        console.log(Array.prototype.slice.call(arguments))
-        super(Array.prototype.slice.call(arguments));//Array.prototype.slice.call(arguments)
-        //PlayerTracker.apply(this, Array.prototype.slice.call(arguments));
-        this.isMi = true; // Marks as minion
+    constructor(server, socket, owner) {
+        super(server, socket);
+        this.owner = owner;
+        this.isMi = true;
+        this.socket.isConnected = true;
     }
-
     checkConnection() {
         if (this.socket.isCloseRequest) {
-            while (this.cells.length) {
-                this.gameServer.removeNode(this.cells[0]);
-            }
+            while (this.cells.length)
+                this.server.removeNode(this.cells[0]);
             this.isRemoved = true;
             return;
         }
