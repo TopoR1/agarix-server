@@ -2,6 +2,7 @@ const PlayerTracker = require('../PlayerTracker');
 
 class MinionPlayer {
     constructor() {
+        console.log(PlayerTracker)
         new PlayerTracker.apply(this, Array.prototype.slice.call(arguments));
         this.isMi = true; // Marks as minion
     }
@@ -38,7 +39,7 @@ class MinionPlayer {
         }
 
         // remove if owner has disconnected or has no control
-        if (this.owner.socket.isConnected == false || !this.owner.minionControl)
+        if (!this.owner.socket.isConnected || !this.owner.minionControl)
             this.socket.close();
 
         // frozen or not
