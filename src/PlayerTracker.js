@@ -548,6 +548,8 @@ class PlayerTracker {
         }
     }
     updateSpecView(len) {
+	let scale = 0;
+	    
         if (!this.spectate || len) {
             // in game
             let cx = 0, cy = 0;
@@ -562,13 +564,13 @@ class PlayerTracker {
                 const mouseVec = this.mouse.clone().sub(this.centerPos);
                 const mouseDist = mouseVec.sqDist();
                 if (mouseDist != 0) this.setCenterPos(this.centerPos.add(mouseVec, 32 / mouseDist));
-                const scale = this.gameServer.config.serverSpectatorScale;
+                scale = this.gameServer.config.serverSpectatorScale;
             } else {
                 // spectate target
                 const player = this.getSpecTarget();
                 if (player) {
                     this.setCenterPos(player.centerPos);
-                    const scale = player.getScale(player);
+                    scale = player.getScale(player);
                     this.place = player.place;
                     this.viewBox = player.viewBox;
                     this.viewNodes = player.viewNodes;
