@@ -282,7 +282,8 @@ class PacketHandler {
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
                     
-                    console.log(name)
+                    console.log(this.socket.playerTracker._accessPlay)
+                    console.log(type)
                     
                     if (type == 'play') this.joinGame(name);
                     else if (type == 'spectate') this.message_onSpectate([1]);
