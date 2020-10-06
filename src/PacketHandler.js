@@ -225,7 +225,7 @@ class PacketHandler {
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
-        if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type);
+        if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type, name);
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
         this.socket.playerTracker.recaptcha.token = token;
@@ -263,7 +263,7 @@ class PacketHandler {
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
-        if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type);
+        if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type, name);
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
         this.socket.playerTracker.recaptcha.token = token;
@@ -293,7 +293,7 @@ class PacketHandler {
             this.sendPacket(new Packet.Recaptcha('error'));
         });
     }
-    toRecaptcha(type) {
+    toRecaptcha(type, name) {
         if (type == 'play') this.joinGame(name);
         else if (type == 'spectate') this.message_onSpectate([1]);
     }
