@@ -276,7 +276,7 @@ class PacketHandler {
             },
             json: true
         }).then((res) => {
-            console.log(res)
+            console.log(res.body)
             if (res.body) {
                 if (res.body.success) {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
