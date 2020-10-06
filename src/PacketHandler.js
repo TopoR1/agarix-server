@@ -225,6 +225,7 @@ class PacketHandler {
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
+        if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type);
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
         this.socket.playerTracker.recaptcha.token = token;
@@ -242,9 +243,7 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
-                    
-                    if (type == 'play') this.joinGame(name);
-                    else if (type == 'spectate') this.message_onSpectate([1]);
+                    this.toRecaptcha(type);
                     
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
@@ -264,6 +263,7 @@ class PacketHandler {
         const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
+        if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type);
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
         
         this.socket.playerTracker.recaptcha.token = token;
@@ -281,9 +281,7 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
-                    
-                    if (type == 'play') this.joinGame(name);
-                    else if (type == 'spectate') this.message_onSpectate([1]);
+                    this.toRecaptcha(type);
                     
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
@@ -294,6 +292,10 @@ class PacketHandler {
             console.log(err);
             this.sendPacket(new Packet.Recaptcha('error'));
         });
+    }
+    toRecaptcha(type) {
+        if (type == 'play') this.joinGame(name);
+        else if (type == 'spectate') this.message_onSpectate([1]);
     }
     message_onSpectate(message) {
         if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0 || !this.socket.playerTracker.recaptcha.active) return;
