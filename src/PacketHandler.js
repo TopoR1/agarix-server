@@ -243,7 +243,7 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
-                    this.toRecaptcha(type);
+                    this.toRecaptcha(type, name);
                     
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
@@ -281,7 +281,7 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
-                    this.toRecaptcha(type);
+                    this.toRecaptcha(type, name);
                     
                     return this.sendPacket(new Packet.Recaptcha('start'));
                 }
