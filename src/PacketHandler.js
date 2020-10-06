@@ -243,6 +243,7 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
+                    
                     return this.toRecaptcha(type, name);
                 }
             }
@@ -279,6 +280,7 @@ class PacketHandler {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
+                    
                     return this.toRecaptcha(type, name);
                 }
             }
@@ -290,9 +292,9 @@ class PacketHandler {
         });
     }
     toRecaptcha(type, name) {
-        if (type == 'play') this.joinGame(name).sendPacket(new Packet.Alert('success', 'Uvasya, there is no such type.'));
+        if (type == 'play') this.joinGame(name);
         else if (type == 'spectate') this.message_onSpectate([1]);
-        else return this.sendPacket(new Packet.Alert('error', 'Uvasya, there is no such type.'));
+        else return this.sendPacket(new Packet.Alert('error', 'Uvasya, there is no such type.')), this.sendPacket(new Packet.Recaptcha('error-lol'));
         
         this.sendPacket(new Packet.Recaptcha('start'));
     }
