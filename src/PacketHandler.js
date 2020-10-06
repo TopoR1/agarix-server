@@ -250,7 +250,7 @@ class PacketHandler {
                 }
             }
             
-            this.sendPacket(new Packet.Recaptcha('recaptchav2'));
+            this.sendPacket(new Packet.Recaptcha(`recaptchav2^${type}`));
         }).catch(err => {
             console.log(err);
             this.sendPacket(new Packet.Recaptcha('error'));
@@ -282,9 +282,6 @@ class PacketHandler {
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
                     
-                    console.log(this.socket.playerTracker._accessPlay)
-                    console.log(type)
-                    
                     if (type == 'play') this.joinGame(name);
                     else if (type == 'spectate') this.message_onSpectate([1]);
                     
@@ -292,7 +289,7 @@ class PacketHandler {
                 }
             }
             
-            this.sendPacket(new Packet.Recaptcha('error-recaptchav2'));
+            this.sendPacket(new Packet.Recaptcha(`error-recaptchav2^${type}`));
         }).catch(err => {
             console.log(err);
             this.sendPacket(new Packet.Recaptcha('error'));
