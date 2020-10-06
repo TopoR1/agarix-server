@@ -238,7 +238,7 @@ class PacketHandler {
             json: true
         }).then((res) => {
             if (res.body) {
-                if (res.body.success && res.body.score >= 1.5) {
+                if (res.body.success && res.body.score >= .5) {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = res.body.score;
