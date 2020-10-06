@@ -276,12 +276,13 @@ class PacketHandler {
             },
             json: true
         }).then((res) => {
-            console.log(res.body)
             if (res.body) {
                 if (res.body.success) {
                     if (!this.socket.playerTracker.recaptcha.verify) this.socket.playerTracker.recaptcha.verify = true;
                     this.socket.playerTracker.recaptcha.active = true;
                     this.socket.playerTracker.recaptcha.score = 0;
+                    
+                    console.log(name)
                     
                     if (type == 'play') this.joinGame(name);
                     else if (type == 'spectate') this.message_onSpectate([1]);
