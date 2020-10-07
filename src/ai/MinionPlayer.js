@@ -10,7 +10,7 @@ class MinionPlayer extends PlayerTracker {
     checkConnection() {
         if (this.socket.isCloseRequest) {
             while (this.cells.length)
-                this.server.removeNode(this.cells[0]);
+                this.gameServer.removeNode(this.cells[0]);
             this.isRemoved = true;
             return;
         }
