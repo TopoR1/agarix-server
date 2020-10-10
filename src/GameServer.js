@@ -238,6 +238,7 @@ GameServer.prototype.onClientSocketOpen = function (ws) {
         return;
     };*/
     const logip = `${ws._socket.remoteAddress}:${ws._socket.remotePort}`;
+    console.log(logip)
     ws.on('error', (err) => {
         Logger.writeError(`[${logip}] ${err.stack}`);
     });
