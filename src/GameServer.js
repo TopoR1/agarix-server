@@ -164,14 +164,16 @@ GameServer.prototype.dbConnect = async function() {
         //reconnectInterval: 1000,
         autoReconnect: false,
         //bufferMaxEntries: -1
-    }).catch(err => {});
+    }).catch(err => {
+        Logger.error('MongoDb: access error, data is incorrect or server is unavailable!');
+    });
 
     if (client) {
         this.db = client;
         this.validDB = false;
-        Logger.info('MongoDb connected!');
+        Logger.info('MongoDb: server is connected!');
     } else {
-        Logger.error('MongoDb not connect');
+        Logger.error('MongoDb: server is not connected!');
         await this.dbConnect();
     }
 };
