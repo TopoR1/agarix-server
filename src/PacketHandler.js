@@ -14,8 +14,8 @@ class PacketHandler {
         this.lastStatTick = 0;
         this.lastQTick = 0;
         this.lastSpaceTick = 0;
-        //this.bufKey = 8 ^ 0x146124;
-        //this.decodeKey = 8 ^ (0x146124 ^ 0x12673178624);
+        this.bufKey = 8 ^ 0x146124;
+        this.decodeKey = 8 ^ (0x146124 ^ 0x12673178624);
         this.autoban = false;
         this.pressQ = false;
         this.pressW = false;
@@ -150,8 +150,8 @@ class PacketHandler {
             39: this.message_onSpawnPortal.bind(this),
             100: this.message_onMouse.bind(this),
             112: this.message_onJoin.bind(this),
-            113: this.message_onRecaptchaTokenV3.bind(this),
-            114: this.message_onRecaptchaTokenV2.bind(this),
+            //113: this.message_onRecaptchaTokenV3.bind(this),
+            //114: this.message_onRecaptchaTokenV2.bind(this),
             120: this.message_onMinionsName.bind(this),
             121: this.message_onGameVersion.bind(this),
             122: this.message_onUUID.bind(this),
