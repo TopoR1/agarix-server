@@ -701,7 +701,7 @@ class PacketHandler {
         }
     }
     message_onChat(message) {
-        if (message.length < 3 || !this.socket.playerTracker._accessPlay || !this.socket.playerTracker.recaptcha.verify) return;
+        if (message.length < 3) return; // || !this.socket.playerTracker._accessPlay || !this.socket.playerTracker.recaptcha.verify
         
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastChatTick;
@@ -821,7 +821,7 @@ class PacketHandler {
         }
     }
     setNickname(origText) {
-        if (!this.socket.playerTracker.recaptcha.active && !this.socket.playerTracker.isBot) return;
+        if (!this.socket.playerTracker.isBot) return; //!this.socket.playerTracker.recaptcha.active && 
         
         this.socket.playerTracker.recaptcha.active = false;
         
