@@ -208,6 +208,8 @@ class PacketHandler {
         }*/
         let text = this.textConvert(message);
         
+        console.log(text)
+        
         this.setNickname(text);
     }/*
     joinGame(name) {
