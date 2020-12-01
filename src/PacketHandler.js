@@ -208,8 +208,6 @@ class PacketHandler {
         }*/
         let text = this.textConvert(message);
         
-        console.log(text)
-        
         this.setNickname(text);
     }/*
     joinGame(name) {
@@ -823,7 +821,7 @@ class PacketHandler {
         }
     }
     setNickname(origText) {
-        if (!this.socket.playerTracker.isBot) return; //!this.socket.playerTracker.recaptcha.active && 
+        //if (!this.socket.playerTracker.recaptcha.active && !this.socket.playerTracker.isBot) return;
         
         this.socket.playerTracker.recaptcha.active = false;
         
