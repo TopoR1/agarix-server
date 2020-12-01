@@ -197,8 +197,8 @@ class PacketHandler {
         
         return text;
     }
-    message_onJoin(message) { // not use
-        if (!this.socket.playerTracker._accessPlay) return;
+    message_onJoin(message) {
+        //if (!this.socket.playerTracker._accessPlay) return;
         
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastJoinTick;
