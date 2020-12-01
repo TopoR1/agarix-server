@@ -36,7 +36,8 @@ class PacketHandler {
         }
         
         this.socket.close(1002, "1a");
-    }/*
+    }
+    // encode
     handleMessage(message) {
         if (this.protocol !== 0) {
             const newAb = new Uint8Array(message);
@@ -87,7 +88,8 @@ class PacketHandler {
         data = Math.imul(data ^ data >>> data) ^ data;
         data = data ^ data[0] >>> data;
         return data;
-    }*/
+    }
+    /*
     handleMessage(message) {
         if (!this.handler.hasOwnProperty(message[0]))
             return;
@@ -106,7 +108,7 @@ class PacketHandler {
             // Check for external minions
             this.gameServer.checkMinion(this.socket);
         }
-    }
+    }*/
     handshake_onProtocol(message) {
         if (message.length !== 5) return this.banned();
         
@@ -147,7 +149,7 @@ class PacketHandler {
             38: this.message_onFreezator.bind(this),
             39: this.message_onSpawnPortal.bind(this),
             100: this.message_onMouse.bind(this),
-            //112: this.message_onJoin.bind(this),
+            112: this.message_onJoin.bind(this),
             113: this.message_onRecaptchaTokenV3.bind(this),
             114: this.message_onRecaptchaTokenV2.bind(this),
             120: this.message_onMinionsName.bind(this),
@@ -207,7 +209,7 @@ class PacketHandler {
         let text = this.textConvert(message);
         
         this.setNickname(text);
-    }
+    }/*
     joinGame(name) {
         if (!this.socket.playerTracker._accessPlay) return;
         
@@ -297,11 +299,11 @@ class PacketHandler {
         else return this.sendPacket(new Packet.Alert('error', 'Uvasya, there is no such type.')), this.sendPacket(new Packet.Recaptcha('error-lol'));
         
         this.sendPacket(new Packet.Recaptcha('start'));
-    }
+    }*/
     message_onSpectate(message) {
-        if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0 || !this.socket.playerTracker.recaptcha.active) return;
+        if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) return; // || !this.socket.playerTracker.recaptcha.active
         
-        this.socket.playerTracker.recaptcha.active = false;
+        //this.socket.playerTracker.recaptcha.active = false;
         this.socket.playerTracker.spectate = true;
     }
     message_onMouse(message) {
@@ -854,7 +856,7 @@ class PacketHandler {
         name = this.gameServer.checkBadWord(name);
         
         this.socket.playerTracker.joinGame(name, skin);
-    }/*
+    }
     sendPacket(packet) {
         const socket = this.socket;
         if (!packet || socket.isConnected == null || !socket.playerTracker || socket.playerTracker.isMi)
@@ -877,7 +879,7 @@ class PacketHandler {
             socket.readyState = this.gameServer.WebSocket.CLOSED;
             socket.emit('close');
         }
-    }*/
+    }/*
     sendPacket(packet) {
         const socket = this.socket;
         if (!packet || !socket.isConnected || socket.playerTracker.isMi ||
@@ -891,7 +893,7 @@ class PacketHandler {
             socket.readyState = this.gameServer.WebSocket.CLOSED;
             socket.emit('close');
         }
-    }
+    }*/
 }
 
 module.exports = PacketHandler;
