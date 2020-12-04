@@ -865,8 +865,8 @@ GameServer.prototype.boostCell = function (cell) {
     }
     // decay boost-speed from distance
     var speed = cell.boostDistance / 30; // val: 87
-    //cell.boostDistance -= speed; // decays from speed
-    cell.position.add(cell.boostDirection, speed)
+    cell.boostDistance -= speed; // decays from speed
+    cell.position.add(cell.boostDirection / 5, speed / 5)
 
     // update boundries
     cell.checkBorder(this.border);
@@ -1029,7 +1029,7 @@ GameServer.prototype.splitPlayerCell = function (client, parent, angle, mass) {
 
     // Create cell and add it to node list
     var newCell = new Entity.PlayerCell(this, client, parent.position, size);
-    newCell.setBoost(this.config.splitVelocity * Math.pow(size, -0.0122), angle, parent);
+    newCell.setBoost(this.config.splitVelocity * Math.pow(size, 0.0122), angle, parent);
     this.addNode(newCell);
 };
 
