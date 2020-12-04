@@ -865,6 +865,8 @@ GameServer.prototype.boostCell = function (cell) {
     }
     // decay boost-speed from distance
     var speed = cell.boostDistance / 30; // val: 87
+	console.log(`speed: ${speed}`)
+	console.log(`boostDistance: ${cell.boostDistance}`)
     cell.boostDistance -= speed; // decays from speed
     cell.position.add(cell.boostDirection, speed)
 
