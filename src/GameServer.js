@@ -1065,7 +1065,7 @@ GameServer.prototype.spawnCoins = function () {
     var maxCount = this.config.coinSpawnAmount - this.nodesCoin.length;
     var spawnCount = Math.min(maxCount, this.config.coinSpawnAmount);
     for (var i = 0; i < spawnCount; i++) {
-        var cell = new Entity.Coin(this, null, this.randomPos(), 90);
+        var cell = new Entity.Coin(this, null, this.randomPos(), this.config.coinSpawnMass);
         //cell.color = this.getRandomColor();
         this.addNode(cell);
     }
