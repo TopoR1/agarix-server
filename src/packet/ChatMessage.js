@@ -30,7 +30,7 @@ class ChatMessage {
             }
             
             //player_id = this.sender.user_auth ? `[UID: ${this.sender.user.id}] ` : `[ID: ${this.sender.pID}] `
-            tag = this.sender.tag;
+            tag = this.sender.tag ? `[${this.sender.tag}] ` : '';
             if (this.sender.cells.length) color = this.sender.cells[0].color;
             if (this.sender.checkVIP()) {
                 if (this.sender.user.vip.chatCrown) {
