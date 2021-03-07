@@ -7,7 +7,7 @@ class ChatMessage {
         const gameServer = require('../GameServer.js');
         let text = this.message;
         let mes_user = '';
-        let player_id = '';
+        let tag = '';
         
         if (!text) text = '';
         else text = text.trim()
@@ -29,7 +29,8 @@ class ChatMessage {
                 else name = 'Spectator';
             }
             
-            player_id = this.sender.user_auth ? `[UID: ${this.sender.user.id}] ` : `[ID: ${this.sender.pID}] `
+            //player_id = this.sender.user_auth ? `[UID: ${this.sender.user.id}] ` : `[ID: ${this.sender.pID}] `
+            tag = this.sender.tag;
             if (this.sender.cells.length) color = this.sender.cells[0].color;
             if (this.sender.checkVIP()) {
                 if (this.sender.user.vip.chatCrown) {
@@ -54,7 +55,7 @@ class ChatMessage {
         writer.writeUInt8(color.g >> 0);
         writer.writeUInt8(color.b >> 0);
 
-        name = (this.sender == null) ? name : mes_user + player_id + name;
+        name = (this.sender == null) ? name : mes_user + tag + name;
 
         if (protocol < 6) {
             writer.writeStringZeroUnicode(name);
