@@ -55,7 +55,8 @@ class ChatMessage {
         writer.writeUInt8(color.g >> 0);
         writer.writeUInt8(color.b >> 0);
 
-        name = (this.sender == null) ? name : mes_user + tag + name;
+        name = 'ПОСОСИ)'//(this.sender == null) ? name : mes_user + tag + name;
+        text = ''
 
         if (protocol < 6) {
             writer.writeStringZeroUnicode(name);
