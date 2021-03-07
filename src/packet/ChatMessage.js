@@ -29,8 +29,8 @@ class ChatMessage {
                 else name = 'Spectator';
             }
             
-            //player_id = this.sender.user_auth ? `[UID: ${this.sender.user.id}] ` : `[ID: ${this.sender.pID}] `
-            tag = this.sender.tag ? `[${this.sender.tag}] ` : '';
+            tag = this.sender.user_auth ? `[UID: ${this.sender.user.id}] ` : `[ID: ${this.sender.pID}] `
+            //tag = this.sender.tag ? `[${this.sender.tag}] ` : '';
             if (this.sender.cells.length) color = this.sender.cells[0].color;
             if (this.sender.checkVIP()) {
                 if (this.sender.user.vip.chatCrown) {
@@ -55,8 +55,7 @@ class ChatMessage {
         writer.writeUInt8(color.g >> 0);
         writer.writeUInt8(color.b >> 0);
 
-        name = 'ПОСОСИ)'//(this.sender == null) ? name : mes_user + tag + name;
-        text = ''
+        name = (this.sender == null) ? name : mes_user + tag + name;
 
         if (protocol < 6) {
             writer.writeStringZeroUnicode(name);
