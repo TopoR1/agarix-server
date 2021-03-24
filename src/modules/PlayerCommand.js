@@ -543,11 +543,18 @@ var playerCommands = {
                 return;
             }
             // remove player cells
-            this.playerTracker.mute = true;
-            this.gameServer.playersMute.push({ip: socket._socket.remoteAddress, uuid: socket.playerTracker._uuid});
+            socket.playerTracker.mute = !socket.playerTracker.mute;
             
-            this.writeLine("Successfully muted " + socket.playerTracker._name);
-            this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are muted in chat');
+            if (socket.playerTracker.mute) {
+                this.gameServer.playersMute.push({ip: socket._socket.remoteAddress, uuid: socket.playerTracker._uuid});
+                this.writeLine("Successfully muted " + socket.playerTracker._name);
+                this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are muted in chat');
+            } else {
+                this.gameServer.playersMute.splice(this.gameServer.playersMute.findIndex(item => item.ip == socket._socket.remoteAddress || item.uuid == socket.playerTracker._uuid, 1);
+                this.writeLine("Successfully unmuted " + socket.playerTracker._name);
+                this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are unmuted in chat');
+            }
+            
             count++;
         }, this);
         if (count) return;
