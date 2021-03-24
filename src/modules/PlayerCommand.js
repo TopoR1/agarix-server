@@ -519,6 +519,38 @@ var playerCommands = {
         if (!id) this.writeLine("Warn: No players to kick!");
         else this.writeLine("Warn: Player with ID " + id + " not found!");
     },
+    mute: function (args) {
+        const id = args[1];
+        if (!this.playerTracker.user_auth || this.playerTracker.user.role != 4) {
+            return this.writeLine("ERROR: access denied!");
+        }
+        if (id == null) {
+            return this.writeLine("Please specify a valid player ID or User Name!");
+        }
+        // kick player
+        var count = 0;
+       
+        this.gameServer.clients.forEach(function (socket) {
+            if (socket.isConnected === false)
+                return;
+            if (id !== 0 && socket.playerTracker.pID.toString() != id && socket.playerTracker.accountusername != id)
+                return;
+
+            if (this.playerTracker.user_auth && this.playerTracker.user.role != 4) {
+                this.writeLine("You cannot mute a ADMIN in game!");
+                return;
+            }
+            // remove player cells
+            this.playerTracker.mute = true;
+            this.gameServer.playersMute.push({ip: socket._socket.remoteAddress, uuid: socket.playerTracker._uuid});
+            
+            this.writeLine("Successfully muted " + name);
+            count++;
+        }, this);
+        if (count) return;
+        if (!id) this.writeLine("Warn: No players to mute!");
+        else this.writeLine("Warn: Player with ID " + id + " not found!");
+    },
     ban: function (args) {
         if (!this.playerTracker.user_auth || this.playerTracker.user.role != 4) {
             this.writeLine("ERROR: access denied!");
