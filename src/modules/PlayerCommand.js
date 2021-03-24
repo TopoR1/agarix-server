@@ -265,7 +265,7 @@ var playerCommands = {
                 protocol = "?";
             }
             if (ip != "[MINION]" && ip != "BOT") {
-		        const user_mes = client.user ? "UID: " + client.user.id : " - ";
+		        const user_mes = client.user ? "UID: " + client.user.id + " - " : "";
                 var data = user_mes + "ID: " + client.pID + " - NICK: " + client._name + " - IP: " + ip;
                 this.writeLine(data);
             }
