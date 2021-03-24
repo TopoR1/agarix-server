@@ -550,7 +550,7 @@ var playerCommands = {
                 this.writeLine("Successfully muted " + socket.playerTracker._name);
                 this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are muted in chat');
             } else {
-                this.gameServer.playersMute.splice(this.gameServer.playersMute.findIndex(item => item.ip == socket._socket.remoteAddress || item.uuid == socket.playerTracker._uuid, 1);
+                this.gameServer.playersMute.splice(this.gameServer.playersMute.findIndex(item => item.ip == socket._socket.remoteAddress || item.uuid == socket.playerTracker._uuid, 1));
                 this.writeLine("Successfully unmuted " + socket.playerTracker._name);
                 this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are unmuted in chat');
             }
