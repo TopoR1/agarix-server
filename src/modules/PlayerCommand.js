@@ -91,6 +91,7 @@ var playerCommands = {
                     this.writeLine("/pl - Shows list players,bots,minions");
                     this.writeLine("/playerlist - Shows list players,bots,minions");
                     this.writeLine("/miname - Change name minion");
+                    this.writeLine("/mute - Mute chat player");
                     this.writeLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 }
             }
@@ -545,6 +546,7 @@ var playerCommands = {
             this.gameServer.playersMute.push({ip: socket._socket.remoteAddress, uuid: socket.playerTracker._uuid});
             
             this.writeLine("Successfully muted " + name);
+            this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are muted in chat');
             count++;
         }, this);
         if (count) return;
