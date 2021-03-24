@@ -265,7 +265,7 @@ var playerCommands = {
                 protocol = "?";
             }
             if (ip != "[MINION]" && ip != "BOT") {
-		        const user_mes = client.user ? "UID: " + client.user.id : "";
+		        const user_mes = client.user ? "UID: " + client.user.id : " - ";
                 var data = user_mes + "ID: " + client.pID + " - NICK: " + client._name + " - IP: " + ip;
                 this.writeLine(data);
             }
@@ -546,7 +546,7 @@ var playerCommands = {
             this.playerTracker.mute = true;
             this.gameServer.playersMute.push({ip: socket._socket.remoteAddress, uuid: socket.playerTracker._uuid});
             
-            this.writeLine("Successfully muted " + name);
+            this.writeLine("Successfully muted " + socket.playerTracker._name);
             this.gameServer.sendChatMessage(null, socket.playerTracker, 'You are muted in chat');
             count++;
         }, this);
