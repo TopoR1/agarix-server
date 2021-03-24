@@ -46,6 +46,7 @@ class PlayerTracker {
         this.connectedTime = new Date();
         this.accountusername = this.pID;
         this.accountpassword = "";
+	this.mute = false;
 
         this.clientV = '2.01.4';
 
