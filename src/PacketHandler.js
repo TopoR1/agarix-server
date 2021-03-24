@@ -357,8 +357,10 @@ class PacketHandler {
         
         if (client.gameServer.clients.find(item => item._uuid == text)) return this.socket.close(1002, "1d");
         
-        if (client.gameServer.playersMute.find(item => item.uuid == text || item.ip == this.socket._socket.remoteAddress))
+        if (client.gameServer.playersMute.find(item => item.uuid == text || item.ip == this.socket._socket.remoteAddress)) {
             client.mute = true;
+            this.gameServer.sendChatMessage(null, this.socket.playerTracker, 'You are muted in chat');
+        }
         
         client._accessPlay = true;
         client._uuid = text;
