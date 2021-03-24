@@ -20,6 +20,7 @@ function GameServer() {
     this.lastNodeId = 1;
     this.lastPlayerId = 1;
     this.clients = [];
+    this.playersMute = [];
     this.socketCount = 0;
     this.largestClient = null; // Required for spectators
     this.nodes = []; // Total nodes
