@@ -717,6 +717,8 @@ class PacketHandler {
         reader.skipBytes(2 + rvLength); // reserved
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
         
+        if (this.socket.playerTracker.mute) return;
+        
         //if (text.length > 4)
             //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
         
