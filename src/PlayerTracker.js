@@ -49,7 +49,7 @@ class PlayerTracker {
 
         this.clientV = '2.01.4';
 
-        this.user = null;
+        this.user = {};
         this.user_auth = false;
         this.notEat = {val: false, visible: false};
         this.collectPoints = 0;
@@ -155,9 +155,10 @@ class PlayerTracker {
 
             if (!user) {
                 this.user_auth = false;
-                this.user = null;
+                this.user = {};
                 this.tag = '';
-            } else {
+                this.setSkin();
+            } else if (this.user.updateTime != user.updateTime) {
                 this.user = user;
                 if ((user.clan && this.num_call > 20) || !this.user_auth) {
                     this.num_call = 0;
@@ -167,22 +168,24 @@ class PlayerTracker {
                         this.tag = clan.tag;
                     }
                 }
-                this.user_auth = true
+                this.user_auth = true;
                 await this.updatePointsCollect();
                 this.checkSkin();
                 await this.checkBots();
-                await this.gameServer.db.db('agarix-db').collection('users').updateOne({access_token: this._token}, {$set: {server_name: this.gameServer.config.serverName, server_id: this.pID, nickPlayer: this._name}});
+		if (user.server_name != this.gameServer.config.serverName || user.server_id != this.pID || user.nickPlayer != this._name)
+                    await this.gameServer.db.db('agarix-db').collection('users').updateOne({access_token: this._token}, {$set: {server_name: this.gameServer.config.serverName, server_id: this.pID, nickPlayer: this._name}});
                 this.num_call++;
             }
         } else if (!this._token) {
             this.user_auth = false;
-            this.user = null;
+            this.user = {};
             this.tag = '';
+            this.setSkin();
         }
 
         setTimeout(async() => {
             await this.startSession();
-        }, this.cells.length ? 500 : 2000);
+        }, this.cells.length ? 1000 : 2000);
     }
     checkSkin() {
         if (this._skin != (typeof (this.user.skin_used) == 'object' ? this.user.skin_used.skin_name : '')) this.setSkin();
