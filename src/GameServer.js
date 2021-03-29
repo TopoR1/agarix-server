@@ -51,7 +51,7 @@ function GameServer() {
     this.db = null;
     this.dbAuth = {
         host: 'main.agarix.ru',
-        port: 52859,
+        port: 53249,
         user: 'TopoR',
         password: 'Egoregor12',
         name: 'agarix-db'
