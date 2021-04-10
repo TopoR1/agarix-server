@@ -154,12 +154,12 @@ class PlayerTracker {
         if (this._token && this.gameServer.db) {
             let user = await this.gameServer.db.db('agarix-db').collection('users').findOne({access_token: this._token});
 
-            if (!user) {
+            if (!user || !user.online) {
                 this.user_auth = false;
                 this.user = {};
                 this.tag = '';
                 this.setSkin();
-            } else if (this.user.updateTime != user.updateTime) {
+            } else if (this.user.updateTime != user.updateTime && user.online) {
                 this.user = user;
                 if ((user.clan && this.num_call > 20) || !this.user_auth) {
                     this.num_call = 0;
