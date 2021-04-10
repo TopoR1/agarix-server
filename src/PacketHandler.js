@@ -312,12 +312,11 @@ class PacketHandler {
         this.mouseData = Buffer.concat([message]);
     }
     message_onMinionsName(message) {
-        const text = this.textConvert(message);
+        let text = this.textConvert(message);
         
         if (text.length > 15) text = 'An unnamed Bot';
         text = this.gameServer.checkBadSymbols(text);
-        const nameAndSkin = /^(?:\{([^}]*)\})?([^]*)/.exec(text);
-        this.socket.playerTracker._miName = nameAndSkin[2];
+        this.socket.playerTracker._miName = text;
     }
     message_onBotsActivity(message) {
         const text = this.textConvert(message);
