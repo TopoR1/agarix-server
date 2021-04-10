@@ -401,6 +401,8 @@ var playerCommands = {
     miname: function (args) {
         var name = args[1];
         var player = this.playerTracker;
+	if (name.length > 15) name = 'An unnamed Bot';
+        name = this.gameServer.checkBadSymbols(text);
         
         player._miName = name;
         this.writeLine("Now the minions have a name " + name);
