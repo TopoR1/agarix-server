@@ -314,6 +314,8 @@ class PacketHandler {
     message_onMinionsName(message) {
         const text = this.textConvert(message);
         
+        if (text.length > 15) text = 'An unnamed Bot';
+        text = this.gameServer.checkBadSymbols(text);
         const nameAndSkin = /^(?:\{([^}]*)\})?([^]*)/.exec(text);
         this.socket.playerTracker._miName = nameAndSkin[2];
     }
@@ -861,6 +863,7 @@ class PacketHandler {
             name = name.substring(0, this.gameServer.config.playerMaxNickLength);
         
         name = this.gameServer.checkBadWord(name);
+        name = this.gameServer.checkBadSymbols(name);
         
         this.socket.playerTracker.joinGame(name, skin);
     }
