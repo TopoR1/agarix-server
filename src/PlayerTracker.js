@@ -257,7 +257,7 @@ class PlayerTracker {
                 this.minionControl = false;
                 this.miQ = 0;
                 this.miNum = user.bots;
-                this.minionMass = user.mass;
+                this.minionMass = user.mass || 31.623;
                 setTimeout(() => {
                     for (let i = 0; i < this.miNum; i++) {
                         this.gameServer.bots.addMinion(this, this.minionMass);
