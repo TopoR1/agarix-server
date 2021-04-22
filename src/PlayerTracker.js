@@ -242,6 +242,7 @@ class PlayerTracker {
                 this.minionSkins = false;
                 this.miQ = 0;
                 this.miNum = 0;
+		this.minionMass = 0;
                 setTimeout(() => {
                     this.gameServer.checkMinion(this.socket);
                 }, 2000);
@@ -249,25 +250,18 @@ class PlayerTracker {
             this.socket.packetHandler.sendPacket(new Packet.Bots(this.miNum, 0, this));
         } else {
             this.socket.packetHandler.sendPacket(new Packet.Bots(user.bots, user.time, this));
-            if (!this.botsUserActive || this.miNum != user.bots || this.minionMass != user.big) {
+            if (!this.botsUserActive || this.miNum != user.bots || this.minionMass != user.mass) {
                 this.botsUserActive = true;
                 this.minionSkins = false;
                 this.minionBuyTime = user.time;
                 this.minionControl = false;
                 this.miQ = 0;
                 this.miNum = user.bots;
-                this.minionMass = user.big;
+                this.minionMass = user.mass;
                 setTimeout(() => {
-                    if (this.minionMass == true) {
-                        for (let i = 0; i < this.miNum; i++) {
-                            this.gameServer.bots.addMinion(this, "name", 1, 50);
-                            this.minionControl = true;
-                        }
-                    } else {
-                        for (let i = 0; i < this.miNum; i++) {
-                            this.gameServer.bots.addMinion(this);
-                            this.minionControl = true;
-                        }
+                    for (let i = 0; i < this.miNum; i++) {
+                        this.gameServer.bots.addMinion(this, this.minionMass);
+                        this.minionControl = true;
                     }
                 }, 2000);
             }
