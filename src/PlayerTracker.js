@@ -250,14 +250,14 @@ class PlayerTracker {
             this.socket.packetHandler.sendPacket(new Packet.Bots(this.miNum, 0, this));
         } else {
             this.socket.packetHandler.sendPacket(new Packet.Bots(user.bots, user.time, this));
-            if (!this.botsUserActive || this.miNum != user.bots || this.minionMass != (user.mass || 31.623)) {
+            if (!this.botsUserActive || this.miNum != user.bots || this.minionMass != (user.mass || 10)) {
                 this.botsUserActive = true;
                 this.minionSkins = false;
                 this.minionBuyTime = user.time;
                 this.minionControl = false;
                 this.miQ = 0;
                 this.miNum = user.bots;
-                this.minionMass = user.mass || 31.623;
+                this.minionMass = user.mass || 10;
                 setTimeout(() => {
                     for (let i = 0; i < this.miNum; i++) {
                         this.gameServer.bots.addMinion(this, this.minionMass);
