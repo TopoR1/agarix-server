@@ -250,7 +250,7 @@ class PlayerTracker {
             this.socket.packetHandler.sendPacket(new Packet.Bots(this.miNum, 0, this));
         } else {
             this.socket.packetHandler.sendPacket(new Packet.Bots(user.bots, user.time, this));
-            if (!this.botsUserActive || this.miNum != user.bots || this.minionMass != user.mass) {
+            if (!this.botsUserActive || this.miNum != user.bots || this.minionMass != (user.mass || 31.623)) {
                 this.botsUserActive = true;
                 this.minionSkins = false;
                 this.minionBuyTime = user.time;
