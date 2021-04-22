@@ -50,7 +50,7 @@ BotLoader.prototype.addBot = function () {
     s.packetHandler.setNickname(this.getName());
 };
 
-BotLoader.prototype.addMinion = function(owner, name, acMi, miMass) {
+BotLoader.prototype.addMinion = function(owner, miMass = 0) {
     var MinionPlayer = require('./MinionPlayer');
     var s = new FakeSocket(this.gameServer);
     s.playerTracker = new MinionPlayer(this.gameServer, s, owner);
@@ -64,7 +64,7 @@ BotLoader.prototype.addMinion = function(owner, name, acMi, miMass) {
     s.playerTracker.spawnmass = size;
     
     // Start mass for minions
-    if ((typeof miMass != "undefined" || miMass != "") && acMi == 1) {
+    if (miMass) {
         size = Math.sqrt(miMass * 100);
         s.playerTracker.spawnmass = size;
     }
