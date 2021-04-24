@@ -627,38 +627,29 @@ GameServer.prototype.updateLeaderboard = function() {
 };
 
 GameServer.prototype.onChatMessage = function(from, to, message) {
-    if (!message) return;
+    if (!message || !this.config.serverChat || (from && from.isMuted)) return;
+    
     message = message.trim();
-    if (message === "") {
-        return;
-    }
-    if (from && message.length && message[0] == '/') {
-        // player command
-        message = message.slice(1, message.length);
-        from.socket.playerCommand.executeCommandLine(message);
-        return;
-    }
-    if (!this.config.serverChat || (from && from.isMuted)) {
-        // chat is disabled or player is muted
-        return;
-    }
-    if (message.length > 64) {
-        message = message.slice(0, 64);
-    }
-    if (this.config.serverChatAscii) {
+    if (!message) return;
+    
+    if (from && message.length && message[0] == '/')
+        return from.socket.playerCommand.executeCommandLine(message.slice(1, message.length)); // player command
+    
+    if (message.length > 64) message = message.slice(0, 64);
+        
+    if (this.config.serverChatAscii && from) {
         for (var i = 0; i < message.length; i++) {
-            if ((message.charCodeAt(i) < 0x20 || message.charCodeAt(i) > 0x7F) && from) {
-                this.sendChatMessage(null, from, "Message failed - You can use ASCII text only!");
-                return;
-            }
+            if ((message.charCodeAt(i) < 0x20 || message.charCodeAt(i) > 0x7F))
+                return this.sendChatMessage(null, from, "Message failed - You can use ASCII text only!");
         }
     }
     
     message = this.checkBadSymbols(message);
     //check bad words send in chat
-    if (from && this.config.badWordFilter === 1) {
-        message = this.checkBadWord(message, from);
-    }
+    if (this.config.badWordFilter === 1) message = this.checkBadWord(message);
+    
+    if (!message) return;
+    
     this.sendChatMessage(from, to, message);
 };
 
@@ -678,7 +669,7 @@ GameServer.prototype.checkBadSymbols = function(text) {
     return text.replace(/\s+/g, ' ').trim();
 }
 
-GameServer.prototype.checkBadWord = function(value, from) {
+GameServer.prototype.checkBadWord = function(value) {
     if (!value) return value;
 
     let value_check = value.toLowerCase().replace(/\s/g, '').replace(/[^a-zA-ZА-Яа-яЁё]/gi, '').replace(/\s+/gi, ', ');
@@ -691,20 +682,15 @@ GameServer.prototype.checkBadWord = function(value, from) {
 };
 
 GameServer.prototype.sendChatMessage = function(from, to, message) {
-    for (var i = 0, len = this.clients.length; i < len; i++) {
-        if (!this.clients[i]) continue;
-        if (!to || to == this.clients[i].playerTracker) {
-            var Packet = require('./packet');
-            if (this.config.separateChatForTeams && this.gameMode.haveTeams) {
-                //  from equals null if message from server
-                if (from == null || from.team === this.clients[i].playerTracker.team) {
-                    this.clients[i].packetHandler.sendPacket(new Packet.ChatMessage(from, message));
-                }
-            } else {
-                this.clients[i].packetHandler.sendPacket(new Packet.ChatMessage(from, message));
-            }
+    const Packet = require('./packet');
+    
+    for (const client of this.clients.length) {
+        if (!client) continue;
+        const player = to == client.playerTracker;
+        if (!to || player) {
+            client.packetHandler.sendPacket(new Packet.ChatMessage(from, message));
+            if (player) return;
         }
-
     }
 };
 
