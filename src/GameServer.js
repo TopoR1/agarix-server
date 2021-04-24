@@ -684,7 +684,7 @@ GameServer.prototype.checkBadWord = function(value) {
 GameServer.prototype.sendChatMessage = function(from, to, message) {
     const Packet = require('./packet');
     
-    for (const client of this.clients.length) {
+    for (const client of this.clients) {
         if (!client) continue;
         const player = to == client.playerTracker;
         if (!to || player) {
