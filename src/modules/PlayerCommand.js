@@ -398,7 +398,7 @@ var playerCommands = {
         }
     },
     miname: function (args) {
-        if (this.playerTracker.setNameMinions(args[1])) this.writeLine("Now the minions have a name " + name);
+        if (this.playerTracker.setNameMinions(args[1])) this.writeLine("Now the minions have a name " + args[1]));
     },
     minion: function (args) {
         if (!this.playerTracker.user_auth || this.playerTracker.user.role != 4) {
