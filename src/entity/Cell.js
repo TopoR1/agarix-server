@@ -14,6 +14,7 @@ function Cell(gameServer, owner, position, size, time = 0) {
     this.isAgitated = false;// If true, then this cell has waves on it's outline
     this.killedBy = null;   // Cell that ate this cell
     this.isMoving = false;  // Indicate that cell is in boosted mode
+	this.checkSize = true;
     this.boostDistance = 0;
     this.boostDirection = new Vec2(1, 0);
 
