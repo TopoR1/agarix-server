@@ -92,6 +92,7 @@ class PlayerTracker {
         this.mass_1000 = false;
         this.instant_compound = false;
         this.spawn_portal = false;
+		this.used_not_eat = false;
 
         // Minions
         this.miQ = 0;
@@ -351,15 +352,16 @@ class PlayerTracker {
         else return player._scale = Math.pow(Math.min(64 / scale, 1), 0.4);
     }
     setEat(spawn = false) {
-        if (!this.user_auth) return;
+        if (!this.user_auth || this.used_not_eat) return;
         
         let time = 0;
         if (this.user.hasOwnProperty('not_eat')) {
             if (this.user.not_eat.hasOwnProperty('time')) {
-		        if (spawn && !(this.user.not_eat.spawn ? true : false)) return;
+		        if ((spawn && !(this.user.not_eat.spawn ? true : false)) || (!spawn && !(this.user.not_eat.press ? true : false))) return;
                 time = this.user.not_eat.time;
                 this.notEat.val = true;
                 this.notEat.visible = true;
+				this.used_not_eat = true;
 
                 this.socket.packetHandler.sendPacket(new Packet.Alert('not_eat', 'on'));
 
@@ -375,17 +377,19 @@ class PlayerTracker {
         if (!isMi) this.setSkin(skin);
         if (!name.trim()) name = "An unnamed cell";
         this.setName(name);
+
+        if (this.cells.length) return;
+		
         this.spectate = false;
         this.freeRoam = false;
         this.spectateTarget = null;
         const packetHandler = this.socket.packetHandler;
-
-        if (this.cells.length) return;
         
         if (isMi) this.setSkin(skin);
         if (!this.isMi && this.socket.isConnected != null) {
             // some old clients don't understand ClearAll message
             // so we will send update for them
+			this.used_not_eat = false;
             this.setEat(true);
             
             if (packetHandler.protocol < 6)
@@ -547,7 +551,7 @@ class PlayerTracker {
         }
     }
     updateSpecView(len) {
-	let scale = 0;
+		let scale = 0;
 	    
         if (!this.spectate || len) {
             // in game
