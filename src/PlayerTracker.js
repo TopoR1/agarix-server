@@ -328,6 +328,12 @@ class PlayerTracker {
         writer1.writeStringZeroUtf8(`%${this._skin}`);
         this._skinUtf8protocol11 = writer1.toBuffer();
     }
+	setNameMinions(name) {
+		if (!name) return;
+		
+		if (name.length > 15) name = 'An unnamed Bot';
+        this._miName = this.gameServer.checkBadSymbols(name);
+	}
     getScale(player_send) {
         const player = player_send || this;
         player._score = 0; // reset to not cause bugs with leaderboard
@@ -357,6 +363,7 @@ class PlayerTracker {
         let time = 0;
         if (this.user.hasOwnProperty('not_eat')) {
             if (this.user.not_eat.hasOwnProperty('time')) {
+				if (this.user.not_eat.hasOwnProperty('spawn')) this.user.not_eat.spawn = true;
 		        if ((spawn && !(this.user.not_eat.spawn ? true : false)) || (!spawn && !(this.user.not_eat.press ? true : false))) return;
                 time = this.user.not_eat.time;
                 this.notEat.val = true;
