@@ -1004,7 +1004,7 @@ GameServer.prototype.resolveCollision = function(m) {
         if (cell.getAge() < 13 || check.getAge() < 13)
             return; // just split => ignore
     } else {
-        if (check._size < cell._size * 1.07)
+        if (check._size < cell._size * 1.07 && cell.checkSize)
             return; // size check
         if (!check.canEat(cell))
             return; // cell refuses to be eaten
