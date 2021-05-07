@@ -11,6 +11,7 @@ function Portal() {
 	this.name = 'portal';
     this.isMotherCell = true;
     this.minSize = 130;
+	this.checkSize = false;
 }
 
 module.exports = Portal;
