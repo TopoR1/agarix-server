@@ -399,7 +399,7 @@ var playerCommands = {
     },
     
     miname: function (args) {
-        var name = '' || args[1];
+        var name = String(args[1]);
         var player = this.playerTracker;
 	if (name.length > 15) name = 'An unnamed Bot';
         name = this.gameServer.checkBadSymbols(name);
