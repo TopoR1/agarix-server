@@ -333,6 +333,8 @@ class PlayerTracker {
 		
 		if (name.length > 15) name = 'An unnamed Bot';
         this._miName = this.gameServer.checkBadSymbols(name);
+		
+		return true;
 	}
     getScale(player_send) {
         const player = player_send || this;
