@@ -397,17 +397,9 @@ var playerCommands = {
             }
         }
     },
-    
     miname: function (args) {
-        var name = String(args[1]);
-        var player = this.playerTracker;
-	if (name.length > 15) name = 'An unnamed Bot';
-        name = this.gameServer.checkBadSymbols(name);
-        
-        player._miName = name;
-        this.writeLine("Now the minions have a name " + name);
+        if (this.playerTracker.setNameMinions(args[1])) this.writeLine("Now the minions have a name " + name);
     },
-    
     minion: function (args) {
         if (!this.playerTracker.user_auth || this.playerTracker.user.role != 4) {
             this.writeLine("ERROR: access denied!");
