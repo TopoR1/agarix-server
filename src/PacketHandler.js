@@ -148,6 +148,7 @@ class PacketHandler {
             37: this.message_onInstantCompound.bind(this),
             38: this.message_onFreezator.bind(this),
             39: this.message_onSpawnPortal.bind(this),
+            40: this.message_onNotEat.bind(this),
             100: this.message_onMouse.bind(this),
             112: this.message_onJoin.bind(this),
             //113: this.message_onRecaptchaTokenV3.bind(this),
@@ -437,6 +438,13 @@ class PacketHandler {
             });
             client.spawn_portal = false;
         }
+    }
+    async message_onNotEat(message) {
+        if (message.length !== 1) return;
+        const client = this.socket.playerTracker;
+        if (!client.user_auth) return;
+        
+        client.setEat();
     }
     async message_onIncreaseMass(message) {
         if (message.length !== 1) return;
