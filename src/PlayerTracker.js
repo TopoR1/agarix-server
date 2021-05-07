@@ -362,12 +362,11 @@ class PlayerTracker {
     setEat(spawn = false) {
         if (!this.user_auth || this.used_not_eat) return;
         
-        let time = 0;
         if (this.user.hasOwnProperty('not_eat')) {
             if (this.user.not_eat.hasOwnProperty('time')) {
-				if (this.user.not_eat.hasOwnProperty('spawn')) this.user.not_eat.spawn = true;
-		        if ((spawn && !(this.user.not_eat.spawn ? true : false)) || (!spawn && !(this.user.not_eat.press ? true : false))) return;
-                time = this.user.not_eat.time;
+				if (!this.user.not_eat.hasOwnProperty('spawn')) this.user.not_eat.spawn = true;
+		        if ((spawn && !this.user.not_eat.spawn) || (!spawn && !this.user.not_eat.press)) return;
+				
                 this.notEat.val = true;
                 this.notEat.visible = true;
 				this.used_not_eat = true;
@@ -378,7 +377,7 @@ class PlayerTracker {
                     this.notEat.val = false;
                     this.notEat.visible = false;
                     this.socket.packetHandler.sendPacket(new Packet.Alert('not_eat', 'off'));
-                }, time * 1000);
+                }, this.user.not_eat.time * 1000);
             }
         }
     }
