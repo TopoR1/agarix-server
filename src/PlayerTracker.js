@@ -350,12 +350,13 @@ class PlayerTracker {
         if (!scale) return scale = player._score = .2; // reset
         else return player._scale = Math.pow(Math.min(64 / scale, 1), 0.4);
     }
-    setEat() {
+    setEat(spawn = false) {
         if (!this.user_auth) return;
         
         let time = 0;
         if (this.user.hasOwnProperty('not_eat')) {
             if (this.user.not_eat.hasOwnProperty('time')) {
+		        if (spawn && !(this.user.not_eat.spawn ? true : false)) return;
                 time = this.user.not_eat.time;
                 this.notEat.val = true;
                 this.notEat.visible = true;
@@ -385,7 +386,7 @@ class PlayerTracker {
         if (!this.isMi && this.socket.isConnected != null) {
             // some old clients don't understand ClearAll message
             // so we will send update for them
-            this.setEat();
+            this.setEat(true);
             
             if (packetHandler.protocol < 6)
                 packetHandler.sendPacket(new Packet.UpdateNodes(this, [], [], [], this.clientNodes));
