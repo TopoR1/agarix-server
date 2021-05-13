@@ -207,7 +207,7 @@ class PlayerTracker {
                 }
             }
             
-            for (i in this.user.boost) {
+            for (let i in this.user.boost) {
                 if (this.user.boost[i].boost == 'xp' && this.user.boost[i].activate) {
                     this.collectPoints *= this.user.boost[i].x;
                     break;
