@@ -276,7 +276,7 @@ GameServer.prototype.onClientSocketOpen = function(ws) {
     
     if (ws.upgradeReq.headers.origin != 'http://agarix.ru') {
         console.log(ws.upgradeReq.headers.origin);
-        return ws.close(1000, 'Client');
+        return ws.close(1002, '1b');
     }
 
     ws.isConnected = true;
