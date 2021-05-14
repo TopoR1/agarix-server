@@ -670,7 +670,7 @@ class PacketHandler {
         await client.gameServer.sleep(1000);
         
         client.mergeOverride = false;
-        if (!this.notEat.visible) client.notEat.val = false;
+        if (!client.notEat.visible) client.notEat.val = false;
         client.instant_compound = false;
     }
     message_onFreezator(message) {
