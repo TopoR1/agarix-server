@@ -274,9 +274,7 @@ GameServer.prototype.onClientSocketOpen = function(ws) {
     if (this.config.clientBind.length && !allowedClient)
         return ws.close(1000, 'Client not allowed');
     
-    
-    console.log(ws)
-    console.log(ws.upgradeReq.url)
+    console.log(ws.upgradeReq.headers)
 
     ws.isConnected = true;
     ws.remoteAddress = ws._socket.remoteAddress;
