@@ -274,7 +274,10 @@ GameServer.prototype.onClientSocketOpen = function(ws) {
     if (this.config.clientBind.length && !allowedClient)
         return ws.close(1000, 'Client not allowed');
     
-    console.log(ws.upgradeReq.headers)
+    if (ws.upgradeReq.headers.origin != 'http://agarix.ru') {
+        console.log(ws.upgradeReq.headers.origin);
+        return ws.close(1000, 'Client');
+    }
 
     ws.isConnected = true;
     ws.remoteAddress = ws._socket.remoteAddress;
