@@ -190,7 +190,9 @@ class PlayerTracker {
         }, this.cells.length ? 1000 : 2000);
     }
     checkSkin() {
-        if (this._skin != this.user.skin_used?.url.split('/')[1] ?? '') this.setSkin();
+	    const skin = this.user?.skin_used?.url.split('/')[1] ?? '';
+		
+        if (this._skin != skin) this.setSkin(skin);
     }
     async updatePointsCollect() {
         if (this.collectPoints > 5 && this.allowCollectPoints) {
@@ -311,12 +313,11 @@ class PlayerTracker {
         writer.writeStringZeroUtf8(this._name);
         this._nameUtf8 = writer.toBuffer();
     }
-    setSkin(skin) {
+    setSkin(skin = '') {
         this._skin = '';
-        if (!this.isBot && !this.isMi && this.user_auth) {
-            this._skin = this.user?.skin_used?.url.split('/')[1] ?? '';
-        } else if (this.isMi && this.minionSkins) {
+        if ((!this.isBot && !this.isMi && this.user_auth) || this.isMi && this.minionSkins) {
             this._skin = skin;
+			console.log(skin)
         }
         const writer = new BinaryWriter();
         writer.writeStringZeroUtf8(this._skin);
