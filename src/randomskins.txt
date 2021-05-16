@@ -1,211 +1,561 @@
-0
-3
-Abductor
-Alien Kid
-Ancient Relic
-Angel
-Army
-Awkward
-Baby Octopus
-Bad Santa
-Basilisk
-Bass Bomb
-Beat Box
-Berserker
-Bionic Ram
-Blue Skull
-Blue Swirl
-Blueberry
-Bolt Samurai
-Bruiser Goat
-Brute Prankster
-Bubble Balz
-Bubblesaurus
-Bug
-Calaca
-Cannon Ball
-Carrot
-Cave Troll
-Celebration Hat
-China Dragon
-Chip Cookie
-Circle
-Cool Agent
-Cool
-Crazy Rudolph
-Cursed Samurai
-Cyber Commando
-Cyber Kid
-Cyber Monk
-Cyber Psychic
-Cyber Punk
-Cyber Scarab
-Dark Sorceress
-Deathly Mine
-Defiled Scarecrow
-Devourer
-Dr Cosmos
-Dracool
-Dry Face
-Duel Master
-Dumboon
-Dust Brain
-Eager Alien
-Eclipse Hunter
-Electro Jelly
-Eyeball
-Facepalm
-Fallen One
-Fire Golem
-Firespitter
-Flying Saucer
-Football Strike
-Future Art
-Geisha
-Goblin
-Groovy Canvas
-Guardian
-Haste
-Hyper cofee
-Ice Griffin
-Idea
-Ignis
-Infernando
-Lava Beast
-Leech
-Marauder
-Mask
-Masked
-Mecha Destroyer
-Mechanicat
-Mechatron
-Mega Mecha
-Merry Pencil
-Metal Face
-Monday Worker
-Moon Ship
-Mushroom Face
-Mutant Herb
-Mutant
-Neon Bug
-Neptunus Spider
-Nightmare
-Ogre
-Oni
-Orc Grunt
-Party Time
-Pepe Loco
-Phantom
-Pie Slice
-Pixel Kong
-Poker Ace
-Power Mask
-Prankster
-Psycho Driller
-Psychopanda
-Raccoon Jutsu
-Radical Smile
-Rainbow Slap
-Raspy Elf
-Raven
-Red Fiend
-Rhino Boxer
-Rooster
-Sabertooth
-Sand Worm
-Santa
-Scarecrow
-Scavenger
-Seal Knight
-Shuriken
-Silent Nun
-Skull Cactus
-Slime Beast
-Smelly
-Smile
-Sonic Boom
-Soul Hunter
-Space Dog
-Space Hunter
-Space Warden
-Spark
-Spike Flower
-Steam Diver
-Steam Mask
-Street Bull
-Sugar Dash
-Techno Kat
-Techno Kid
-Techno Quack
-Terra
-The Maw
-Tiny Reaper
-Toxic Eater
-Toxic
-Virus
-Volcano
-Voracious
-Warhorse
-Warlock
-Warrior
-Wicked Vendetta
-Wide Eye
-Wolf Man
-Zombie Dog
-Zombie
-Zula Gorgan
-alien
-bat
-bear
-calinor3
-cameron
-clandy12
-coin
-cougar
-coyote
-crocodile
-cyber demon
-cybernaut
-dark wings
-devil
-drushkoshow
-eagle
-evil master
-faun
-finn
-fly
-fox
-fpxq5ym
-fuck
-furycat
-general
-hazmat
-heisenberg
-hunter
-insectoid
-ixxo7ea
-jadedragon
-jumbo
-kraken
-leo
-lion
-lizard
-magic hat
-mammoth
-nemezit
-odd shroom
-panther
-pirateflgss
-raptor
-shark
-skull magician
-slartie
-snake
-space dog
-spider
-splitrun
-spy
-sumo
-trex
-wackyegg
-wasp
+3.png
+5deMayo_Avocato.png
+5deMayo_Coyote.png
+Abduction.png
+Abductor.png
+AgentMorel.png
+Alan.png
+Alien Kid.png
+Alone.png
+Ancient Relic.png
+Angel.png
+Ankh.png
+Another Dragon.png
+Anubis.png
+Aqugly.png
+Archer.png
+Army.png
+Astral Deer.png
+Astronaut.png
+Awkward.png
+Baby Bat.png
+Baby Dragon On Fire.png
+Baby Kraken.png
+Baby Octopus.png
+Bad Santa.png
+Banana.png
+Banshee.png
+Barrel.png
+BaseballClash.png
+Basilisk.png
+Basketball.png
+Bass Bomb.png
+Battle Angel.png
+Beast Leo.png
+Beat Box.png
+Behemoth.png
+Berserker.png
+BigMustagus.png
+Biker.png
+Bionic Ram.png
+Birdie.png
+Black Devil.png
+Blue Skull.png
+Blue Swirl.png
+Blue Warrior.png
+Blueberry.png
+Boar.png
+Bolt Samurai.png
+Brazil Soccerball.png
+Bruiser Goat.png
+Brute Prankster.png
+Bubble Balz.png
+Bubblesaurus.png
+Bug.png
+Bulbasur.png
+Bull Skull.png
+Bunny.png
+Bunnytron.png
+Burger Face.png
+Burly Man.png
+Burner.png
+Cactus.png
+Calaca.png
+Can Man.png
+Cannon Ball.png
+Cap n Joe.png
+Caribbean Corsair.png
+Carrot.png
+Cave Troll.png
+Celebration Hat.png
+Charmander.png
+Cheesy.png
+Cheshire.png
+Chicken Leg.png
+Chicken.png
+China Dragon.png
+Chip Cookie.png
+Choco Egg.png
+Chrono Ranger.png
+Circle.png
+Coco Nuts.png
+Cool Agent.png
+Cool Android.png
+Cool Guy.png
+Cool Lion.png
+Cool.png
+Crazy Eye.png
+Crazy Rudolph.png
+CreepyCracker.png
+Croc Fu.png
+Croco.png
+Cthulhu.png
+Cursed Samurai.png
+Cyber Commando.png
+Cyber Kid.png
+Cyber Monk.png
+Cyber Psychic.png
+Cyber Punk.png
+Cyber Scarab.png
+Cyborg Clown.png
+DJStice.png
+Dapper Dog.png
+Dark Sorceress.png
+Darth Vader.png
+Darts Of Fury.png
+Deathly Mine.png
+Defiled Scarecrow.png
+Demolition Expert.png
+Derpichu.png
+Desert Fox.png
+Desert Worm.png
+Devourer.png
+Diamonds.png
+Direction Giver.png
+Dohnut.png
+Dr Cosmos.png
+Dr Static.png
+Dracool.png
+Dragon Eye.png
+Dragon God.png
+Dragon Griffin.png
+Dragon Haze.png
+Dragon Hydra.png
+Dragon Razor.png
+Dragon Twin.png
+Dragon Viper.png
+Dry Face.png
+Duck Target.png
+Duel Master.png
+Dumboon.png
+Dunker.png
+Dust Brain.png
+Dynamite Guy.png
+Eager Alien.png
+Earth Day.png
+Easter Chick.png
+Eclipse Hunter.png
+Egyptian Cat.png
+Elder Master.png
+Electro Chick.png
+Electro Jelly.png
+Enokuous.png
+Entertainer.png
+Evil Eagle.png
+Evil Pumpkin.png
+Evil pumpkin.png
+Evil.png
+Eyeball.png
+Facepalm.png
+Fallen One.png
+Fangtooth.png
+Fire Golem.png
+Firebird.png
+Firespitter.png
+Flying Cork.png
+Flying Saucer.png
+Football Strike.png
+Fox Mask.png
+Frankie Tomankie.png
+Furious.png
+Future Art.png
+Gahhhlic.png
+Gamma.png
+Geisha.png
+Geminhate.png
+Ghost Reaper.png
+Ghostie.png
+Gingerbread.png
+Goblin.png
+Gold Coin.png
+Golden Mask.png
+Gordon.png
+Gorilla.png
+Green Virus.png
+Groovy Canvas.png
+Grumpy Frog.png
+Guard Dog.png
+Guardian.png
+Happy Soda.png
+Haste.png
+Hatter.png
+Head Ball 2.png
+Healing Potion.png
+Health Fixer.png
+Hercules.png
+Hornet.png
+Horrorscope Aries.png
+Horrorscope_Taurus.png
+Hot Pepper.png
+Husky Brawl.png
+Hyper cofee.png
+Ice Griffin.png
+Idea.png
+Ignis.png
+Infernando.png
+Iron titan.png
+Ironfist Titus.png
+Jester.png
+John.png
+Jotun.png
+Judo Fighter.png
+Karate Parrot.png
+Kayo.png
+Kempo Tiger.png
+Kepper.png
+Krav Monki.png
+Lava Beast.png
+Leech.png
+Lightning.png
+Little Monster.png
+Lol.png
+Lop Bunny.png
+Love Cat.png
+LovesickTed.png
+Luchador.png
+Lucky Doll.png
+MadRamon.png
+Madshroom.png
+Mage.png
+Magic Gerbil.png
+Magical Fox.png
+Maple.png
+Marauder.png
+MariMonshroom.png
+Mariachi.png
+Mask.png
+Masked Menace.png
+Masked.png
+Mecha Destroyer.png
+Mechanicat.png
+Mechatron.png
+Mega Mecha.png
+Mega Power.png
+Mercury.png
+Merry Pencil.png
+Metal Face.png
+Metal Scorpion.png
+Mico.png
+Mindseye.png
+Minotaur.png
+Mischievous.png
+Monday Worker.png
+Monk.png
+Moofun.png
+Moon Ship.png
+Mosasaurus.png
+Mummy.png
+Mushroom Face.png
+Mutant Herb.png
+Mutant.png
+Neon Bug.png
+Neptunus Spider.png
+Night Hunter.png
+Nightmare.png
+Nuclear.png
+Nutcracker.png
+Octoeira.png
+Ogre.png
+Omega Blast.png
+Omicron.png
+Oni.png
+Orc Grunt.png
+Paladin.png
+Palm Tree.png
+Party Bones.png
+Party Time.png
+Penguin.png
+Pepe Loco.png
+Peppegario.png
+Phantom.png
+Pharaoh.png
+Phoenix.png
+Pie Slice.png
+Piglet.png
+Pikachu.png
+Pilgrim.png
+Pine Head.png
+Pineapple.png
+Pixel Kong.png
+Planet Cat.png
+Poker Ace.png
+Poppyns.png
+Power Mask.png
+Power Ninja.png
+Power.png
+Prankster.png
+Predator_Gorilla.png
+Prey.png
+Psycho Driller.png
+Psycho.png
+Psychopanda.png
+Quad.png
+Raccoon Jutsu.png
+Radical Smile.png
+Rage.png
+Raider.png
+Rainbow Slap.png
+Ranger.png
+Rascal.png
+Raspy Elf.png
+Rastafari.png
+Rat.png
+Raven.png
+Real Mars.png
+Red Fiend.png
+Red Japanese.png
+Red Kraken.png
+Reptilian.png
+Rhino Boxer.png
+Rogue.png
+Rooster.png
+Rose.png
+Rowdy Shroom.png
+Sabertooth.png
+Sad.png
+Sand Worm.png
+Santa Claus.png
+Santa.png
+Scarecrow.png
+Scared Apple.png
+Scarlxrd.png
+Scary Teddy.png
+Scavenger.png
+Scorpio.png
+Scott.png
+Sea Turtle.png
+Seal Knight.png
+Shadow.png
+Sherbert.png
+Sheriff.png
+Shogun.png
+Shrieker.png
+Shuriken.png
+Silent Fox.png
+Silent Nun.png
+Skeleton.png
+Skull Bow.png
+Skull Cactus.png
+Slicey.png
+Slime Beast.png
+Sluggy.png
+Smelly.png
+Smile.png
+Smooth Operator.png
+Smyg.png
+Soda Can.png
+Songsmith.png
+Sonic Boom.png
+Sorceress.png
+Soul Hunter.png
+Sour Candy.png
+Space Dog.png
+Space Hunter.png
+Space Voyager.png
+Space Warden.png
+Spark.png
+Spike Flower.png
+Spitfire.png
+Splatter.png
+Squiggly.png
+Squirrel.png
+Squirtle.png
+Star Eagle.png
+Star Pilot.png
+Star Player.png
+Starfish.png
+Stars and Stripes.png
+Statue.png
+StayHome.png
+Steam Diver.png
+Steam Freak.png
+Steam Mask.png
+Street Bull.png
+Striker.png
+Sugar Dash.png
+Sunbath.png
+Surprised Cat.png
+Sweet Egg.png
+Sword Man.png
+Tape Guy.png
+Techno Kat.png
+Techno Kid.png
+Techno Quack.png
+Terra.png
+The Hood.png
+The Maw.png
+The Reaper.png
+The Scorcher.png
+The Stranger.png
+Thirst Quencher.png
+Thirteen.png
+Tiger.png
+Tiny Reaper.png
+Tjoops.png
+Toco Bones.png
+Tom Cat.png
+Tomato Eater.png
+Tooth Troll.png
+TorchHeader.png
+Toxic Eater.png
+Toxic.png
+Trance Girl.png
+Translucent Letter.png
+Tummy Filler.png
+UFO.png
+Uncle Sam.png
+Vampire.png
+Vampy.png
+Venus.png
+Viking.png
+Virgil.png
+Virginia.png
+Virus.png
+Volcano.png
+Voracious.png
+Wacky Hyena.png
+Wahfull.png
+Walrus Art.png
+Wannapieceofme.png
+War Tank.png
+Warhorse.png
+Warlock.png
+Warrior.png
+Water Spirit.png
+Watson.png
+Werewolf.png
+White Horse.png
+Wicked Cat.png
+Wicked Vendetta.png
+Wide Eye.png
+Wild Pepper.png
+WildCooper.png
+Wolf Man.png
+Yuno.png
+Zombie Dog.png
+Zombie.png
+Zula Gorgan.png
+adventurer.png
+alien.png
+alien_blast.png
+bad_bone.png
+baddie.png
+bat.png
+bear.png
+bottle_map.png
+bubbabutt.png
+calinor3.png
+cameron.png
+chikadahr.png
+chilled_homie.png
+christmas_kittie.png
+chromatic_peafowl.png
+clandy12.png
+coin.png
+cougar.png
+coyote.png
+crazy_love.png
+creepy_crepe.png
+crocodile.png
+cute_bunny.png
+cyber demon.png
+cybernaut.png
+dark wings.png
+derpy_parasaurolophus.png
+devil.png
+dick.png
+dog_life.png
+dollhouse.png
+doomsday.png
+drushkoshow.png
+eagle.png
+egg.png
+evil master.png
+faun.png
+finn.png
+fly.png
+fox.png
+fpxq5ym.png
+fuck.png
+furycat.png
+general.png
+golden_rat.png
+hazmat.png
+heisenberg.png
+hunter.png
+insectoid.png
+iridian_tiger.png
+ixxo7ea.png
+jadedragon.png
+jumbo.png
+jungle_quest_great_zilla.png
+kiss.png
+kobe.png
+kraken.png
+last_judgment.png
+leo.png
+leopard.png
+lion.png
+lizard.png
+lop_bunn.png
+lucky_rat.png
+magic hat.png
+mammoth.png
+mgs_in-cog-nito.png
+mgs_lit.png
+mgs_steam_skull.png
+moustache_mask.png
+nemezit.png
+neon_dog.png
+nibblebug.png
+odd shroom.png
+omnom_gator.png
+omnom_lion.png
+omnom_snek.png
+panther.png
+pickeyes.png
+pirateflgss.png
+plague.png
+portal.png
+prismatic_jackal.png
+prxdtE7.png
+ragnarok.png
+rainbow_tusk.png
+raptor.png
+rat.png
+reckoning.png
+s7rNjb0.png
+salty_assault.png
+shark.png
+shot_of_love.png
+silverback.png
+simian_spectrum.png
+skull magician.png
+slartie.png
+sliptoon.png
+snake.png
+space dog.png
+spider.png
+splitrun.png
+spy.png
+squiggle.png
+starsigns_aries.png
+starsigns_taurus.png
+stretch_dog.png
+sumo.png
+swag_royalty.png
+sweet_egg.png
+sweetie.png
+titan demon.png
+titan_giant_spider.png
+titanomachy.png
+tranqeeze.png
+treasure.png
+trex.png
+troublemaker_bunny.png
+wackyegg.png
+walko.png
+wasp.png
+weirdough.png
+white-square.png
+world_end.png
