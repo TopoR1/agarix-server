@@ -190,7 +190,7 @@ class PlayerTracker {
         }, this.cells.length ? 1000 : 2000);
     }
     checkSkin() {
-        if (this._skin != this.user.skin_used?.skin_name ?? '') this.setSkin();
+        if (this._skin != this.user.skin_used?.url.split('/')[1] ?? '') this.setSkin();
     }
     async updatePointsCollect() {
         if (this.collectPoints > 5 && this.allowCollectPoints) {
@@ -314,7 +314,7 @@ class PlayerTracker {
     setSkin(skin) {
         this._skin = '';
         if (!this.isBot && !this.isMi && this.user_auth) {
-            this._skin = this.user?.skin_used?.skin_name ?? '';
+            this._skin = this.user?.skin_used?.url.split('/')[1] ?? '';
         } else if (this.isMi && this.minionSkins) {
             this._skin = skin;
         }
