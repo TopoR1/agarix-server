@@ -317,7 +317,6 @@ class PlayerTracker {
         this._skin = '';
         if (((!this.isBot && !this.isMi && this.user_auth) || this.isMi && this.minionSkins) && typeof(skin) == 'string') {
             this._skin = skin;
-			console.log(skin)
         }
         const writer = new BinaryWriter();
         writer.writeStringZeroUtf8(this._skin);
