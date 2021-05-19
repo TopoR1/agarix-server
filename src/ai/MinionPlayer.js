@@ -24,8 +24,10 @@ class MinionPlayer extends PlayerTracker {
             }
             return;
         }
-        
-         //this.owner._skin
+
+        // remove if owner has disconnected or has no control
+        if (!this.owner.socket.isConnected || ((!this.owner.minionControl || this.death) && !this.cells.length) || ((!this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length))
+            this.socket.close();
         
         if (this.owner.cells.length && this.owner.minionActivity && !this.cells.length) {
             let skin = '';
@@ -44,10 +46,6 @@ class MinionPlayer extends PlayerTracker {
             this.joinGame(name, skin, true);
             //if (!this.cells.length) this.socket.close();
         }
-
-        // remove if owner has disconnected or has no control
-        if (!this.owner.socket.isConnected || ((!this.owner.minionControl || this.death) && !this.cells.length) || ((!this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length))
-            this.socket.close();
 
         // frozen or not
         this.frozen = this.owner.minionFrozen;
