@@ -15,7 +15,7 @@ PlayerCommand.prototype.writeLine = function (text) {
 PlayerCommand.prototype.skinchanger = function () {
     var self = this;
     this.SCInterval = setInterval(function () {
-        var rSkin = self.playerTracker.socket.packetHandler.getRandomSkin();
+        var rSkin = self.playerTracker.getRandomSkin();
         self.playerTracker.setSkin(rSkin);
         for (var i in self.playerTracker.cells) {
             var cell = self.playerTracker.cells[i];
