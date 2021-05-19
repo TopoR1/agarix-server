@@ -102,12 +102,11 @@ class PlayerTracker {
         this.miQ = 0;
         this.miNum = 0;
         this.isMi = false;
-        this.minionSplit = false;
-        this.minionEject = false;
         this.minionFrozen = false;
         this.minionControl = false;
         this.minionActivity = true;
         this.collectPellets = false;
+	this.minions = [];
 
         this.botsUserActive = false;
         this.minionBuyTime = 0;
