@@ -46,14 +46,6 @@ class MinionPlayer extends PlayerTracker {
         if (this.owner.minionFrozen) this.frozen = true;
         else this.frozen = false;
 
-        // split cells
-        if (this.owner.minionSplit)
-            this.socket.packetHandler.pressSpace = true;
-
-        // eject mass
-        if (this.owner.minionEject)
-            this.socket.packetHandler.pressW = true;
-
         // follow owners mouse by default
         this.mouse = this.owner.mouse;
 
