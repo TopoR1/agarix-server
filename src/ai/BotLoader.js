@@ -1,7 +1,6 @@
 // Project imports
 var FakeSocket = require('./FakeSocket');
 var PacketHandler = require('../PacketHandler');
-var acMi = 0;
 
 function BotLoader(gameServer) {
     this.gameServer = gameServer;
