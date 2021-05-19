@@ -255,7 +255,7 @@ class PlayerTracker {
     }
     checkMinions() {
         if (this.isMi || this.isBot || this.isMinion) return;
-
+	
         const seconds = parseInt(Date.now() / 1000);
         const minions = this?.user?.bots;
         let minionMass = this.minionMass;
@@ -293,13 +293,13 @@ class PlayerTracker {
 
         this.socket.packetHandler.sendPacket(new Packet.Bots(this.minions.length, this.minionsAmount, time, this));
 
-        if (this.minionMass != minionMass) {
+        if (this.minionMass != minionMass && this.cells.length) {
             for (const minion of this.minions) {
                 minion.spawnmass = Math.sqrt(this.minionMass * 100);
             }
         }
 
-        if (this.minionsAmount < this.minions.length) {
+        if (this.minionsAmount < this.minions.length && this.cells.length) {
             const minionsDeath = this.minions.length - this.minionsAmount;
             let i = 0;
 
@@ -309,7 +309,7 @@ class PlayerTracker {
                 minion.death = true;
                 i++;
             }
-        } else {
+        } else if (this.cells.length) {
             const minionsAdd = this.minionsAmount - this.minions.length;
 
             for (let i = 0; i < minionsAdd; i++) {
