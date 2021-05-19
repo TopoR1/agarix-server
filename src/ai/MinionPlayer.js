@@ -7,35 +7,35 @@ class MinionPlayer extends PlayerTracker {
         this.isMi = true;
         this.socket.isConnected = true;
         this.index = this.owner.minions.push(this) - 1;
+        this.tickMinions = 0;
     }
     checkConnection() {
-        if (this.socket.isCloseRequest) {
+        if (this.socket.isCloseRequest || ((this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length)) {
             while (this.cells.length)
                 this.gameServer.removeNode(this.cells[0]);
             this.isRemoved = true;
             this.owner.minions.splice(this.index, 1);
             return;
         }
-        let skin = " "; //this.owner._skin
         
-        if (this.owner.user_auth) {
-            if (this.owner.checkVIP() && this.owner.user.vip.botsSkins) {
-                this.minionSkins = true;
+         //this.owner._skin
+        
+        if (this.owner.cells.length && this.owner.minionActivity && !this.cells.length) {
+            let skin = '';
+            
+            if (this.owner.checkVIP() && this.owner?.user?.vip?.botsSkins) {
+                this.minionSkins = this.owner.user.vip.botsSkins;
                 skin = this.getRandomSkin();
             }
             if (this.owner.user.clan) {
                 this.tag = this.owner.tag;
             }
-        }
-        if (this.owner.cells.length && this.owner.minionActivity) {
             let name = this.owner._miName;
-            try {
-                if (!name.trim()) name = `${this.owner._name} Bot`;
-            } catch(err) {
-                name = 'Bot';
-            }
-            this.joinGame(name, skin, true)
-            if (!this.cells.length) this.socket.close();
+            
+            if (!name.trim()) name = `${this.owner._name} Bot`;
+            
+            this.joinGame(name, skin, true);
+            //if (!this.cells.length) this.socket.close();
         }
 
         // remove if owner has disconnected or has no control
@@ -43,8 +43,7 @@ class MinionPlayer extends PlayerTracker {
             this.socket.close();
 
         // frozen or not
-        if (this.owner.minionFrozen) this.frozen = true;
-        else this.frozen = false;
+        this.frozen = this.owner.minionFrozen;
 
         // follow owners mouse by default
         this.mouse = this.owner.mouse;
