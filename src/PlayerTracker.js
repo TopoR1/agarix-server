@@ -316,8 +316,6 @@ class PlayerTracker {
                 this.gameServer.bots.addMinion(this, this.minionMass);
             }
         }
-
-        this.socket.packetHandler.sendPacket(new Packet.Bots(0, 0, this));
     }
     scramble() {
         if (!this.gameServer.config.serverScrambleLevel) {
