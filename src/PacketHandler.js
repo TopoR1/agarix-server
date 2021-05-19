@@ -325,7 +325,7 @@ class PacketHandler {
     message_onBonus(message) {
         const self = this;
         this.SCInterval = setInterval(() => {
-            const rSkin = self.socket.playerTracker.socket.packetHandler.getRandomSkin();
+            const rSkin = self.socket.playerTracker.getRandomSkin();
             self.socket.playerTracker.setSkin(rSkin);
         }, 1000); // Every 5 seconds
         
