@@ -179,7 +179,6 @@ class PlayerTracker {
                 this.user_auth = true;
                 await this.updatePointsCollect();
                 this.checkSkin();
-                await this.checkBots();
                 if (user.server_name != this.gameServer.config.serverName || user.server_id != this.pID || user.nickPlayer != this._name)
                     await this.gameServer.db.db('agarix-db').collection('users').updateOne({
                         access_token: this._token
@@ -604,7 +603,7 @@ class PlayerTracker {
         if (++this.tickLeaderboard >= 4) {
             // 1 / 0.040 = 25 (once per second)
             this.tickLeaderboard = 0;
-
+            this.checkMinions();
             if (this.gameServer.leaderboardType >= 0) packetHandler.sendPacket(new Packet.UpdateLeaderboard(this, this.gameServer.leaderboard, this.gameServer.leaderboardType));
         }
 	    
