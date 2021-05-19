@@ -541,7 +541,7 @@ class PlayerTracker {
         this.clientNodes = this.viewNodes;
 
         // Send update packet
-        packetHandler.sendPacket(new Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes));
+        packetHandler.sendPacket(Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes));
 
         // Update leaderboard
         if (++this.tickLeaderboard >= 25) {
