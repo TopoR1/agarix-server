@@ -799,23 +799,6 @@ class PacketHandler {
         }
         this.processMouse();
     }
-    getRandomSkin() {
-        let randomSkins = [];
-        const fs = require("fs");
-        let rSkin = '';
-        if (fs.existsSync("../src/randomskins.txt")) {
-            // Read and parse the Skins - filter out whitespace-only Skins
-            randomSkins = fs.readFileSync("../src/randomskins.txt", "utf8").split(/[\r\n]+/).filter(x => {
-                return x != ''; // filter empty Skins
-            });
-        }
-        // Picks a random skin
-        if (randomSkins.length > 0) {
-            const index = (randomSkins.length * Math.random()) >>> 0;
-            rSkin = randomSkins[index];
-        }
-        return rSkin;
-    }
     banned() {
         if (this.autoban) this.gameServer.ipBanList.push(this.socket.remoteAddress);
         this.socket.close(1000, "1f");
@@ -834,35 +817,12 @@ class PacketHandler {
             }
         }
     }
-    setNickname(origText) {
+    setNickname(name) {
         //if (!this.socket.playerTracker.recaptcha.active && !this.socket.playerTracker.isBot) return;
         
-        this.socket.playerTracker.recaptcha.active = false;
+        //this.socket.playerTracker.recaptcha.active = false;
         
-        const badLets = ['⠀', 'ᅠ', ' '];
-        let text = '';
-        
-        for (let val of origText) {
-            if (!badLets.find(item => item == val)) text += val;
-        }
-        
-        let name = "",
-            skin = null;
-        if (text != null && text.length > 0) {
-            let skinName = null,
-                userName = text,
-                n = -1;
-            if (text[0] == '<' && (n = text.indexOf('>', 1)) >= 1) {
-                const inner = text.slice(1, n);
-                if (n > 1)
-                    skinName = (inner == "r") ? this.getRandomSkin() : inner;
-                else
-                    skinName = "";
-                userName = text.slice(n + 1);
-            }
-            skin = skinName;
-            name = userName;
-        }
+        name = name.trim();
         
         if (name.length > this.gameServer.config.playerMaxNickLength)
             name = name.substring(0, this.gameServer.config.playerMaxNickLength);
@@ -870,7 +830,7 @@ class PacketHandler {
         name = this.gameServer.checkBadWord(name);
         name = this.gameServer.checkBadSymbols(name);
         
-        this.socket.playerTracker.joinGame(name, skin);
+        this.socket.playerTracker.joinGame(name);
     }
     sendPacket(packet) {
         const socket = this.socket;
