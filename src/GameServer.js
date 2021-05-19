@@ -810,7 +810,7 @@ GameServer.prototype.mainLoop = function() {
         this.tickCounter++;
     this.updateClients();
 
-    if (((this.tickCounter + 3) % 25) == 0) {
+    if (this.tickCounter % 5 == 0) {
         // once per second
         this.updateLeaderboard();
     }
