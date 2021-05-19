@@ -1,4 +1,5 @@
-function Bots(bots, time, sender) {
+function Bots(minions, bots, time, sender) {
+    this.minions = minions;
     this.bots = bots;
     this.time = time;
     this.sender = sender;
@@ -10,11 +11,9 @@ Bots.prototype.build = function() {
     let BinaryWriter = require("./BinaryWriter");
     let writer = new BinaryWriter();
     writer.writeUInt8(0x69);
-	let sec = "";
-	
-    if (this.sender.botsUserActive) sec = this.time - Math.floor(Date.now() / 1000);
 
+    writer.writeFloat(this.minions);
     writer.writeFloat(this.bots);
-    writer.writeFloat(sec);
+    writer.writeFloat(this.time);
     return writer.toBuffer();
 };
