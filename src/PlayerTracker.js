@@ -107,8 +107,6 @@ class PlayerTracker {
         this.minionActivity = true;
         this.collectPellets = false;
         this.minions = [];
-
-        this.botsUserActive = false;
         this.minionMass = false;
         this.minionSkins = false;
 
@@ -261,10 +259,9 @@ class PlayerTracker {
         let minionMass = this.minionMass;
         let time = 0;
 
-        if (!minions || seconds >= minions?.time) { //this.minionsAmount
+        if (!minions || seconds >= minions?.time && this.gameServer.config.serverMinions > 0) { //this.minionsAmount
             if (this.minionsAmount != this.gameServer.config.serverMinions && this.minionsAmount != this.gameServer.config.serverMinions * 2) {
-                this.botsUserActive = false;
-                this.minionControl = this.gameServer.config.serverMinions == 0 ? false : true;
+                this.minionControl = true;
                 //this.miQ = 0;
                 this.minionsAmount = 0;
                 this.minionMass = 0;
@@ -280,8 +277,7 @@ class PlayerTracker {
                 this.minionMass = this.gameServer.config.minionStartSize;
             }
         } else {
-            if (!this.botsUserActive || this.minionsAmount != minions.bots || this.minionMass != minions.mass) {
-                this.botsUserActive = true;
+            if (this.minionsAmount != minions.bots || this.minionMass != minions.mass) {
                 this.minionControl = true;
                 //this.miQ = 0;
                 this.minionsAmount = minions.bots;
