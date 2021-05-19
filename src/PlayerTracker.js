@@ -254,68 +254,70 @@ class PlayerTracker {
         }
     }
     checkMinions() {
-		if (this.isMi || this.isBot || this.isMinion) return;
-		
+        if (this.isMi || this.isBot || this.isMinion) return;
+
         const seconds = parseInt(Date.now() / 1000);
         const minions = this?.user?.bots;
-		let minionMass = this.minionMass;
-		let time = 0;
-	 
+        let minionMass = this.minionMass;
+        let time = 0;
+
         if (!minions || seconds >= minions?.time) { //this.minionsAmount
-			if (this.minionsAmount != this.gameServer.config.serverMinions && this.minionsAmount != this.gameServer.config.serverMinions * 2) {
-				this.botsUserActive = false;
-                this.minionControl = false;
+            if (this.minionsAmount != this.gameServer.config.serverMinions && this.minionsAmount != this.gameServer.config.serverMinions * 2) {
+                this.botsUserActive = false;
+                this.minionControl = this.gameServer.config.serverMinions == 0 ? false : true;
                 //this.miQ = 0;
                 this.minionsAmount = 0;
                 this.minionMass = 0;
-				
-        		const date = new Date();
-        		const hours = date.getHours();
-				
-				if (0 <= hours && 6 >= hours) {
-            		this.minionsAmount = this.gameServer.config.serverMinions * 2;
-            		this.gameServer.sendChatMessage(null, this, `You get a night bonus - ${this.minionsAmount} minions! We issue them from 0:00 to 7:00!`);
-        		} else this.minionsAmount = this.config.serverMinions;
-				
-				this.minionMass = this.config.minionStartSize;
-			}
-		} else {
-			if (!this.botsUserActive || this.minionsAmount != minions.bots || this.minionMass != minions.mass) {
-				this.botsUserActive = true;
+
+                const date = new Date();
+                const hours = date.getHours();
+
+                if (0 <= hours && 6 >= hours) {
+                    this.minionsAmount = this.gameServer.config.serverMinions * 2;
+                    this.gameServer.sendChatMessage(null, this, `You get a night bonus - ${this.minionsAmount} minions! We issue them from 0:00 to 7:00!`);
+                } else this.minionsAmount = this.config.serverMinions;
+
+                this.minionMass = this.config.minionStartSize;
+            }
+        } else {
+            if (!this.botsUserActive || this.minionsAmount != minions.bots || this.minionMass != minions.mass) {
+                this.botsUserActive = true;
                 this.minionControl = true;
                 //this.miQ = 0;
                 this.minionsAmount = minions.bots;
                 this.minionMass = minions.mass || 10;
-				time = minions.time - seconds;
-			}
-		}
-	    
+                time = minions.time - seconds;
+            }
+		
+            time = minions.time - seconds;
+        }
+
         this.socket.packetHandler.sendPacket(new Packet.Bots(this.minions.length, this.minionsAmount, time, this));
-		
-		if (this.minionMass != minionMass) {
-			for (const minion of this.minions) {
-        	    minion.spawnmass = Math.sqrt(this.minionMass * 100);
-			}
-		}
-		
-		if (this.minionsAmount < this.minions.length) {
-			const minionsDeath = this.minions.length - this.minionsAmount;
-			let i = 0;
-			
-			for (const minion of this.minions) {
-				if (i >= minionsDeath) break;
-				
-        	    minion.death = true;
-				i++;
-			}
-		} else {
-			const minionsAdd = this.minionsAmount - this.minions.length;
-			
-			for (let i = 0; i < minionsAdd; i++) {
+
+        if (this.minionMass != minionMass) {
+            for (const minion of this.minions) {
+                minion.spawnmass = Math.sqrt(this.minionMass * 100);
+            }
+        }
+
+        if (this.minionsAmount < this.minions.length) {
+            const minionsDeath = this.minions.length - this.minionsAmount;
+            let i = 0;
+
+            for (const minion of this.minions) {
+                if (i >= minionsDeath) break;
+
+                minion.death = true;
+                i++;
+            }
+        } else {
+            const minionsAdd = this.minionsAmount - this.minions.length;
+
+            for (let i = 0; i < minionsAdd; i++) {
                 this.gameServer.bots.addMinion(this, this.minionMass);
             }
-		}
-		
+        }
+
         this.socket.packetHandler.sendPacket(new Packet.Bots(0, 0, this));
     }
     scramble() {
@@ -351,11 +353,11 @@ class PlayerTracker {
         if (!this._score) this._score = .4;
         return this._score;
     }
-	getRandomSkin() {
+    getRandomSkin() {
         // Picks a random skin
         if (this.gameServer.skins.length > 0) {
             const index = (this.gameServer.skins.length * Math.random()) >>> 0;
-            
+
             return this.gameServer.skins[index];
         }
     }
@@ -606,8 +608,8 @@ class PlayerTracker {
             this.checkMinions();
             if (this.gameServer.leaderboardType >= 0) packetHandler.sendPacket(new Packet.UpdateLeaderboard(this, this.gameServer.leaderboard, this.gameServer.leaderboardType));
         }
-	    
-	if (++this.tickSecond >= 25) {
+
+        if (++this.tickSecond >= 25) {
             if (this.cells.length && this.user_auth) this.gameServer.db.db('agarix-db').collection('users').updateOne({
                 access_token: this.user.access_token
             }, {
@@ -618,7 +620,7 @@ class PlayerTracker {
                     updateTime: Date.now()
                 }
             });
-	}
+        }
     }
     updateSpecView(len) {
         let scale = 0;
