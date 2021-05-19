@@ -6,11 +6,12 @@ class MinionPlayer extends PlayerTracker {
         this.owner = owner;
         this.isMi = true;
         this.socket.isConnected = true;
+        this.death = false;
         this.index = this.owner.minions.push(this) - 1;
         this.tickMinions = 0;
     }
     checkConnection() {
-        if (this.socket.isCloseRequest || ((!this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length)) {
+        if (this.socket.isCloseRequest) {
             while (this.cells.length)
                 this.gameServer.removeNode(this.cells[0]);
             this.isRemoved = true;
@@ -39,7 +40,7 @@ class MinionPlayer extends PlayerTracker {
         }
 
         // remove if owner has disconnected or has no control
-        if (!this.owner.socket.isConnected || !this.owner.minionControl)
+        if (!this.owner.socket.isConnected || ((!this.owner.minionControl || this.death) && !this.cells.length) || ((!this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length))
             this.socket.close();
 
         // frozen or not
