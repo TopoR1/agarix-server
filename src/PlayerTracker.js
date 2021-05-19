@@ -277,7 +277,7 @@ class PlayerTracker {
                     this.gameServer.sendChatMessage(null, this, `You get a night bonus - ${this.minionsAmount} minions! We issue them from 0:00 to 7:00!`);
                 } else this.minionsAmount = this.config.serverMinions;
 
-                this.minionMass = this.config.minionStartSize;
+                this.minionMass = this.gameServer.config.minionStartSize;
             }
         } else {
             if (!this.botsUserActive || this.minionsAmount != minions.bots || this.minionMass != minions.mass) {
