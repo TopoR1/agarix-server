@@ -286,7 +286,6 @@ class PlayerTracker {
                 //this.miQ = 0;
                 this.minionsAmount = minions.bots;
                 this.minionMass = minions.mass || 10;
-                time = minions.time - seconds;
             }
 		
             time = minions.time - seconds;
