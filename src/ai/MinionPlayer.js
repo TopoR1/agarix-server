@@ -7,7 +7,7 @@ class MinionPlayer extends PlayerTracker {
         this.isMi = true;
         this.socket.isConnected = true;
         this.death = false;
-        this.index = this.owner.minions.push(this) - 1;
+        this.owner.minions.push(this);
         this.tickMinions = 0;
     }
     checkConnection() {
@@ -15,7 +15,13 @@ class MinionPlayer extends PlayerTracker {
             while (this.cells.length)
                 this.gameServer.removeNode(this.cells[0]);
             this.isRemoved = true;
-            this.owner.minions.splice(this.index, 1);
+            
+            for (const i in this.owner.minions) {
+                if (this.pID == this.owner.minions[i].pID) {
+                    this.owner.minions.splice(i, 1);
+                    break;
+                }
+            }
             return;
         }
         
