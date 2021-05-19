@@ -27,7 +27,7 @@ class MinionPlayer extends PlayerTracker {
 
         // remove if owner has disconnected or has no control
         if (!this.owner.socket.isConnected || ((!this.owner.minionControl || this.death) && !this.cells.length) || ((!this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length))
-            this.socket.close();
+            return this.socket.close();
         
         if (this.owner.cells.length && this.owner.minionActivity && !this.cells.length) {
             let skin = '';
