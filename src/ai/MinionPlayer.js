@@ -6,15 +6,16 @@ class MinionPlayer extends PlayerTracker {
         this.owner = owner;
         this.isMi = true;
         this.socket.isConnected = true;
+        this.index = this.owner.minions.push(this) - 1;
     }
     checkConnection() {
         if (this.socket.isCloseRequest) {
             while (this.cells.length)
                 this.gameServer.removeNode(this.cells[0]);
             this.isRemoved = true;
+            this.owner.minions.splice(this.index, 1);
             return;
         }
-        this.user = {skin_used: {skin_name: ""}};
         let skin = " "; //this.owner._skin
         
         if (this.owner.user_auth) {
@@ -57,7 +58,7 @@ class MinionPlayer extends PlayerTracker {
         this.mouse = this.owner.mouse;
 
         // pellet-collecting mode
-        if (this.owner.collectPellets) {
+        /*if (this.owner.collectPellets) {
             if (this.cells.length) {
                 this.viewNodes = [];
                 const self = this;
@@ -75,7 +76,7 @@ class MinionPlayer extends PlayerTracker {
                     }
                 }
             }
-        }
+        }*/
     }
 }
 
