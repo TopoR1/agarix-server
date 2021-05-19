@@ -309,7 +309,7 @@ class PlayerTracker {
                 minion.death = true;
                 i++;
             }
-        } else if (this.cells.length) {
+        } else if (this.cells.length && this.minionActivity) {
             const minionsAdd = this.minionsAmount - this.minions.length;
 
             for (let i = 0; i < minionsAdd; i++) {
