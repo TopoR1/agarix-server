@@ -596,7 +596,7 @@ GameServer.prototype.removeNode = function(node) {
 
 GameServer.prototype.updateClients = function() {
     // check dead clients
-    /*const len = this.clients.length;
+    const len = this.clients.length;
     for (let i = 0; i < len;) {
         if (!this.clients[i] || !this.clients[i].playerTracker) {
             i++;
@@ -616,8 +616,8 @@ GameServer.prototype.updateClients = function() {
     for (let i = 0; i < len; i++) {
         if (!this.clients[i] || !this.clients[i].playerTracker) continue;
         this.clients[i].playerTracker.sendUpdate();
-    }*/
-    
+    }
+    /*
     for (const i in this.clients) {
         if (!this.clients[i] || !this.clients[i].playerTracker) continue;
         
@@ -630,7 +630,7 @@ GameServer.prototype.updateClients = function() {
         
         this.clients[i].playerTracker.updateTick();
         this.clients[i].playerTracker.sendUpdate();
-    }
+    }*/
 };
 
 GameServer.prototype.updateLeaderboard = function() {
