@@ -29,7 +29,7 @@ class PlayerTracker {
             token: null,
             active: false,
             score: 0,
-        verify: false
+            verify: false
         };
         this.color = {
             r: 0,
@@ -46,17 +46,21 @@ class PlayerTracker {
         this.connectedTime = new Date();
         this.accountusername = this.pID;
         this.accountpassword = "";
-	this.mute = false;
+        this.mute = false;
 
         this.clientV = '2.01.4';
 
         this.user = {};
         this.user_auth = false;
-        this.notEat = {val: false, visible: false};
+        this.notEat = {
+            val: false,
+            visible: false
+        };
         this.collectPoints = 0;
         this.allowCollectPoints = true;
         this.tickNodes = 0;
         this.tickLeaderboard = 0;
+        this.tickSecond = 0;
         this.team = 0;
         this.spectate = false;
         this.freeRoam = false; // Free-roam mode enables player to move in spectate mode
@@ -92,7 +96,7 @@ class PlayerTracker {
         this.mass_1000 = false;
         this.instant_compound = false;
         this.spawn_portal = false;
-		this.used_not_eat = false;
+        this.used_not_eat = false;
 
         // Minions
         this.miQ = 0;
@@ -153,7 +157,9 @@ class PlayerTracker {
     async startSession() {
         if (this.isRemoved) return;
         if (this._token && this.gameServer.db) {
-            let user = await this.gameServer.db.db('agarix-db').collection('users').findOne({access_token: this._token});
+            let user = await this.gameServer.db.db('agarix-db').collection('users').findOne({
+                access_token: this._token
+            });
 
             if (!user || !user.online) {
                 this.user_auth = false;
@@ -164,7 +170,9 @@ class PlayerTracker {
                 this.user = user;
                 if ((user.clan && this.num_call > 20) || !this.user_auth) {
                     this.num_call = 0;
-                    const clan = await this.gameServer.db.db('agarix-db').collection('clans').findOne({id: user.clan});
+                    const clan = await this.gameServer.db.db('agarix-db').collection('clans').findOne({
+                        id: user.clan
+                    });
 
                     if (clan) {
                         this.tag = clan.tag;
@@ -174,8 +182,16 @@ class PlayerTracker {
                 await this.updatePointsCollect();
                 this.checkSkin();
                 await this.checkBots();
-		if (user.server_name != this.gameServer.config.serverName || user.server_id != this.pID || user.nickPlayer != this._name)
-                    await this.gameServer.db.db('agarix-db').collection('users').updateOne({access_token: this._token}, {$set: {server_name: this.gameServer.config.serverName, server_id: this.pID, nickPlayer: this._name}});
+                if (user.server_name != this.gameServer.config.serverName || user.server_id != this.pID || user.nickPlayer != this._name)
+                    await this.gameServer.db.db('agarix-db').collection('users').updateOne({
+                        access_token: this._token
+                    }, {
+                        $set: {
+                            server_name: this.gameServer.config.serverName,
+                            server_id: this.pID,
+                            nickPlayer: this._name
+                        }
+                    });
                 this.num_call++;
             }
         } else if (!this._token) {
@@ -185,13 +201,13 @@ class PlayerTracker {
             this.setSkin();
         }
 
-        setTimeout(async() => {
+        setTimeout(async () => {
             await this.startSession();
         }, this.cells.length ? 1000 : 2000);
     }
     checkSkin() {
-	    const skin = this.user?.skin_used?.url.split('/')[1] ?? '';
-		
+        const skin = this.user?.skin_used?.url.split('/')[1] ?? '';
+
         if (this._skin != skin) this.setSkin(skin);
     }
     async updatePointsCollect() {
@@ -202,20 +218,29 @@ class PlayerTracker {
             this.allowCollectPoints = false;
 
             if (this.user.clan) {
-                const clan = await this.gameServer.db.db('agarix-db').collection('clans').findOne({id: this.user.clan});
+                const clan = await this.gameServer.db.db('agarix-db').collection('clans').findOne({
+                    id: this.user.clan
+                });
 
                 if (clan) {
-                    await this.gameServer.db.db('agarix-db').collection('clans').updateOne({id: this.user.clan, 'team.id': this.user.id}, {$inc: {'team.$.xp': this.collectPoints}});
+                    await this.gameServer.db.db('agarix-db').collection('clans').updateOne({
+                        id: this.user.clan,
+                        'team.id': this.user.id
+                    }, {
+                        $inc: {
+                            'team.$.xp': this.collectPoints
+                        }
+                    });
                 }
             }
-            
+
             for (let i in this.user.boost) {
                 if (this.user.boost[i].boost == 'xp' && this.user.boost[i].activate) {
                     this.collectPoints *= this.user.boost[i].x;
                     break;
                 }
             }
-            
+
             await this.gameServer.db.db('agarix-db').collection('users').updateOne({
                 access_token: this.user.access_token
             }, {
@@ -245,7 +270,7 @@ class PlayerTracker {
                 this.minionSkins = false;
                 this.miQ = 0;
                 this.miNum = 0;
-		this.minionMass = 0;
+                this.minionMass = 0;
                 setTimeout(() => {
                     this.gameServer.checkMinion(this.socket);
                 }, 2000);
@@ -325,14 +350,14 @@ class PlayerTracker {
         writer1.writeStringZeroUtf8(`%${this._skin}`);
         this._skinUtf8protocol11 = writer1.toBuffer();
     }
-	setNameMinions(name) {
-		if (!name) return;
-		
-		if (name.length > 15) name = 'An unnamed Bot';
+    setNameMinions(name) {
+        if (!name) return;
+
+        if (name.length > 15) name = 'An unnamed Bot';
         this._miName = this.gameServer.checkBadSymbols(name);
-		
-		return true;
-	}
+
+        return true;
+    }
     getScale(player_send) {
         const player = player_send || this;
         player._score = 0; // reset to not cause bugs with leaderboard
@@ -358,15 +383,15 @@ class PlayerTracker {
     }
     setEat(spawn = false) {
         if (!this.user_auth || this.used_not_eat) return;
-        
+
         if (this.user.hasOwnProperty('not_eat')) {
             if (this.user.not_eat.hasOwnProperty('time')) {
-				if (!this.user.not_eat.hasOwnProperty('spawn')) this.user.not_eat.spawn = true;
-		        if ((spawn && !this.user.not_eat.spawn) || (!spawn && !this.user.not_eat.press)) return;
-				
+                if (!this.user.not_eat.hasOwnProperty('spawn')) this.user.not_eat.spawn = true;
+                if ((spawn && !this.user.not_eat.spawn) || (!spawn && !this.user.not_eat.press)) return;
+
                 this.notEat.val = true;
                 this.notEat.visible = true;
-				this.used_not_eat = true;
+                this.used_not_eat = true;
 
                 this.socket.packetHandler.sendPacket(new Packet.Alert('not_eat', 'on'));
 
@@ -384,22 +409,22 @@ class PlayerTracker {
         this.setName(name);
 
         if (this.cells.length) return;
-		
+
         this.spectate = false;
         this.freeRoam = false;
         this.spectateTarget = null;
         const packetHandler = this.socket.packetHandler;
-        
+
         if (isMi) this.setSkin(skin);
         if (!this.isMi && this.socket.isConnected != null) {
             // some old clients don't understand ClearAll message
             // so we will send update for them
-			this.used_not_eat = false;
+            this.used_not_eat = false;
             this.setEat(true);
-            
+
             if (packetHandler.protocol < 6)
                 packetHandler.sendPacket(new Packet.UpdateNodes(this, [], [], [], this.clientNodes));
-                
+
             packetHandler.sendPacket(new Packet.ClearAll());
             this.clientNodes = [];
             this.scramble();
@@ -444,7 +469,7 @@ class PlayerTracker {
         if ((!this.isCloseRequested && this.gameServer.config.serverTimeout) && !this.cells.length) {
             dt = (this.gameServer.stepDateTime - this.socket.lastAliveTime) / 1000;
             if (dt >= this.gameServer.config.serverTimeout) {
-		console.log(`connect close for ${this.socket.remoteAddress}`)
+                console.log(`connect close for ${this.socket.remoteAddress}`)
                 this.socket.close(1000, "Connection timeout");
                 this.isCloseRequested = true;
             }
@@ -491,7 +516,8 @@ class PlayerTracker {
         if (this.gameServer.config.serverScrambleLevel == 2) {
             // scramble (moving border)
             if (!this.borderCounter) {
-                const b = this.gameServer.border, v = this.viewBox;
+                const b = this.gameServer.border,
+                    v = this.viewBox;
                 const bound = {
                     minx: Math.max(b.minx, v.minx - v.halfWidth),
                     miny: Math.max(b.miny, v.miny - v.halfHeight),
@@ -531,7 +557,7 @@ class PlayerTracker {
             oldIndex++;
         }
         for (; newIndex < this.viewNodes.length; newIndex++) {
-          addNodes.push(this.viewNodes[newIndex]);
+            addNodes.push(this.viewNodes[newIndex]);
         }
         for (; oldIndex < this.clientNodes.length; oldIndex++) {
             const node = this.clientNodes[oldIndex];
@@ -541,26 +567,36 @@ class PlayerTracker {
         this.clientNodes = this.viewNodes;
 
         // Send update packet
-        packetHandler.sendPacket(Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes));
+        packetHandler.sendPacket(new Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes));
 
         // Update leaderboard
-        if (++this.tickLeaderboard >= 25) {
+        if (++this.tickLeaderboard >= 4) {
             // 1 / 0.040 = 25 (once per second)
             this.tickLeaderboard = 0;
-            
-            if (this.cells.length && this.user_auth) this.gameServer.db.db('agarix-db').collection('users').updateOne(
-                    {access_token: this.user.access_token},
-                    {$inc: {game_time: 1}, $set: {updateTime: Date.now()}});
-            
+
             if (this.gameServer.leaderboardType >= 0) packetHandler.sendPacket(new Packet.UpdateLeaderboard(this, this.gameServer.leaderboard, this.gameServer.leaderboardType));
         }
+	    
+	if (++this.tickSecond >= 25) {
+            if (this.cells.length && this.user_auth) this.gameServer.db.db('agarix-db').collection('users').updateOne({
+                access_token: this.user.access_token
+            }, {
+                $inc: {
+                    game_time: 1
+                },
+                $set: {
+                    updateTime: Date.now()
+                }
+            });
+	}
     }
     updateSpecView(len) {
-		let scale = 0;
-	    
+        let scale = 0;
+
         if (!this.spectate || len) {
             // in game
-            let cx = 0, cy = 0;
+            let cx = 0,
+                cy = 0;
             for (let i = 0; i < len; i++) {
                 cx += this.cells[i].position.x / len;
                 cy += this.cells[i].position.y / len;
@@ -653,7 +689,7 @@ class PlayerTracker {
     }
     getSpecTarget() {
         if (!this.spectateTarget || this.spectateTarget.isRemoved || !this.spectateTarget.cells.length) return this.gameServer.largestClient;
-        
+
         return this.spectateTarget;
     }
     setCenterPos(p) {
