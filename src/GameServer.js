@@ -65,6 +65,7 @@ function GameServer() {
     //this.ipTokens = {};
     this.userList = [];
     this.badWords = [];
+    this.skins = [];
 }
 
 module.exports = GameServer;
@@ -112,7 +113,15 @@ GameServer.prototype.start = async function() {
 
     // Set border, quad-tree
     const QuadNode = require('./modules/QuadNode.js');
-
+    const fs = require("fs");
+    
+    if (fs.existsSync("../src/skins.txt")) {
+        // Read and parse the Skins - filter out whitespace-only Skins
+        this.skins = fs.readFileSync("../src/skins.txt", "utf8").split(/[\r\n]+/).filter(x => {
+            return x != ''; // filter empty Skins
+        });
+    }
+    
     this.setBorder(this.config.borderWidth, this.config.borderHeight);
     this.quadTree = new QuadNode(this.border);
 
