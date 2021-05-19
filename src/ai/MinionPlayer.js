@@ -21,7 +21,7 @@ class MinionPlayer extends PlayerTracker {
         if (this.owner.user_auth) {
             if (this.owner.checkVIP() && this.owner.user.vip.botsSkins) {
                 this.minionSkins = true;
-                skin = this.owner.socket.packetHandler.getRandomSkin();
+                skin = this.getRandomSkin();
             }
             if (this.owner.user.clan) {
                 this.tag = this.owner.tag;
