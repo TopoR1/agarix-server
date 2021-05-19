@@ -10,7 +10,7 @@ class MinionPlayer extends PlayerTracker {
         this.tickMinions = 0;
     }
     checkConnection() {
-        if (this.socket.isCloseRequest || ((this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length)) {
+        if (this.socket.isCloseRequest || ((!this.owner.minionActivity || !this.owner.cells.length) && !this.cells.length)) {
             while (this.cells.length)
                 this.gameServer.removeNode(this.cells[0]);
             this.isRemoved = true;
