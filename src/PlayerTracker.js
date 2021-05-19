@@ -328,9 +328,16 @@ class PlayerTracker {
         if (!this._score) this._score = .4;
         return this._score;
     }
+	getRandomSkin() {
+        // Picks a random skin
+        if (this.gameServer.skins.length > 0) {
+            const index = (this.gameServer.skins.length * Math.random()) >>> 0;
+            
+            return this.gameServer.skins[index];
+        }
+    }
     setName(name) {
-        const nameAndSkin = /^(?:\{([^}]*)\})?([^]*)/.exec(name);
-        this._name = nameAndSkin[2].trim();
+        this._name = name.trim();
         let writer = new BinaryWriter();
         writer.writeStringZeroUnicode(this._name);
         this._nameUnicode = writer.toBuffer();
