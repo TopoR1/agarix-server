@@ -696,11 +696,15 @@ class PacketHandler {
     }
     message_onKeyE(message) {
         if (this.gameServer.config.disableERTP) return;
-        this.socket.playerTracker.minionSplit = true;
+        
+        for (const item of this.socket.playerTracker.minions)
+            item.socket.packetHandler.pressSpace = true;
     }
     message_onKeyR(message) {
         if (this.gameServer.config.disableERTP) return;
-        this.socket.playerTracker.minionEject = true;
+        
+        for (const item of this.socket.playerTracker.minions)
+            item.socket.packetHandler.pressW = true;
     }
     message_onKeyT(message) {
         if (this.gameServer.config.disableERTP) return;
@@ -790,12 +794,6 @@ class PacketHandler {
         if (this.pressQ) { // Q Press
             this.socket.playerTracker.pressQ();
             this.pressQ = false;
-        }
-        if (this.socket.playerTracker.minionSplit) {
-            this.socket.playerTracker.minionSplit = false;
-        }
-        if (this.socket.playerTracker.minionEject) {
-            this.socket.playerTracker.minionEject = false;
         }
         this.processMouse();
     }
