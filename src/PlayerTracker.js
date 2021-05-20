@@ -274,7 +274,7 @@ class PlayerTracker {
                 } else this.minionsAmount = this.config.serverMinions;
 
                 this.minionMass = this.gameServer.config.minionStartSize;
-            } else if (this.minionsAmount) this.minionsAmount = 0;
+            }
         } else if (seconds < minions?.time) {
             if (this.minionsAmount != minions.bots || this.minionMass != minions.mass) {
                 this.minionControl = true;
