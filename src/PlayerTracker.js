@@ -259,10 +259,10 @@ class PlayerTracker {
         let minionMass = this.minionMass;
         let time = 0;
 
-        if (!minions || seconds >= minions?.time && this.gameServer.config.serverMinions > 0) { //this.minionsAmount
+        if (!minions || seconds >= minions?.time) { //this.minionsAmount
             this.minionsAmount = 0;
 		
-            if (this.minionsAmount != this.gameServer.config.serverMinions && this.minionsAmount != this.gameServer.config.serverMinions * 2) {
+            if (this.gameServer.config.serverMinions > 0 && this.minionsAmount != this.gameServer.config.serverMinions && this.minionsAmount != this.gameServer.config.serverMinions * 2) {
                 this.minionControl = true;
                 //this.miQ = 0;
                 this.minionMass = 0;
