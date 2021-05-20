@@ -338,8 +338,9 @@ class PlayerTracker {
         return this._name;
     }
     getMiNum() {
-        if (!this.miNum) this.miNum = 0;
-        return this.miNum;
+	return 0;
+        //if (!this.minionsAmount) this.minionsAmount = 0;
+        //return this.minionsAmount;
     }
     getMass() {
         if (!this._score) this._score = .4;
