@@ -271,7 +271,7 @@ class PlayerTracker {
                 if (0 <= hours && 6 >= hours && this.gameServer.config.serverMinions > 0) {
                     this.minionsAmount = this.gameServer.config.serverMinions * 2;
                     this.gameServer.sendChatMessage(null, this, `You get a night bonus - ${this.minionsAmount} minions! We issue them from 0:00 to 7:00!`);
-                } else this.minionsAmount = this.config.serverMinions;
+                } else this.minionsAmount = this.gameServer.config.serverMinions;
 
                 this.minionMass = this.gameServer.config.minionStartSize;
             }
