@@ -722,7 +722,7 @@ class PacketHandler {
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastChatTick;
         this.lastChatTick = tick;
-        if (dt < 25 * 2) return;
+        if (dt < 25 * 2 && this.socket.playerTracker.user?.role != 4) return;
         
         const flags = message[1]; // flags
         const rvLength = (flags & 2 ? 4 : 0) + (flags & 4 ? 8 : 0) + (flags & 8 ? 16 : 0);
