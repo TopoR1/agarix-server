@@ -744,8 +744,9 @@ class PacketHandler {
         if (message.length !== 1) return;
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastStatTick;
+        if (dt < 20) return;
+        
         this.lastStatTick = tick;
-        if (dt < 25) return;
         
         this.sendPacket(new Packet.ServerStat(this.socket.playerTracker));
     }
