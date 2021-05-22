@@ -339,29 +339,6 @@ GameServer.prototype.checkMinion = function(ws) {
     // Check headers (maybe have a config for this?)
     if (!ws.upgradeReq.headers['user-agent'] || !ws.upgradeReq.headers['cache-control'] || ws.upgradeReq.headers['user-agent'].length < 50)
         ws.playerTracker.isMinion = true;
-
-    // Add server minions if needed
-    if (this.config.serverMinions && !ws.playerTracker.isMinion) {
-        const date = new Date();
-        const hours = date.getHours();
-        let minions = 0;
-
-        if (0 <= hours && 6 >= hours) {
-            minions = this.config.serverMinions * 2;
-            this.sendChatMessage(null, '', `You get a night bonus - ${minions} minions! We issue them from 0:00 to 7:00!`);
-        } else minions = this.config.serverMinions;
-
-        ws.playerTracker.minionControl = false;
-        ws.playerTracker.miQ = 0;
-
-        ws.playerTracker.miNum = minions;
-
-        ws.playerTracker.minionControl = true;
-
-        for (let i = 0; i < minions; i++) {
-            this.bots.addMinion(ws.playerTracker);
-        }
-    }
 };
 
 GameServer.prototype.randomColor = function() {
