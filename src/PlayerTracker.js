@@ -430,7 +430,6 @@ class PlayerTracker {
         }
     }
     joinGame(name, skin, isMi) {
-        if (!isMi) this.setSkin(skin);
         if (!name.trim()) name = "An unnamed cell";
         this.setName(name);
 
