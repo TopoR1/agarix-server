@@ -602,6 +602,8 @@ class PlayerTracker {
         }
 
         if (++this.tickSecond >= 25) {
+			this.tickSecond = 0;
+			
             if (this.cells.length && this.user_auth) this.gameServer.db.db('agarix-db').collection('users').updateOne({
                 access_token: this.user.access_token
             }, {
