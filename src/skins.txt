@@ -451,7 +451,6 @@ chilled_homie.png
 christmas_kittie.png
 chromatic_peafowl.png
 clandy12.png
-coin.png
 cougar.png
 coyote.png
 crazy_love.png
@@ -516,7 +515,6 @@ panther.png
 pickeyes.png
 pirateflgss.png
 plague.png
-portal.png
 prismatic_jackal.png
 prxdtE7.png
 ragnarok.png
