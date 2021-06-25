@@ -67,6 +67,7 @@ class GameServer {
         this.badWords = [];
         this.skins = [];
     }
+
     request(options) {
         return new Promise((resolve, reject) => {
             request(options, (error, response, body) => {
@@ -79,6 +80,7 @@ class GameServer {
             });
         });
     }
+
     async start() {
         const reqIP = await this.request({
             url: "http://agarix.ru/getipaddress.php",
@@ -159,9 +161,11 @@ class GameServer {
         if (this.config.serverStatsPort > 0)
             this.startStatsServer(this.config.serverStatsPort);
     }
+
     async sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
     async dbConnect() {
         const client = await MongoClient.connect(`mongodb://${this.dbAuth.host}:${this.dbAuth.port}`, {
             useNewUrlParser: true,
@@ -187,9 +191,11 @@ class GameServer {
             await this.dbConnect();
         }
     }
+
     checkDBConnect() {
         return !!this.db && !!this.db.topology && this.db.topology.isConnected();
     }
+
     onHttpServerOpen() {
         // Start Main Loop
         setTimeout(this.timerLoopBind, 1);
@@ -205,6 +211,7 @@ class GameServer {
             Logger.info(`Added ${this.config.serverBots} player bots`);
         }
     }
+
     addNode(node) {
         // Add to quad-tree & node list
         let x = node.position.x;
@@ -226,6 +233,7 @@ class GameServer {
         // Special on-add actions
         node.onAdd(this);
     }
+
     onServerSocketError(error) {
         Logger.error(`WebSocket: ${error.code} - ${error.message}`);
         switch (error.code) {
@@ -241,6 +249,7 @@ class GameServer {
         }
         process.exit(1); // Exits the program
     }
+
     onClientSocketOpen(ws) {
         /*if (this.ipTokens[ws._socket.remoteAddress] != ws.upgradeReq.url.substr(1)) {
             ws.close();
@@ -333,11 +342,13 @@ class GameServer {
 
         ws.packetHandler.startCheckSendPacket();
     }
+
     checkMinion(ws) {
         // Check headers (maybe have a config for this?)
         if (!ws.upgradeReq.headers['user-agent'] || !ws.upgradeReq.headers['cache-control'] || ws.upgradeReq.headers['user-agent'].length < 50)
             ws.playerTracker.isMinion = true;
     }
+
     randomColor() {
         let RGB;
         switch (this.config.serverColorType) {
@@ -502,6 +513,7 @@ class GameServer {
             }
         }
     }
+
     checkIpBan(ipAddress) {
         if (!this.ipBanList || !this.ipBanList.length || ipAddress == "127.0.0.1") return false;
 
@@ -517,6 +529,7 @@ class GameServer {
 
         return false;
     }
+
     setBorder(width, height) {
         const hw = width / 2;
         const hh = height / 2;
@@ -529,6 +542,7 @@ class GameServer {
             height: height
         };
     }
+
     getRandomColor() {
         // get random
         const colorRGB = [0xFF, 0x07, (Math.random() * 256) >> 0];
@@ -542,6 +556,7 @@ class GameServer {
             g: colorRGB[2]
         };
     }
+
     removeNode(node) {
         try {
             // Remove from quad-tree
@@ -559,6 +574,7 @@ class GameServer {
         // Special on-remove actions
         node.onRemove(this);
     }
+
     updateClients() {
         // check dead clients
         /*const len = this.clients.length;
@@ -597,6 +613,7 @@ class GameServer {
             this.clients[i].playerTracker.sendUpdate();
         }
     }
+
     updateLeaderboard() {
         // Update leaderboard with the gamemode's method
         this.leaderboard = [];
@@ -617,6 +634,7 @@ class GameServer {
             this.largestClient = this.gameMode.rankOne;
         }
     }
+
     onChatMessage(from, to, message) {
         if (!message || !this.config.serverChat || (from && from.isMuted)) return;
         
@@ -643,11 +661,13 @@ class GameServer {
         
         this.sendChatMessage(from, to, message);
     }
+
     setCharAt(str, index, chr) {
         if(index > str.length - 1) return str;
         
         return str.substring(0, index) + chr + str.substring(index + 1);
     }
+
     checkBadSymbols(text) {
         for (let i = 0; i < text.length; i++) {
             if ((text.charCodeAt(i) >= 0x600 && text.charCodeAt(i) <= 0x6FF) || (text.charCodeAt(i) >= 0x750 && text.charCodeAt(i) <= 0x77F) || (text.charCodeAt(i) >= 0x8A0 && text.charCodeAt(i) <= 0x8FF) || (text.charCodeAt(i) >= 0xFB50 && text.charCodeAt(i) <= 0xFDFF) || (text.charCodeAt(i) >= 0xFE70 && text.charCodeAt(i) <= 0xFEFF) || (text.charCodeAt(i) >= 0x10E60 && text.charCodeAt(i) <= 0x10E7F) || (text.charCodeAt(i) >= 0x1EE00 && text.charCodeAt(i) <= 0x1EEFF)) {
@@ -657,6 +677,7 @@ class GameServer {
         
         return text.replace(/\s+/g, ' ').trim();
     }
+
     checkBadWord(value) {
         if (!value) return value;
 
@@ -668,6 +689,7 @@ class GameServer {
 
         return value;
     }
+
     sendChatMessage(from, to, message) {
         const Packet = require('./packet');
         
@@ -680,6 +702,7 @@ class GameServer {
             }
         }
     }
+
     timerLoop() {
         const timeStep = 40; // vanilla: 40
         const ts = Date.now();
@@ -695,6 +718,7 @@ class GameServer {
         setTimeout(this.mainLoopBind, 0);
         setTimeout(this.timerLoopBind, 0);
     }
+
     mainLoop() {
         this.stepDateTime = Date.now();
         const tStart = process.hrtime();
@@ -794,7 +818,7 @@ class GameServer {
             // once per second
             this.updateLeaderboard();
         }
-        if (this.tickCounter % 2 == 0) {
+        if (((this.tickCounter + 3) % 20) === 0) {
             this.SendMiniMap();
         }
 
@@ -802,6 +826,7 @@ class GameServer {
         const tEnd = process.hrtime(tStart);
         this.updateTime = tEnd[0] * 1e3 + tEnd[1] / 1e6;
     }
+
     movePlayer(cell, client) {
         if (client.socket.isConnected == false || client.frozen || !client.mouse || client.portal)
             return; // Do not move
@@ -828,6 +853,7 @@ class GameServer {
         // regular remerge time
         cell._canRemerge = cell.getAge() >= base;
     }
+
     updateSizeDecay(cell) {
         let rate = this.config.playerDecayRate, cap = this.config.playerDecayCap;
 
@@ -839,6 +865,7 @@ class GameServer {
         const decay = 1 - rate * this.gameMode.decayMod;
         cell.setSize(Math.sqrt(cell.radius * decay));
     }
+
     boostCell(cell) {
         if (cell.isMoving && !cell.boostDistance || cell.isRemoved) {
             cell.boostDistance = 0;
@@ -854,6 +881,7 @@ class GameServer {
         cell.checkBorder(this.border);
         this.updateNodeQuad(cell);
     }
+
     autoSplit(cell, client) {
         //if (client.frozen) return;
         // get size limit based off of rec mode
@@ -879,6 +907,7 @@ class GameServer {
             }
         }
     }
+
     updateNodeQuad(node) {
         // update quad tree
         const item = node.quadItem.bound;
@@ -889,6 +918,7 @@ class GameServer {
         this.quadTree.remove(node.quadItem);
         this.quadTree.insert(node.quadItem);
     }
+
     checkCellCollision(cell, check) {
         const p = check.position.clone().sub(cell.position);
 
@@ -900,6 +930,7 @@ class GameServer {
             p: p // check - cell position
         };
     }
+
     checkRigidCollision(m) {
         if (!m.cell.owner || !m.check.owner)
             return false;
@@ -920,6 +951,7 @@ class GameServer {
         }
         return !m.cell._canRemerge || !m.check._canRemerge;
     }
+
     resolveRigidCollision(m) {
         const push = (m.cell._size + m.check._size - m.d) / m.d;
         if (push <= 0 || m.d == 0) return; // do not extrude
@@ -936,6 +968,7 @@ class GameServer {
         m.cell.position.sub2(m.p, r2);
         m.check.position.add(m.p, r1);
     }
+
     resolveCollision(m) {
         let cell = m.cell;
         let check = m.check;
@@ -989,6 +1022,7 @@ class GameServer {
         // Remove cell
         this.removeNode(cell);
     }
+
     splitPlayerCell(client, parent, angle, mass) {
         const size = Math.sqrt(mass * 100);
         const size1 = Math.sqrt(parent.radius - size * size);
@@ -1005,12 +1039,14 @@ class GameServer {
         newCell.setBoost(this.config.splitVelocity * Math.pow(size, 0.0122), angle, parent);
         this.addNode(newCell);
     }
+
     randomPos() {
         return new Vec2(
             this.border.minx + this.border.width * Math.random(),
             this.border.miny + this.border.height * Math.random()
         );
     }
+
     spawnCells() {
         // spawn food at random size
         const maxCount = this.config.foodMinAmount - this.nodesFood.length;
@@ -1031,6 +1067,7 @@ class GameServer {
             if (!this.willCollide(virus)) this.addNode(virus);
         }
     }
+
     spawnCoins() {
         const maxCount = this.config.coinSpawnAmount - this.nodesCoin.length;
         const spawnCount = Math.min(maxCount, this.config.coinSpawnAmount);
@@ -1040,6 +1077,7 @@ class GameServer {
             this.addNode(cell);
         }
     }
+
     spawnPortals() {
         const maxCount = this.config.portalSpawnAmount - this.nodesPortals.length;
         const spawnCount = Math.min(maxCount, this.config.portalSpawnAmount);
@@ -1049,6 +1087,7 @@ class GameServer {
             this.addNode(cell);
         }
     }
+
     spawnPlayer(player, pos) {
         if (this.disableSpawn) return; // Not allowed to spawn!
 
@@ -1092,6 +1131,7 @@ class GameServer {
         // Set initial mouse coords
         player.mouse = new Vec2(pos.x, pos.y);
     }
+
     willCollide(cell) {
         let notSafe = false; // Safe by default
         const sqSize = cell.radius;
@@ -1110,6 +1150,7 @@ class GameServer {
         });
         return notSafe;
     }
+
     splitCells(client) {
         // Split cell order decided by cell age
         const cellToSplit = [];
@@ -1135,6 +1176,7 @@ class GameServer {
             this.splitPlayerCell(client, cell, d.angle(), cell._mass * .5);
         });
     }
+
     canEjectMass(client) {
         if (client.lastEject === null) {
             // first eject
@@ -1149,6 +1191,7 @@ class GameServer {
         client.lastEject = this.tickCounter;
         return true;
     }
+
     ejectMass(client) {
         if (!this.canEjectMass(client) || client.mouse == null || client.portal) // || client.frozen
             return;
@@ -1177,7 +1220,7 @@ class GameServer {
 
             // Create cell and add it to node list
             let ejected = null;
-            
+
             if (!this.config.ejectVirus) {
                 ejected = new Entity.EjectedMass(this, null, pos, this.config.ejectSize);
             } else {
@@ -1188,6 +1231,7 @@ class GameServer {
             this.addNode(ejected);
         }
     }
+
     shootVirus(parent, angle) {
         // Create virus and add it to node list
         const pos = parent.position.clone();
@@ -1195,6 +1239,7 @@ class GameServer {
         newVirus.setBoost(this.config.virusVelocity, angle);
         this.addNode(newVirus);
     }
+
     SendMiniMap() {
         const Packet = require('./packet');
 
@@ -1209,6 +1254,7 @@ class GameServer {
             client.packetHandler.sendPacket(new Packet.MiniMap(cells));
         }
     }
+
     startStatsServer(port) {
         // Create stats
         this.getStats();
@@ -1230,6 +1276,7 @@ class GameServer {
             setInterval(getStatsBind, this.config.serverStatsUpdate * 1000);
         }.bind(this));
     }
+
     getStats() {
         // Get server statistics
         let totalPlayers = 0;
