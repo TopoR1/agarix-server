@@ -4,12 +4,8 @@ function Coin() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     
     this.cellType = 1;
-	this.name = 'coin';
+    this.cellOtherType = 5;
     this.color = {r: 255, g: 215, b: 0};
-    this.isSpiked = false;  // If true, then this cell has spikes around it
-    this.isAgitated = false;// If true, then this cell has waves on it's outline
-    this.killedBy = null;   // Cell that ate this cell
-    this.isMoving = false;  // Indicate that cell is in boosted mode
 }
 
 module.exports = Coin;

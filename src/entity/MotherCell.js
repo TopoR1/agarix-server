@@ -6,6 +6,7 @@ function MotherCell() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     
     this.cellType = 2;
+    this.cellOtherType = 4;
     this.isSpiked = true;
     this.isMotherCell = true;       // Not to confuse bots
     this.color = { r: 0xce, g: 0x63, b: 0x63 };

@@ -4,8 +4,8 @@ var Packet = require('../packet');
 function PlayerCell() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     this.cellType = 0;
+    this.cellOtherType = 0;
     this._canRemerge = false;
-    this.name = 'player';
 }
 
 module.exports = PlayerCell;

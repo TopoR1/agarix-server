@@ -337,11 +337,6 @@ class PlayerTracker {
         if (!this._name.length) this._name = "An unnamed cell";
         return this._name;
     }
-    getMiNum() {
-	return 0;
-        //if (!this.minionsAmount) this.minionsAmount = 0;
-        //return this.minionsAmount;
-    }
     getMass() {
         if (!this._score) this._score = .4;
         return this._score;
@@ -557,13 +552,45 @@ class PlayerTracker {
         const eatNodes = [];
         const addNodes = [];
         const updNodes = [];
+        const skinsNodes = [];
+        const tagsNodes = [];
+        const namesNodes = [];
         let oldIndex = 0;
         let newIndex = 0;
+        const getTexts = node => {
+            if (node.owner._skinUtf8 != null) {
+                const skinI = skinsNodes.findIndex(item => item == node.owner._skinUtf8);
+                
+                if (skinI == -1) skinsNodes.push({
+                    id: node.owner.pID,
+                    text: node.owner._skinUtf8
+                });
+            }
+
+            if (node.owner.tag != null || node.owner.tag != '') {
+                const tagI = tagsNodes.findIndex(item => item == node.owner.tag);
+
+                if (tagI == -1) tagsNodes.push({
+                    id: node.owner.pID,
+                    text: node.owner.tag
+                });
+            }
+
+            if (node.owner._nameUtf8 != null) {
+                const nameI = namesNodes.findIndex(item => item == node.owner._nameUtf8);
+
+                if (nameI == -1) namesNodes.push({
+                    id: node.owner.pID,
+                    text: node.owner._nameUtf8
+                });
+            }
+        }
         for (; newIndex < this.viewNodes.length && oldIndex < this.clientNodes.length;) {
             if (this.viewNodes[newIndex].nodeId < this.clientNodes[oldIndex].nodeId) {
                 if (this.viewNodes[newIndex].isRemoved) continue;
                 addNodes.push(this.viewNodes[newIndex]);
                 newIndex++;
+                if (this.viewNodes[newIndex]?.cellOtherType == 0) getTexts(this.viewNodes[newIndex]);
                 continue;
             }
             if (this.viewNodes[newIndex].nodeId > this.clientNodes[oldIndex].nodeId) {
@@ -576,12 +603,16 @@ class PlayerTracker {
             const node = this.viewNodes[newIndex];
             if (node.isRemoved) continue;
             // only send update for moving or player nodes
-            if (node.isMoving || node.cellType == 0 || node.cellType == 2 || this.gameServer.config.serverGamemode == 3 && node.cellType == 1) updNodes.push(node);
+            if (node.isMoving || node.cellType == 0 || node.cellType == 2 || this.gameServer.config.serverGamemode == 3 && node.cellType == 1) {
+                updNodes.push(node);
+                if (node.cellOtherType == 0) getTexts(this.viewNodes[newIndex]);
+            }
             newIndex++;
             oldIndex++;
         }
         for (; newIndex < this.viewNodes.length; newIndex++) {
             addNodes.push(this.viewNodes[newIndex]);
+            if (this.viewNodes[newIndex]?.cellOtherType == 0) getTexts(this.viewNodes[newIndex]);
         }
         for (; oldIndex < this.clientNodes.length; oldIndex++) {
             const node = this.clientNodes[oldIndex];
@@ -591,7 +622,7 @@ class PlayerTracker {
         this.clientNodes = this.viewNodes;
 
         // Send update packet
-        packetHandler.sendPacket(new Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes));
+        packetHandler.sendPacket(new Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes, skinsNodes, tagsNodes, namesNodes));
 
         // Update leaderboard
         if (++this.tickLeaderboard >= 4) {

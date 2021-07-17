@@ -7,11 +7,12 @@ function Portal() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     
     this.cellType = 1;
+    this.cellOtherType = 6;
     this.color = {r: 104, g: 24, b: 195};
-	this.name = 'portal';
     this.isMotherCell = true;
     this.minSize = 130;
 	this.checkSize = false;
+    this.isSpiked = true;
 }
 
 module.exports = Portal;

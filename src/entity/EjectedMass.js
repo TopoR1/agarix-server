@@ -4,7 +4,7 @@ function EjectedMass() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     
     this.cellType = 3;
-    this.name = 'ejectMass';
+    this.cellOtherType = 3;
 }
 
 module.exports = EjectedMass;

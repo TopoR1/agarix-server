@@ -3,7 +3,7 @@ const Cell = require('./Cell');
 function Virus() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     this.cellType = 2;
-    this.name = 'virus';
+    this.cellOtherType = 2;
     this.virusact = false;
     this.isSpiked = true;
     this.isMotherCell = false; // Not to confuse bots

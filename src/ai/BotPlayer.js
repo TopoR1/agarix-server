@@ -79,7 +79,7 @@ class BotPlayer extends PlayerTracker {
                     influence = check._size;
             }
             
-            if (check.name == 'coin' || check.name == 'portal') influence = 0;
+            if (check.cellOtherType > 4) influence = 0;
 
             // Apply influence if it isn't 0
             if (!influence) continue;

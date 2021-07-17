@@ -78,7 +78,6 @@ UpdateLeaderboard.prototype.buildFfa6 = function () {
         var item = this.leaderboard[i];
         if (item == null) return null; // bad leaderboard just don't send it
         var name = item.getFriendlyName();
-        var minions = item.getMiNum();
         var num = i + 1;
         var id = item == this.playerTracker ? 1 : 0;
         writer.writeUInt32(id >>> 0); // isMe flag
@@ -92,7 +91,6 @@ UpdateLeaderboard.prototype.buildFfa6 = function () {
         if (reg) name = name.replace(reg[0], '').trim();
         
         mass = item.getMass();
-        miInfo = " (m: " + minions + ")";
         if (mass >= this.playerTracker.gameServer.config.massRestart) {
             name = "Win " + name + "! Restart " + this.playerTracker.gameServer.config.timeRestart + "sec.";
         }
@@ -100,10 +98,9 @@ UpdateLeaderboard.prototype.buildFfa6 = function () {
         roundMass = parseFloat(mass.toFixed(1));
         mass = roundMass + "k";
         if (name.replace(/^\s+|\s+$/g, '').lentgh = 0) name = "An unnamed cell";
-        if (minions == 0) miInfo = "";
         
-        if (name) writer.writeStringZeroUtf8(num + ". " + name + " (" + mass + ")" + miInfo);
-        else if (!name) writer.writeStringZeroUtf8(num + ". An unnamed cell" + " (" + mass + ")" + miInfo);
+        if (name) writer.writeStringZeroUtf8(num + ". " + name + " (" + mass + ")");
+        else if (!name) writer.writeStringZeroUtf8(num + ". An unnamed cell" + " (" + mass + ")");
         else writer.writeUInt8(0);
     }
     writer.writeUInt32(1 >>> 0);
@@ -113,15 +110,11 @@ UpdateLeaderboard.prototype.buildFfa6 = function () {
     reg = /\{([\w\W]+)\}/.exec(name);
     if (reg) name = name.replace(reg[0], '').trim();
 
-    minions = this.playerTracker.getMiNum();
     mass = this.playerTracker.getMass() / 1000;
     roundMass = parseFloat(mass.toFixed(1));
     mass = roundMass + "k";
-    //miInfo = " (m: " + minions + ")";
-    //if (minions == 0) 
-	miInfo = "";
     if (name.replace(/^\s+|\s+$/g, '').lentgh = 0) name = "An unnamed cell";
-    leader = pos + ". " + name + " (" + mass + ")" + miInfo;
+    leader = pos + ". " + name + " (" + mass + ")";
 
     if (pos > 10) {
         if (item.checkVIP()) {

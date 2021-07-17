@@ -8,10 +8,9 @@ function Cell(gameServer, owner, position, size, time = 0) {
     this.radius = 0;
     this._size = 0;
     this._mass = 0;
-	this.name = "other";
     this.cellType = -1;     // 0 = Player Cell, 1 = Food, 2 = Virus, 3 = Ejected Mass
+    this.cellOtherType = -1; // 0 = Player Cell, 1 = Food, 2 = Virus, 3 = Ejected Mass, 4 = Mother Cell, 5 = Coin, 6 = Portal
     this.isSpiked = false;  // If true, then this cell has spikes around it
-    this.isAgitated = false;// If true, then this cell has waves on it's outline
     this.killedBy = null;   // Cell that ate this cell
     this.isMoving = false;  // Indicate that cell is in boosted mode
 	this.checkSize = true;

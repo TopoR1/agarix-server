@@ -4,7 +4,7 @@ function Food() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
     
     this.cellType = 1;
-    this.name = 'pellet';
+    this.cellOtherType = 1;
 }
 
 module.exports = Food;
