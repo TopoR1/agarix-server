@@ -50,7 +50,7 @@ Portal.prototype.onEaten = async function(cell) {
                 cell.position = new Vec2(this.position.x, this.position.y);
             }
             //cell.
-            const size = cell._size - 1;
+            const size = cell._size - (1 * client.gameServer.config.playerSpeed);
             if (size > 40) {
                 cell.setSize(size);
                 mass += cell._size;
