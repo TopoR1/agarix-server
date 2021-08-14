@@ -45,7 +45,7 @@ class UpdateLeaderboard {
         let i = 0;
 
         for (const item of this.leaderboard) {
-            if (item == null) return; // bad leaderboard just don't send it
+            if (item == null) return null; // bad leaderboard just don't send it
 
             const name = item.getName();
             const id = item.pID == this.playerTracker.pID ? 1 : 0;
@@ -61,7 +61,7 @@ class UpdateLeaderboard {
                 if (!item.win) item.win = true;
             }
 		
-		console.log(`${++i}. ${name} (${mass})`)
+		console.log(`${i}. ${name} (${mass})`)
 
             writer.writeStringZeroUtf8(`${++i}. ${name} (${mass})`);
         }
@@ -88,7 +88,7 @@ class UpdateLeaderboard {
         writer.writeUInt32(this.leaderboard.length >>> 0); // Number of elements
 
         for (let value of this.leaderboard) {
-            if (value == null) return; // bad leaderboardm just don't send it
+            if (value == null) return null; // bad leaderboardm just don't send it
             if (isNaN(value)) value = 0;
             value = value < 0 ? 0 : value;
             value = value > 1 ? 1 : value;
