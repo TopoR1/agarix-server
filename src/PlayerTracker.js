@@ -387,7 +387,7 @@ class PlayerTracker {
         }
         if (player.isBot && player._score > 20000) player.gameServer.removeNode(player.cells[0]);
         if (player._score >= player.gameServer.config.massRestart && !player.gameServer.restart.time) {
-			player.gameServer.restart.time = Date.now() + player.gameServer.config.timeRestart * 1000;
+			player.gameServer.restart.time = Date.now() / 1000 + player.gameServer.config.timeRestart;
             setTimeout(() => {
                 process.exit(3);
             }, player.gameServer.config.timeRestart * 1000);
