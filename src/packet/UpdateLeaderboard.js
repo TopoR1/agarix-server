@@ -70,7 +70,7 @@ class UpdateLeaderboard {
         const mass = parseFloat((this.playerTracker.getMass() / 1000).toFixed(1)) + 'k';
 
         if (pos > this.leaderboardCount) {
-            if (item.checkVIP() && item.user.vip.chatCrown) writer.writeUInt32(1);
+            if (player.checkVIP() && player.user.vip.chatCrown) writer.writeUInt32(1);
             else writer.writeUInt32(0);
 
             writer.writeStringZeroUtf8(`${pos}. ${name} (${mass})`);
