@@ -16,15 +16,14 @@ class PlayerTracker {
         this._name = "";
         this._miName = "";
         this._skin = "";
-        this.color_bonus = "";
         this._uuid = "";
         this._token = "";
         this._accessPlay = false;
-        this._bonus = false;
         this._nameUtf8 = null;
         this._skinUtf8protocol11 = null;
         this._nameUnicode = null;
         this._skinUtf8 = null;
+		this.win = false;
         this.recaptcha = {
             token: null,
             active: false,
@@ -331,10 +330,10 @@ class PlayerTracker {
         }
         this.borderCounter = 0;
     }
-    getFriendlyName() {
-        if (!this._name) this._name = "";
+    getName() {
+        if (!this._name) this._name = '';
         this._name = this._name.trim();
-        if (!this._name.length) this._name = "An unnamed cell";
+        if (!this._name.length) this._name = 'An unnamed cell';
         return this._name;
     }
     getMass() {
@@ -382,22 +381,22 @@ class PlayerTracker {
         const player = player_send || this;
         player._score = 0; // reset to not cause bugs with leaderboard
         let scale = 0; // reset to not cause bugs with viewbox
-        for (let i = 0; i < player.cells.length; i++) {
-            scale += player.cells[i]._size;
-            player._score += player.cells[i]._mass;
+        for (const cell of player.cells) {
+            scale += cell._size;
+            player._score += cell._mass;
         }
         if (player.isBot && player._score > 20000) player.gameServer.removeNode(player.cells[0]);
-        if (player._score >= player.gameServer.config.massRestart) {
+        if (player._score >= player.gameServer.config.massRestart && !player.gameServer.restart.time) {
+			player.gameServer.restart.time = Date.now() + player.gameServer.config.timeRestart * 1000;
             setTimeout(() => {
                 process.exit(3);
-            }, player.gameServer.config.timeRestart * 1000)
-            if (player._score >= player.gameServer.config.maxMassRestart) {
-                console.log(`scale: ${scale}`)
-                console.log(`pl.scale: ${player._score}`)
-                console.log(`cells: ${player.cells.length}`)
-                process.exit(3);
-            }
+            }, player.gameServer.config.timeRestart * 1000);
         }
+			
+        if (player._score >= player.gameServer.config.maxMassRestart) {
+            process.exit(3);
+        }
+		
         if (!scale) return scale = player._score = .2; // reset
         else return player._scale = Math.pow(Math.min(64 / scale, 1), 0.4);
     }
@@ -625,7 +624,7 @@ class PlayerTracker {
         packetHandler.sendPacket(new Packet.UpdateNodes(this, addNodes, updNodes, eatNodes, delNodes, skinsNodes, tagsNodes, namesNodes));
 
         // Update leaderboard
-        if (++this.tickLeaderboard >= 4) {
+        if (++this.tickLeaderboard >= 13) {
             // 1 / 0.040 = 25 (once per second)
             this.tickLeaderboard = 0;
             this.checkMinions();
