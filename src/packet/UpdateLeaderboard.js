@@ -47,8 +47,8 @@ class UpdateLeaderboard {
             const item = this.leaderboard[i];
             if (item == null) return null; // bad leaderboard just don't send it
 
-            const name = item.getName();
-            const id = item.pID == this.playerTracker.pID ? 1 : 0;
+            let name = item.getName();
+            const id = item == this.playerTracker ? 1 : 0;
             writer.writeUInt32(id >>> 0); // isMe flag
 
             if (item.checkVIP() && item.user.vip.chatCrown) writer.writeUInt32(1);
