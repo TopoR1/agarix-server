@@ -87,7 +87,7 @@ class UpdateLeaderboard {
 		writer.writeUInt8(0x32); // Packet ID
     	writer.writeUInt32(this.leaderboard.length >>> 0); // Number of elements
 		
-        for (const value of this.leaderboard) {
+        for (let value of this.leaderboard) {
             if (value == null) return; // bad leaderboardm just don't send it
             if (isNaN(value)) value = 0;
             value = value < 0 ? 0 : value;
