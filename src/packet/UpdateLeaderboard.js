@@ -61,7 +61,7 @@ class UpdateLeaderboard {
                 if (!item.win) item.win = true;
             }
 
-            writer.writeStringZeroUtf8(`${++i}. ${name} (${mass})`);
+            writer.writeStringZeroUtf8(`${i}. ${name} (${mass})`);
         }
         writer.writeUInt32(1 >>> 0);
 
