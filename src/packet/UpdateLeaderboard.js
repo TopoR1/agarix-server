@@ -42,9 +42,9 @@ class UpdateLeaderboard {
         const writer = new BinaryWriter();
         writer.writeUInt8(0x31); // Packet ID
         writer.writeUInt32(this.leaderboardCount + 1 >>> 0);
-        let i = 0;
 
-        for (const item of this.leaderboard) {
+        for (let i = 0; i < this.leaderboardCount; i++) {
+            const item = this.leaderboard[i];
             if (item == null) return null; // bad leaderboard just don't send it
 
             const name = item.getName();
@@ -60,8 +60,6 @@ class UpdateLeaderboard {
                 name = `Win ${name}! Restart ${this.playerTracker.gameServer.getDate(this.playerTracker.gameServer.restart.time)}`;
                 if (!item.win) item.win = true;
             }
-		
-		console.log(`${i}. ${name} (${mass})`)
 
             writer.writeStringZeroUtf8(`${++i}. ${name} (${mass})`);
         }
