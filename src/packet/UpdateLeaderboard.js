@@ -12,13 +12,13 @@ class UpdateLeaderboard {
         switch (this.leaderboardType) {
             case 48:
                 // UserText
-                this.buildUserText(protocol);
+                return this.buildUserText(protocol);
             case 49:
                 // FFA
-                this.buildFFA();
+                return this.buildFFA();
             case 50:
                 // Team
-                this.buildTeam();
+                return this.buildTeam();
             default:
                 return null;
         }
