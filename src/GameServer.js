@@ -34,6 +34,9 @@ class GameServer {
         this.movingNodes = []; // For move engine
         this.leaderboard = []; // For leaderboard
         this.leaderboardType = -1; // No type
+        this.restart = {
+            time: null
+        };
 
         const BotLoader = require('./ai/BotLoader');
         this.bots = new BotLoader(this);
@@ -1305,6 +1308,27 @@ class GameServer {
             'start_time': this.startTime
         };
         this.stats = JSON.stringify(s);
+    }
+    getDate(seconds, days = true) {
+        let h = seconds / 3600 ^ 0;
+        let m = (seconds - h * 3600) / 60 ^ 0;
+        let s = seconds - h * 3600 - m * 60;
+        let d = 0;
+
+        if (days) {
+            d = parseInt(h / 24);
+            h -= d * 24;
+        }
+
+        let time = '';
+        if (d != 0 && days) time += d + 'd ';
+        if (h != 0) time += h + 'h ';
+        if (m != 0) time += m + 'm ';
+        else if (h != 0) time += m + 'm ';
+        if (s != 0) time += s + 's';
+        else if (h != 0 || m != 0) time += s + 's';
+
+        return time;
     }
 }
 
