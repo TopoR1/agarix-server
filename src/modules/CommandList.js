@@ -662,8 +662,8 @@ Commands.list = {
             var client = gameServer.clients[i].playerTracker;
             if (client.pID == id) {
                 client.perfectpopsplit = !client.perfectpopsplit;
-                if (client.perfectpopsplit) Logger.print(client.getFriendlyName() + " is now in popsplit mode!");
-                else Logger.print(client.getFriendlyName() + " is no longer in popsplit mode");
+                if (client.perfectpopsplit) Logger.print(client.getName() + " is now in popsplit mode!");
+                else Logger.print(client.getName() + " is no longer in popsplit mode");
             }
         }
     },
@@ -847,9 +847,9 @@ Commands.list = {
                 client.disableSpawn = !client.disableSpawn;
                 if (client.disableSpawn) {
                     Commands.list.kill(gameServer, split);
-                    Logger.print("Disabled spawning for " + client.getFriendlyName());
+                    Logger.print("Disabled spawning for " + client.getName());
                 } else {
-                    Logger.print("Enabled spawning for " + client.getFriendlyName());
+                    Logger.print("Enabled spawning for " + client.getName());
                 }
             }
         }
