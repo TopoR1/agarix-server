@@ -61,7 +61,7 @@ class UpdateLeaderboard {
                 if (!item.win) item.win = true;
             }
 
-            writer.writeStringZeroUtf8(`${i}. ${name} (${mass})`);
+            writer.writeStringZeroUtf8(`${i + 1}. ${name} (${mass})`);
         }
         writer.writeUInt32(1 >>> 0);
 
@@ -69,7 +69,7 @@ class UpdateLeaderboard {
         const name = this.playerTracker.getName();
         const mass = parseFloat((this.playerTracker.getMass() / 1000).toFixed(1)) + 'k';
 
-        if (pos > 10) {
+        if (pos > this.leaderboardCount) {
             if (item.checkVIP() && item.user.vip.chatCrown) writer.writeUInt32(1);
             else writer.writeUInt32(0);
 
