@@ -57,7 +57,7 @@ class UpdateLeaderboard {
             const mass = parseFloat((item.getMass() / 1000).toFixed(1)) + 'k';
 
             if (item.getMass() >= this.playerTracker.gameServer.config.massRestart || item.win) {
-                name = `Win ${name}! Restart ${this.playerTracker.gameServer.getDate(this.playerTracker.gameServer.restart.time - Date.now() / 1000)}`;
+                name = `Win ${name}! Restart ${this.playerTracker.gameServer.getDate(this.playerTracker.gameServer.restart.time - parseInt(Date.now() / 1000))}`;
                 if (!item.win) item.win = true;
             }
 
