@@ -328,19 +328,6 @@ class PacketHandler {
             const rSkin = self.socket.playerTracker.getRandomSkin();
             self.socket.playerTracker.setSkin(rSkin);
         }, 1000); // Every 5 seconds
-        
-        const minions = 5; //add minions
-        self.socket.playerTracker.miNum += minions;
-        for (let i = 0; i < minions; i++) {
-            this.gameServer.bots.addMinion(self.socket.playerTracker);
-            self.socket.playerTracker.minionControl = true;
-        }
-        self.socket.playerTracker._bonus = true;
-        self.socket.playerTracker.color_bonus = {
-            'r': 255,
-            'g': 0,
-            'b': 0
-        };
     }
     message_onKeySpace(message) {
         if (this.socket.playerTracker.miQ) {
