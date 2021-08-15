@@ -379,8 +379,8 @@ class PacketHandler {
         }
     }
     message_onKeyH(message) {
-        //if (message.length !== 1) return;
-        //this.pressH = true;
+        if (message.length !== 1) return;
+        this.pressH = true;
     }
     async message_onSpawnVirus(message) {
         if (message.length !== 1) return;
