@@ -493,7 +493,7 @@ var playerCommands = {
         this.gameServer.clients.forEach(function (socket) {
             if (socket.isConnected === false)
                 return;
-            if (id !== 0 && socket.playerTracker.pID.toString() != id && socket.playerTracker.accountusername != id)
+            if (id !== 0 && socket.playerTracker.pID.toString() != id)
                 return;
 
             if (this.playerTracker.user_auth && this.playerTracker.user.role != 4) {
@@ -529,7 +529,7 @@ var playerCommands = {
         this.gameServer.clients.forEach(function (socket) {
             if (socket.isConnected === false)
                 return;
-            if (id !== 0 && socket.playerTracker.pID.toString() != id && socket.playerTracker.accountusername != id)
+            if (id !== 0 && socket.playerTracker.pID.toString() != id)
                 return;
 
             if (this.playerTracker.user_auth && this.playerTracker.user.role != 4) {
@@ -712,7 +712,7 @@ var playerCommands = {
         // set popsplit for client
         for (var i in this.gameServer.clients) {
             var client = this.gameServer.clients[i].playerTracker;
-            if (client.pID.toString() == id || client.accountusername == id) {
+            if (client.pID.toString() == id) {
 
                 client.popsplit = !client.popsplit;
 
@@ -781,7 +781,7 @@ var playerCommands = {
         // set rec for client
         for (var i in this.gameServer.clients) {
             var client = this.gameServer.clients[i].playerTracker;
-            if (client.accountusername == id || client.pID.toString() == id) {
+            if (client.accountusername == id) {
                 var client = this.gameServer.clients[i].playerTracker;
                 client.rec = !client.rec;
                 if (client.rec) {
@@ -816,7 +816,7 @@ var playerCommands = {
 
             // Find client with same ID as player entered
             for (var i = 0; i < this.gameServer.clients.length; i++) {
-                if (id == this.gameServer.clients[i].playerTracker.pID.toString() || id == this.gameServer.clients[i].playerTracker.accountusername) {
+                if (id == this.gameServer.clients[i].playerTracker.pID.toString()) {
                     var client = this.gameServer.clients[i].playerTracker;
                     if (client.cells.length == 1) {
                         this.writeLine("Client already has one cell!");
