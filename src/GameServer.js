@@ -172,11 +172,11 @@ class GameServer {
     async dbConnect() {
         const client = await MongoClient.connect(`mongodb://${this.dbAuth.host}:${this.dbAuth.port}`, {
             useNewUrlParser: true,
-            auth: {
-                username: this.dbAuth.user,
-                password: this.dbAuth.password
-            },
-            authSource: this.dbAuth.name,
+            //auth: {
+            //    username: this.dbAuth.user,
+            //    password: this.dbAuth.password
+            //},
+            //authSource: this.dbAuth.name,
             //reconnectTries: Number.MAX_VALUE,
             //reconnectInterval: 1000,
             autoReconnect: false,
