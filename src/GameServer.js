@@ -188,7 +188,7 @@ class GameServer {
         if (client) {
             this.db = client;
             this.validDB = false;
-            Logger.info('MongoDb: server is connected!');\
+            Logger.info('MongoDb: server is connected!');
         } else {
             Logger.error('MongoDb: server is not connected!');
             await this.dbConnect();
