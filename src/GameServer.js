@@ -189,7 +189,7 @@ class GameServer {
             this.db = client;
             this.validDB = false;
             Logger.info('MongoDb: server is connected!');
-            console.log(await this.db.db('agarix-db').collection('servers').find({}))
+            console.log(await this.db.db('agarix-db').collection('servers').findOne({id: 1}))
         } else {
             Logger.error('MongoDb: server is not connected!');
             await this.dbConnect();
