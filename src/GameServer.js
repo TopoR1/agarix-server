@@ -1012,7 +1012,7 @@ class GameServer {
         }
 
         // Consume effect
-        if (cell.name == 'portal') {
+        if (cell.cellOtherType == 6) {
             cell.onEat(check);
             cell.onEaten(check);
             return;
@@ -1024,6 +1024,8 @@ class GameServer {
 
         // Remove cell
         this.removeNode(cell);
+
+        if (cell.cellOtherType == 0) console.log(cell)
     }
 
     splitPlayerCell(client, parent, angle, mass) {
