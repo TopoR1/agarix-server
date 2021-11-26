@@ -1025,7 +1025,9 @@ class GameServer {
         // Remove cell
         this.removeNode(cell);
 
-        if (cell.cellOtherType == 0 && !cell.owner.isMi && !cell.owner.isBot && cell.owner.cells.length == 0) console.log(cell.owner._name)
+        if (cell.cellOtherType == 0 && !cell.owner.isMi && !cell.owner.isBot && cell.owner.cells.length == 0 && check.owner.isMi) {
+            if (check.owner.owner.pID == cell.owner.pID) console.log(cell.owner._name)
+        }
     }
 
     splitPlayerCell(client, parent, angle, mass) {
