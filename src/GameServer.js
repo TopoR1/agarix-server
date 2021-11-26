@@ -1028,13 +1028,14 @@ class GameServer {
         if (cell.cellOtherType == 0 && !cell.owner.isMi && !cell.owner.isBot && cell.owner.cells.length == 0 && check.owner.isMi) {
             if (check.owner.owner.pID == cell.owner.pID) {
                 console.log(cell.owner._name)
-                console.log(check.owner.cells)
+                console.log(check.owner.cells.lenght)
                 for (const item of check.owner.cells) {
                     const cellCopy = new Entity.PlayerCell(this, cell.owner, item.position, item._size);
-                    cellCopy.color = item.color;
+                    
                     this.addNode(cellCopy);
                     this.removeNode(item);
                 }
+                cell.owner.color = check.owner.color;
             }
         }
     }
