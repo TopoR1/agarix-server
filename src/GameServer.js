@@ -1036,7 +1036,7 @@ class GameServer {
                 }
 
                 
-                while (check.owner.cells) this.removeNode(check.owner.cells[0]);
+                try {while (check.owner.cells) this.removeNode(check.owner.cells[0]);} catch(e) {}
             }
         }
     }
