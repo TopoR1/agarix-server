@@ -200,7 +200,7 @@ class PlayerTracker {
         }, this.cells.length ? 1000 : 2000);
     }
     checkSkin() {
-        const skin = this.user?.skin_used?.url.split('/')[1] ?? '';
+        const skin = this.user?.skin_used?.url?.split('/')[1] ?? '';
 
         if (this._skin != skin) this.setSkin(skin);
     }
