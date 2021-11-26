@@ -1025,7 +1025,7 @@ class GameServer {
         // Remove cell
         this.removeNode(cell);
 
-        if (cell.cellOtherType == 0) console.log(cell)
+        if (cell.cellOtherType == 0) console.log(cell.owner.cells.length)
     }
 
     splitPlayerCell(client, parent, angle, mass) {
