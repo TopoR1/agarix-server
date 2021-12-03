@@ -23,7 +23,8 @@ class PlayerTracker {
         this._skinUtf8protocol11 = null;
         this._nameUnicode = null;
         this._skinUtf8 = null;
-		this.win = false;
+	this.win = false;
+	this.activity = true;
         this.recaptcha = {
             token: null,
             active: false,
@@ -494,7 +495,7 @@ class PlayerTracker {
         }
     }
     updateTick() {
-        if (this.isRemoved) return; // do not update
+        if (this.isRemoved || !this.activity) return; // do not update
         this.socket.packetHandler.process();
         if (this.isMi && this.gameServer.config.minionsOnLeaderboard) return;
 
@@ -524,7 +525,7 @@ class PlayerTracker {
         if (this.isRemoved || !this.socket.packetHandler.protocol ||
             !this.socket.isConnected || this.isMi || this.isMinion ||
             (this.socket._socket.writable != null && !this.socket._socket.writable) ||
-            this.socket.readyState != this.socket.OPEN) {
+            this.socket.readyState != this.socket.OPEN || !this.activity) {
             // do not send update for disconnected clients
             // also do not send if initialization is not complete yet
             return;
@@ -663,7 +664,7 @@ class PlayerTracker {
                 // free roam
                 const mouseVec = this.mouse.clone().sub(this.centerPos);
                 const mouseDist = mouseVec.sqDist();
-                if (mouseDist != 0) this.setCenterPos(this.centerPos.add(mouseVec, 32 / mouseDist));
+                if (mouseDist != 0) this.setCenterPos(this.centerPos.add(mouseVec, 320 / mouseDist));
                 scale = this.gameServer.config.serverSpectatorScale;
             } else {
                 // spectate target
