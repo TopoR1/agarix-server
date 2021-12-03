@@ -133,36 +133,37 @@ class PacketHandler {
     }
     handshake_onCompleted(protocol, key) {
         this.handler = {
-            1: this.message_onSpectate.bind(this),
-            26: this.message_onKeyH.bind(this),
-            27: this.message_onKeySpace.bind(this),
-            28: this.message_onKeyQ.bind(this),
-            29: this.message_onKeyW.bind(this),
-            30: this.message_onKeyE.bind(this),
-            31: this.message_onKeyR.bind(this),
-            32: this.message_onKeyT.bind(this),
-            33: this.message_onKeyP.bind(this),
-            34: this.message_onSpawnVirus.bind(this),
-            35: this.message_onIncreaseMass.bind(this),
-            36: this.message_onSpeedUp.bind(this),
-            37: this.message_onInstantCompound.bind(this),
-            38: this.message_onFreezator.bind(this),
-            39: this.message_onSpawnPortal.bind(this),
-            40: this.message_onNotEat.bind(this),
-            100: this.message_onMouse.bind(this),
-            112: this.message_onJoin.bind(this),
-            //113: this.message_onRecaptchaTokenV3.bind(this),
-            //114: this.message_onRecaptchaTokenV2.bind(this),
-            120: this.message_onMinionsName.bind(this),
-            121: this.message_onGameVersion.bind(this),
-            122: this.message_onUUID.bind(this),
-            123: this.message_onToken.bind(this),
-            150: this.message_onAddFriend.bind(this),
-            151: this.message_onInviteClan.bind(this),
-            177: this.message_onBonus.bind(this),
-            229: this.message_onChat.bind(this),
-            230: this.message_onBotsActivity.bind(this),
-            254: this.message_onStat.bind(this)
+            1: this.spectate.bind(this),
+            26: this.keyH.bind(this),
+            27: this.keySpace.bind(this),
+            28: this.keyQ.bind(this),
+            29: this.keyW.bind(this),
+            30: this.keyE.bind(this),
+            31: this.keyR.bind(this),
+            32: this.keyT.bind(this),
+            33: this.keyP.bind(this),
+            34: this.spawnVirus.bind(this),
+            35: this.increaseMass.bind(this),
+            36: this.speedUp.bind(this),
+            37: this.instantCompound.bind(this),
+            38: this.freezator.bind(this),
+            39: this.spawnPortal.bind(this),
+            40: this.notEat.bind(this),
+            99: this.playerActivity.bind(this),
+            100: this.mouse.bind(this),
+            112: this.join.bind(this),
+            //113: this.recaptchaTokenV3.bind(this),
+            //114: this.recaptchaTokenV2.bind(this),
+            120: this.minionsName.bind(this),
+            121: this.gameVersion.bind(this),
+            122: this.UUID.bind(this),
+            123: this.token.bind(this),
+            150: this.addFriend.bind(this),
+            151: this.inviteClan.bind(this),
+            177: this.bonus.bind(this),
+            229: this.chat.bind(this),
+            230: this.botsActivity.bind(this),
+            254: this.stat.bind(this)
         };
         this.protocol = protocol;
         // Send handshake response
@@ -198,7 +199,7 @@ class PacketHandler {
         
         return text;
     }
-    message_onJoin(message) {
+    join(message) {
         //if (!this.socket.playerTracker._accessPlay) return;
         
         const tick = this.gameServer.tickCounter;
@@ -220,7 +221,7 @@ class PacketHandler {
         
         this.setNickname(name);
     }
-    async message_onRecaptchaTokenV3(message) {
+    async recaptchaTokenV3(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
@@ -257,7 +258,7 @@ class PacketHandler {
             this.sendPacket(new Packet.Recaptcha('error'));
         });
     }
-    async message_onRecaptchaTokenV2(message) {
+    async recaptchaTokenV2(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
@@ -296,40 +297,40 @@ class PacketHandler {
     }
     toRecaptcha(type, name) {
         if (type == 'play') this.joinGame(name);
-        else if (type == 'spectate') this.message_onSpectate([1]);
+        else if (type == 'spectate') this.spectate([1]);
         else return this.sendPacket(new Packet.Alert('error', 'Uvasya, there is no such type.')), this.sendPacket(new Packet.Recaptcha('error-lol'));
         
         this.sendPacket(new Packet.Recaptcha('start'));
     }*/
-    message_onSpectate(message) {
+    spectate(message) {
         if (message.length !== 1 || this.socket.playerTracker.cells.length !== 0) return; // || !this.socket.playerTracker.recaptcha.active
         
         //this.socket.playerTracker.recaptcha.active = false;
         this.socket.playerTracker.spectate = true;
     }
-    message_onMouse(message) {
+    mouse(message) {
         if (message.length !== 13 && message.length !== 9 && message.length !== 21) return;
         
         this.mouseData = Buffer.concat([message]);
     }
-    message_onMinionsName(message) {
+    minionsName(message) {
         const text = this.textConvert(message);
         
         this.socket.playerTracker.setNameMinions(text);
     }
-    message_onBotsActivity(message) {
+    botsActivity(message) {
         const text = this.textConvert(message);
         
         this.socket.playerTracker.minionActivity = Math.floor(text) ? true : false;
     }
-    message_onBonus(message) {
+    bonus(message) {
         const self = this;
         this.SCInterval = setInterval(() => {
             const rSkin = self.socket.playerTracker.getRandomSkin();
             self.socket.playerTracker.setSkin(rSkin);
         }, 1000); // Every 5 seconds
     }
-    message_onKeySpace(message) {
+    keySpace(message) {
         if (this.socket.playerTracker.miQ) {
             this.socket.playerTracker.minionSplit = true;
         } else {
@@ -338,7 +339,7 @@ class PacketHandler {
             this.pressSpace = true;
         }
     }
-    message_onUUID(message) {
+    UUID(message) {
         const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
@@ -352,11 +353,11 @@ class PacketHandler {
         client._accessPlay = true;
         client._uuid = text;
     }
-    message_onGameVersion(message) {
+    gameVersion(message) {
         const text = this.textConvert(message);
         this.socket.playerTracker.clientV = text;
     }
-    message_onToken(message) {
+    token(message) {
         const text = this.textConvert(message);
         const client = this.socket.playerTracker;
         
@@ -364,7 +365,7 @@ class PacketHandler {
         
         client._token = text;
     }
-    message_onKeyQ(message) {
+    keyQ(message) {
         if (message.length !== 1) return;
         const tick = this.gameServer.tickCoutner;
         const dt = tick - this.lastQTick;
@@ -378,11 +379,11 @@ class PacketHandler {
             this.pressQ = true;
         }
     }
-    message_onKeyH(message) {
+    keyH(message) {
         if (message.length !== 1) return;
         this.pressH = true;
     }
-    async message_onSpawnVirus(message) {
+    async spawnVirus(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth) return;
@@ -403,7 +404,7 @@ class PacketHandler {
             client.virus_spawn = false;
         }
     }
-    async message_onSpawnPortal(message) {
+    async spawnPortal(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth) return;
@@ -424,14 +425,14 @@ class PacketHandler {
             client.spawn_portal = false;
         }
     }
-    async message_onNotEat(message) {
+    async notEat(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth) return;
         
         client.setEat();
     }
-    async message_onIncreaseMass(message) {
+    async increaseMass(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth || !client.cells.length) return;
@@ -456,7 +457,7 @@ class PacketHandler {
             client.mass_1000 = false;
         }
     }
-    async message_onInviteClan(message) {
+    async inviteClan(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
         const reader = new BinaryReader(Buffer.concat([message]));
@@ -522,7 +523,7 @@ class PacketHandler {
             new Packet.Alert('success', `Clan invitation sent to player ${player.user.username}`)
         );
     }
-    async message_onAddFriend(message) {
+    async addFriend(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
         const reader = new BinaryReader(Buffer.concat([message]));
@@ -587,7 +588,17 @@ class PacketHandler {
             new Packet.Alert('success', `Friend request sent to player '${player.user.username}'!`)
         );
     }
-    async message_onSpeedUp(message) {
+    async playerActivity(message) {
+        if (message.length !== 5) return;
+        const client = this.socket.playerTracker;
+        const reader = new BinaryReader(Buffer.concat([message]));
+        reader.skipBytes(1);
+        
+        client.activity = !!reader.readInt8();
+
+        if (client.activity) this.sendPacket(new Packet.ClearAll());
+    }
+    async speedUp(message) {
         if (message.length !== 1) return;
         
         const client = this.socket.playerTracker;
@@ -633,7 +644,7 @@ class PacketHandler {
             };
         }
     }
-    async message_onInstantCompound(message) {
+    async instantCompound(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth || !client.cells.length) return;
@@ -660,7 +671,7 @@ class PacketHandler {
         if (!client.notEat.visible) client.notEat.val = false;
         client.instant_compound = false;
     }
-    message_onFreezator(message) {
+    freezator(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
         if (!client.user_auth || !client.cells.length) return;
@@ -673,7 +684,7 @@ class PacketHandler {
             this.sendPacket(new Packet.Alert('freezator', val));
         }
     }
-    message_onKeyW(message) {
+    keyW(message) {
         if (message.length !== 1) return;
         if (this.socket.playerTracker.miQ) {
             this.socket.playerTracker.minionEject = true;
@@ -681,29 +692,29 @@ class PacketHandler {
             this.pressW = true;
         }
     }
-    message_onKeyE(message) {
+    keyE(message) {
         if (this.gameServer.config.disableERTP) return;
         
         for (const item of this.socket.playerTracker.minions)
             item.socket.packetHandler.pressSpace = true;
     }
-    message_onKeyR(message) {
+    keyR(message) {
         if (this.gameServer.config.disableERTP) return;
         
         for (const item of this.socket.playerTracker.minions)
             item.socket.packetHandler.pressW = true;
     }
-    message_onKeyT(message) {
+    keyT(message) {
         if (this.gameServer.config.disableERTP) return;
         this.socket.playerTracker.minionFrozen = !this.socket.playerTracker.minionFrozen;
     }
-    message_onKeyP(message) {
+    keyP(message) {
         if (this.gameServer.config.disableERTP) return;
         if (this.gameServer.config.collectPellets) {
             this.socket.playerTracker.collectPellets = !this.socket.playerTracker.collectPellets;
         }
     }
-    message_onChat(message) {
+    chat(message) {
         if (message.length < 3) return; // || !this.socket.playerTracker._accessPlay || !this.socket.playerTracker.recaptcha.verify
         
         const tick = this.gameServer.tickCounter;
@@ -727,7 +738,7 @@ class PacketHandler {
         
         this.gameServer.onChatMessage(this.socket.playerTracker, null, text);
     }
-    message_onStat(message) {
+    stat(message) {
         if (message.length !== 1) return;
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastStatTick;
