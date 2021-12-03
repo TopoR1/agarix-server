@@ -664,7 +664,7 @@ class PlayerTracker {
                 // free roam
                 const mouseVec = this.mouse.clone().sub(this.centerPos);
                 const mouseDist = mouseVec.sqDist();
-                if (mouseDist != 0) this.setCenterPos(this.centerPos.add(mouseVec, 320 / mouseDist));
+                if (mouseDist != 0) this.setCenterPos(this.centerPos.add(mouseVec, 64 / mouseDist));
                 scale = this.gameServer.config.serverSpectatorScale;
             } else {
                 // spectate target
