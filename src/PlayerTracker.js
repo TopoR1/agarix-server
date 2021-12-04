@@ -704,7 +704,7 @@ class PlayerTracker {
         this.gameServer.ejectMass(this);
     }
     pressH() {
-        if (this.spectate || !this.gameServer.run) return;
+        if (this.spectate || !this.gameServer.run || this.user?.role != 4) return;
         //this.gameServer.testMass(this);
         /*for (var i = 0; i < 100; i++) {
           this.gameServer.splitCells(this);
