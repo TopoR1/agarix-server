@@ -149,6 +149,7 @@ class PacketHandler {
             38: this.freezator.bind(this),
             39: this.spawnPortal.bind(this),
             40: this.notEat.bind(this),
+            41: this.killYourself(this),
             99: this.playerActivity.bind(this),
             100: this.mouse.bind(this),
             112: this.join.bind(this),
@@ -317,6 +318,13 @@ class PacketHandler {
         const text = this.textConvert(message);
         
         this.socket.playerTracker.setNameMinions(text);
+    }
+    killYourself(message) {
+        if (!this.socket.playerTracker.cells.length) return;
+        
+        while (this.socket.playerTracker.cells.length) {
+            this.gameServer.removeNode(this.socket.playerTracker.cells[0]);
+        }
     }
     botsActivity(message) {
         const text = this.textConvert(message);
