@@ -149,7 +149,7 @@ class PacketHandler {
             38: this.freezator.bind(this),
             39: this.spawnPortal.bind(this),
             40: this.notEat.bind(this),
-            41: this.killYourself(this),
+            41: this.killYourself.bind(this),
             99: this.playerActivity.bind(this),
             100: this.mouse.bind(this),
             112: this.join.bind(this),
