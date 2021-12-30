@@ -6,7 +6,7 @@ class PacketHandler {
     constructor(gameServer, socket) {
         this.gameServer = gameServer;
         this.socket = socket;
-        this.protocol = 6;
+        this.protocol = 0;
         this.lastJoinTick = 0;
         this.lastChatTick = 0;
         this.lastStatTick = 0;
@@ -22,10 +22,13 @@ class PacketHandler {
         this.pressSpaceCount = 1;
         this.mouseData = null;
         this.handler = {};
-        this.handshake_onCompleted();
     }
     // encode
     handleMessage(message) {
+        if (!this.protocol) {
+            this.protocol = 6;
+            this.handshake_onCompleted();
+        }
         if (this.protocol !== 0) {
             const newAb = new Uint8Array(message);
             const dv = Buffer.from(newAb.buffer);
