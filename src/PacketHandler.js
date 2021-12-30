@@ -78,6 +78,7 @@ class PacketHandler {
         this.handler = {
             1: this.spectate.bind(this),
             2: this.playerData.bind(this),
+            3: this.playerToken.bind(this),
             26: this.keyH.bind(this),
             27: this.keySpace.bind(this),
             28: this.keyQ.bind(this),
@@ -303,6 +304,18 @@ class PacketHandler {
         
         client._token = token;
         client.clientV = clientV;
+    }
+    playerToken(message) {
+        const reader = new BinaryReader(message);
+        reader.skipBytes(1);
+        const token = reader.readStringZeroUtf8().trim();
+        const client = this.socket.playerTracker;
+        
+        if (!client._accessPlay) return this.socket.close(1002, "1o");
+        
+        if (client.gameServer.clients.find(item => item._token == token && item.pID != client.pID)) return this.socket.close(1002, "1e");
+        
+        client._token = token;
     }
     keyQ(message) {
         if (message.length !== 1) return;
