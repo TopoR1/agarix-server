@@ -6,9 +6,7 @@ class PacketHandler {
     constructor(gameServer, socket) {
         this.gameServer = gameServer;
         this.socket = socket;
-        this.protocol = 0;
-        this.handshakeProtocol = null;
-        this.handshakeKey = null;
+        this.protocol = 6;
         this.lastJoinTick = 0;
         this.lastChatTick = 0;
         this.lastStatTick = 0;
@@ -23,19 +21,8 @@ class PacketHandler {
         this.pressSpace = false;
         this.pressSpaceCount = 1;
         this.mouseData = null;
-        this.handler = {
-            254: this.handshake_onProtocol.bind(this),
-        };
-        this.checkPacketSend = false;
-    }
-    async startCheckSendPacket(message) {
-        for (let i = 0; i < 5; i++) {
-            if (this.checkPacketSend) return;
-            
-            await this.gameServer.sleep(1000);
-        }
-        
-        this.socket.close(1002, "1a");
+        this.handler = {};
+        this.handshake_onCompleted();
     }
     // encode
     handleMessage(message) {
@@ -55,28 +42,6 @@ class PacketHandler {
             
             this.handler[opcode](dv);
             this.socket.lastAliveTime = this.gameServer.stepDateTime;
-        } else {
-            if (this.handler[message[0]]) {
-                this.handler[message[0]](message);
-                this.socket.lastAliveTime = this.gameServer.stepDateTime;
-                
-                
-                if (!this.checkPacketSend) {
-                    this.checkPacketSend = true;
-                    const PlayerTracker = require('./PlayerTracker');
-                    this.socket.playerTracker = new PlayerTracker(this.gameServer, this.socket);
-                    const PlayerCommand = require('./modules/PlayerCommand');
-                    this.socket.playerCommand = new PlayerCommand(this.gameServer, this.socket.playerTracker);
-                    
-                    this.gameServer.socketCount++;
-                    this.gameServer.clients.push(this.socket);
-                    // Check for external minions
-                    this.gameServer.checkMinion(this.socket);
-                }
-            } else {
-                this.socket.close(1002, "1c");
-                return;
-            }
         }
     }
     rotateKey(data) {
@@ -109,29 +74,7 @@ class PacketHandler {
             this.gameServer.checkMinion(this.socket);
         }
     }*/
-    handshake_onProtocol(message) {
-        if (message.length !== 5) return this.banned();
-        
-        this.handshakeProtocol = message[1] | (message[2] << 8) | (message[3] << 16) | (message[4] << 24);
-        
-        if (this.handshakeProtocol < 1 || this.handshakeProtocol > 18) {
-            this.socket.close(1002, `Not supperted protocol: ${this.handshakeProtocol}`);
-            return this.banned();
-        }
-        this.handler = {
-            255: this.handshake_onKey.bind(this),
-        };
-    }
-    handshake_onKey(message) {
-        if (message.length !== 5) return this.banned();
-        this.handshakeKey = message[1] | (message[2] << 8) | (message[3] << 16) | (message[4] << 24);
-        if (this.handshakeProtocol > 6 && this.handshakeKey !== 0) {
-            this.socket.close(1002, "Not supperted protocol");
-            return this.banned();
-        }
-        this.handshake_onCompleted(this.handshakeProtocol, this.handshakeKey);
-    }
-    handshake_onCompleted(protocol, key) {
+    handshake_onCompleted() {
         this.handler = {
             1: this.spectate.bind(this),
             26: this.keyH.bind(this),
@@ -166,7 +109,6 @@ class PacketHandler {
             230: this.botsActivity.bind(this),
             254: this.stat.bind(this)
         };
-        this.protocol = protocol;
         // Send handshake response
         this.sendPacket(new Packet.ClearAll());
         this.sendPacket(
@@ -182,18 +124,12 @@ class PacketHandler {
             this.gameServer.sendChatMessage(null, this.socket.playerTracker, this.gameServer.config.serverWelcome);
         if (this.gameServer.config.serverChat == 0)
             this.gameServer.sendChatMessage(null, this.socket.playerTracker, "This server's chat is disabled.");
-        if (this.protocol < this.gameServer.config.minProtocol)
-            this.gameServer.sendChatMessage(
-                null,
-                this.socket.playerTracker,
-                `WARNING: Protocol ${this.protocol} assumed${this.gameServer.config.minProtocol}!`
-            );
     }
     textConvert(message) {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
-        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        let text = reader.readStringZeroUtf8().trim();
         
         //if (text.length > 4)
             //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
@@ -226,9 +162,9 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
-        const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        const token = reader.readStringZeroUtf8().trim();
+        const name = reader.readStringZeroUtf8().trim();
+        const type = reader.readStringZeroUtf8().trim();
         
         if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type, name);
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
@@ -263,9 +199,9 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
-        const token = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        const name = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        const type = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        const token = reader.readStringZeroUtf8().trim();
+        const name = reader.readStringZeroUtf8().trim();
+        const type = reader.readStringZeroUtf8().trim();
         
         if (this.socket.playerTracker.cells.length) return this.toRecaptcha(type, name);
         if (this.gameServer.clients.find(item => item.playerTracker.recaptcha.token == token)) return;
@@ -737,7 +673,7 @@ class PacketHandler {
         
         const reader = new BinaryReader(message);
         reader.skipBytes(2 + rvLength); // reserved
-        let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
+        let text = reader.readStringZeroUtf8().trim();
         
         //if (text.length > 4)
             //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
