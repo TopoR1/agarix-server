@@ -723,7 +723,7 @@ class PacketHandler {
         }
     }
     chat(message) {
-        if (message.length < 3) return; // || !this.socket.playerTracker._accessPlay || !this.socket.playerTracker.recaptcha.verify
+        if (message.length < 3 || !this.socket.playerTracker.user_auth || this.socket.playerTracker.mute) return; // || !this.socket.playerTracker._accessPlay || !this.socket.playerTracker.recaptcha.verify
         
         const tick = this.gameServer.tickCounter;
         const dt = tick - this.lastChatTick;
@@ -738,8 +738,6 @@ class PacketHandler {
         const reader = new BinaryReader(message);
         reader.skipBytes(2 + rvLength); // reserved
         let text = String(this.protocol < 6 ? reader.readStringZeroUnicode() : reader.readStringZeroUtf8()).trim();
-        
-        if (this.socket.playerTracker.mute) return;
         
         //if (text.length > 4)
             //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
