@@ -1024,7 +1024,7 @@ class GameServer {
 
         // Remove cell
         this.removeNode(cell);
-
+        /* double life
         if (cell.cellOtherType == 0 && !cell.owner.isMi && !cell.owner.isBot && cell.owner.cells.length == 0 && check.owner.isMi) {
             if (check.owner.owner.pID == cell.owner.pID) {
                 cell.owner.color = check.owner.color;
@@ -1038,7 +1038,7 @@ class GameServer {
                 
                 try {while (check.owner.cells) this.removeNode(check.owner.cells[0]);} catch(e) {}
             }
-        }
+        }*/
     }
 
     splitPlayerCell(client, parent, angle, mass) {
