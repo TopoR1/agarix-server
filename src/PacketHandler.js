@@ -77,6 +77,7 @@ class PacketHandler {
     handshake_onCompleted() {
         this.handler = {
             1: this.spectate.bind(this),
+            2: this.playerData.bind(this),
             26: this.keyH.bind(this),
             27: this.keySpace.bind(this),
             28: this.keyQ.bind(this),
@@ -99,9 +100,6 @@ class PacketHandler {
             //113: this.recaptchaTokenV3.bind(this),
             //114: this.recaptchaTokenV2.bind(this),
             120: this.minionsName.bind(this),
-            121: this.gameVersion.bind(this),
-            122: this.UUID.bind(this),
-            123: this.token.bind(this),
             150: this.addFriend.bind(this),
             151: this.inviteClan.bind(this),
             177: this.bonus.bind(this),
@@ -246,7 +244,7 @@ class PacketHandler {
         this.socket.playerTracker.spectate = true;
     }
     mouse(message) {
-        if (message.length !== 13 && message.length !== 9 && message.length !== 21) return;
+        if (message.length !== 13) return;
         
         this.mouseData = Buffer.concat([message]);
     }
@@ -283,31 +281,28 @@ class PacketHandler {
             this.pressSpace = true;
         }
     }
-    UUID(message) {
-        const text = this.textConvert(message);
+    playerData(message) {
+        const reader = new BinaryReader(Buffer.concat([message]));
+        reader.skipBytes(1);
         const client = this.socket.playerTracker;
+        const token = reader.readStringZeroUtf8();
+        const uuid = reader.readStringZeroUtf8();
+        const clientV = reader.readStringZeroUtf8();
         
-        if (client.gameServer.clients.find(item => item._uuid == text)) return this.socket.close(1002, "1d");
+        if (client.gameServer.clients.find(item => item._uuid == uuid)) return this.socket.close(1002, '1d');
         
-        if (client.gameServer.playersMute.find(item => item.uuid == text || item.ip == this.socket._socket.remoteAddress)) {
+        if (client.gameServer.playersMute.find(item => item.uuid == uuid || item.ip == this.socket._socket.remoteAddress)) {
             client.mute = true;
-            this.gameServer.sendChatMessage(null, this.socket.playerTracker, 'You are muted in chat');
+            this.gameServer.sendChatMessage(null, client, 'You are muted in chat');
         }
         
         client._accessPlay = true;
-        client._uuid = text;
-    }
-    gameVersion(message) {
-        const text = this.textConvert(message);
-        this.socket.playerTracker.clientV = text;
-    }
-    token(message) {
-        const text = this.textConvert(message);
-        const client = this.socket.playerTracker;
+        client._uuid = uuid;
         
-        if (client.gameServer.clients.find(item => item._token == text)) return this.socket.close(1002, "1e");
+        if (client.gameServer.clients.find(item => item._token == token)) return this.socket.close(1002, "1e");
         
-        client._token = text;
+        client._token = token;
+        client.clientV = clientV;
     }
     keyQ(message) {
         if (message.length !== 1) return;
@@ -699,20 +694,6 @@ class PacketHandler {
             // protocol late 5, 6, 7
             client.mouse.x = reader.readInt32() - client.scrambleX;
             client.mouse.y = reader.readInt32() - client.scrambleY;
-        }
-        // correct im
-        else if (this.mouseData.length === 9) {
-            // early protocol 5
-            client.mouse.x = reader.readInt16() - client.scrambleX;
-            client.mouse.y = reader.readInt16() - client.scrambleY;
-        } else if (this.mouseData.length === 21) {
-            // protocol 4
-            let x = reader.readDouble() - client.scrambleX;
-            let y = reader.readDouble() - client.scrambleY;
-            if (!isNaN(x) && !isNaN(y)) {
-                client.mouse.x = x;
-                client.mouse.y = y;
-            }
         }
         this.mouseData = null;
     }
