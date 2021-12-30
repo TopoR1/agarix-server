@@ -828,9 +828,9 @@ class GameServer {
             // once per second
             this.updateLeaderboard();
         }
-        if (((this.tickCounter + 3) % 20) === 0) {
-            this.SendMiniMap();
-        }
+        //if (((this.tickCounter + 3) % 20) === 0) {
+        //    this.SendMiniMap();
+        //}
 
         // update-update time
         const tEnd = process.hrtime(tStart);
