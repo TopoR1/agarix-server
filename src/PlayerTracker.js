@@ -48,7 +48,7 @@ class PlayerTracker {
         this.accountpassword = "";
         this.mute = false;
 
-        this.clientV = '2.01.4';
+        this.clientV = '3.01.2';
 
         this.user = {};
         this.user_auth = false;
