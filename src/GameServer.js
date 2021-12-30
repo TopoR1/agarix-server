@@ -305,6 +305,15 @@ class GameServer {
 
         const PacketHandler = require('./PacketHandler');
         ws.packetHandler = new PacketHandler(this, ws);
+        const PlayerTracker = require('./PlayerTracker');
+        ws.playerTracker = new PlayerTracker(this, ws);
+        const PlayerCommand = require('./modules/PlayerCommand');
+        ws.playerCommand = new PlayerCommand(ws, ws.playerTracker);
+                    
+        this.socketCount++;
+        this.clients.push(ws);
+        // Check for external minions
+        this.checkMinion(ws);
 
         const self = this;
         ws.on('message', (message) => {
@@ -342,8 +351,6 @@ class GameServer {
                 `DISCONNECTED ${ws.remoteAddress}:${ws.remotePort}, code: ${ws._closeCode}, reason: \''${ws._closeMessage}'\', name: \''${name}'\'`
             );
         });
-
-        ws.packetHandler.startCheckSendPacket();
     }
 
     checkMinion(ws) {
