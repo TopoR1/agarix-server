@@ -127,17 +127,6 @@ class PacketHandler {
         if (this.gameServer.config.serverChat == 0)
             this.gameServer.sendChatMessage(null, this.socket.playerTracker, "This server's chat is disabled.");
     }
-    textConvert(message) {
-        const reader = new BinaryReader(message);
-        reader.skipBytes(1);
-        
-        let text = reader.readStringZeroUtf8().trim();
-        
-        //if (text.length > 4)
-            //text = text.substr(text.length - 4)[0] == text[0] ? text.substr(0, text.length - 4) : text;
-        
-        return text;
-    }
     join(message) {
         //if (!this.socket.playerTracker._accessPlay) return;
         
@@ -147,7 +136,11 @@ class PacketHandler {
         /*if (dt < 25 || this.socket.playerTracker.cells.length !== 0) {
             return;
         }*/
-        let text = this.textConvert(message);
+        
+        const reader = new BinaryReader(message);
+        reader.skipBytes(1);
+        
+        let text = reader.readStringZeroUtf8().trim();
         
         this.setNickname(text);
     }/*
@@ -250,10 +243,13 @@ class PacketHandler {
     mouse(message) {
         if (message.length !== 13) return;
         
-        this.mouseData = Buffer.concat([message]);
+        this.mouseData = message;
     }
     minionsName(message) {
-        const text = this.textConvert(message);
+        const reader = new BinaryReader(message);
+        reader.skipBytes(1);
+        
+        let text = reader.readStringZeroUtf8().trim();
         
         this.socket.playerTracker.setNameMinions(text);
     }
@@ -265,9 +261,10 @@ class PacketHandler {
         }
     }
     botsActivity(message) {
-        const text = this.textConvert(message);
+        const reader = new BinaryReader(message);
+        reader.skipBytes(1);
         
-        this.socket.playerTracker.minionActivity = Math.floor(text) ? true : false;
+        this.socket.playerTracker.minionActivity = !!reader.readInt8();
     }
     bonus(message) {
         const self = this;
@@ -286,7 +283,7 @@ class PacketHandler {
         }
     }
     playerData(message) {
-        const reader = new BinaryReader(Buffer.concat([message]));
+        const reader = new BinaryReader(message);
         reader.skipBytes(1);
         const client = this.socket.playerTracker;
         const token = reader.readStringZeroUtf8();
@@ -415,7 +412,7 @@ class PacketHandler {
     async inviteClan(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
-        const reader = new BinaryReader(Buffer.concat([message]));
+        const reader = new BinaryReader(message);
         reader.skipBytes(1);
         const playerID = reader.readInt32();
         
@@ -481,7 +478,7 @@ class PacketHandler {
     async addFriend(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
-        const reader = new BinaryReader(Buffer.concat([message]));
+        const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
         const playerID = reader.readInt32();
@@ -546,7 +543,7 @@ class PacketHandler {
     async playerActivity(message) {
         if (message.length !== 5) return;
         const client = this.socket.playerTracker;
-        const reader = new BinaryReader(Buffer.concat([message]));
+        const reader = new BinaryReader(message);
         reader.skipBytes(1);
         
         client.activity = !!reader.readInt8();
