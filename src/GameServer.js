@@ -905,16 +905,9 @@ class GameServer {
             // cannot split => just limit
             cell.setSize(maxSize);
         } else {
-            try {
-                // split in random direction
-                let angle;
-                if (!client.mouse.x || !cell.position.x) {
-                    angle = Math.random() * 2 * Math.PI;
-                } else angle = Math.atan2(client.mouse.x - cell.position.x, client.mouse.y - cell.position.y); //Math.random() * 2 * Math.PI;
-                this.splitPlayerCell(client, cell, angle, cell._mass * .5);
-            } catch (err) {
-                console.log('err autosplit')
-            }
+            // split in random direction
+            let angle = Math.random() * 2 * Math.PI; //Math.atan2(client.mouse.x - cell.position.x, client.mouse.y - cell.position.y);
+            this.splitPlayerCell(client, cell, angle, cell._mass * .5);
         }
     }
 
