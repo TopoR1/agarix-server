@@ -308,7 +308,7 @@ class GameServer {
         const PlayerTracker = require('./PlayerTracker');
         ws.playerTracker = new PlayerTracker(this, ws);
         const PlayerCommand = require('./modules/PlayerCommand');
-        ws.playerCommand = new PlayerCommand(ws, ws.playerTracker);
+        ws.playerCommand = new PlayerCommand(this, ws.playerTracker);
                     
         this.socketCount++;
         this.clients.push(ws);
