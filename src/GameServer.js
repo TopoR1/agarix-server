@@ -1281,11 +1281,11 @@ class GameServer {
         this.getStats();
 
         // Show stats
-        this.httpServer = https.createServer({key: fs.readFileSync('../keys/key.pem', 'utf8'), cert: fs.readFileSync('../keys/cert.pem', 'utf8')}, function(req, res) {
+        this.httpServer = https.createServer(function(req, res) {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.writeHead(200);
             res.end(this.stats);
-        }.bind(this));
+        }.bind(this)); //{key: fs.readFileSync('../keys/key.pem', 'utf8'), cert: fs.readFileSync('../keys/cert.pem', 'utf8')}
         this.httpServer.on('error', err => {
             Logger.error(`Stats Server: ${err.message}`);
         });
