@@ -1281,7 +1281,7 @@ class GameServer {
         this.getStats();
 
         // Show stats
-        this.httpServer = http.createServer(function(req, res) {
+        this.httpServer = https.createServer({key: fs.readFileSync('../keys/key.pem', 'utf8'), cert: fs.readFileSync('../keys/cert.pem', 'utf8')}, function(req, res) {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.writeHead(200);
             res.end(this.stats);
