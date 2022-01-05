@@ -1,7 +1,9 @@
 // Library imports
-const http = require('http');
+//const http = require('http');
 const https = require('https');
 const MongoClient = require('mongodb').MongoClient;
+const QuadNode = require('./modules/QuadNode.js');
+const fs = require('fs');
 
 // Project imports
 const Entity = require('./entity');
@@ -114,9 +116,6 @@ class GameServer {
         this.badWords = server.badwords;
 
         // Set border, quad-tree
-        const QuadNode = require('./modules/QuadNode.js');
-        const fs = require("fs");
-        
         if (fs.existsSync("../src/skins.txt")) {
             // Read and parse the Skins - filter out whitespace-only Skins
             this.skins = fs.readFileSync("../src/skins.txt", "utf8").split(/[\r\n]+/).filter(x => {
@@ -142,7 +141,10 @@ class GameServer {
         this.clientBind = bind.split(' - ');
 
         // Start the server
-        this.httpServer = http.createServer();
+        //Logger.info('Using HTTP');
+        //this.httpServer = http.createServer();
+        Logger.info('Using HTTPS, use the wss:// protocol prefix when connecting');
+        this.httpServer = https.createServer({key: fs.readFileSync('../keys/key.pem', 'utf8'), cert: fs.readFileSync('../keys/cert.pem', 'utf8')});
 
         const wsOptions = {
             server: this.httpServer,
