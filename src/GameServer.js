@@ -1281,7 +1281,7 @@ class GameServer {
         this.getStats();
 
         // Show stats
-        this.httpServer = https.createServer(function(req, res) {
+        this.httpServer = http.createServer(function(req, res) {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.writeHead(200);
             res.end(this.stats);
