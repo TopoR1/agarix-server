@@ -48,8 +48,8 @@ class PlayerTracker {
         this.accountpassword = "";
         this.mute = false;
 	this.disablePowers = true;
-	this.incVirus = true;
-	this.incCoins = true;
+	this.incVirus = false;
+	this.incCoins = false;
 
         this.clientV = '3.01.2';
 
