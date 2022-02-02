@@ -338,7 +338,7 @@ class PacketHandler {
     async spawnVirus(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
-        if (!client.user_auth) return;
+        if (!client.user_auth || client.disablePowers) return;
         
         if (client.user.virus_spawn > 0 && !client.virus_spawn) {
             client.virus_spawn = true;
@@ -359,7 +359,7 @@ class PacketHandler {
     async spawnPortal(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
-        if (!client.user_auth) return;
+        if (!client.user_auth || client.disablePowers) return;
         
         if (client.user.spawn_portal > 0 && !client.spawn_portal) {
             client.spawn_portal = true;
@@ -387,7 +387,7 @@ class PacketHandler {
     async increaseMass(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
-        if (!client.user_auth || !client.cells.length) return;
+        if (!client.user_auth || !client.cells.length || client.disablePowers) return;
         
         if (client.user.mass_1000 > 0 && !client.mass_1000) {
             client.mass_1000 = true;
@@ -555,7 +555,7 @@ class PacketHandler {
         
         const client = this.socket.playerTracker;
         
-        if (!client.user_auth || !client.cells.length) return;
+        if (!client.user_auth || !client.cells.length || client.disablePowers) return;
         
         if (client.user.speed_up > 0 && !client.speed_up) {
             client.speed_up = true;
@@ -599,7 +599,7 @@ class PacketHandler {
     async instantCompound(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
-        if (!client.user_auth || !client.cells.length) return;
+        if (!client.user_auth || !client.cells.length || client.disablePowers) return;
         
         if (client.user.instant_compound <= 0) return;
         if (client.cells.length == 1 || client.mergeOverride || client.instant_compound) return;
@@ -626,7 +626,7 @@ class PacketHandler {
     freezator(message) {
         if (message.length !== 1) return;
         const client = this.socket.playerTracker;
-        if (!client.user_auth || !client.cells.length) return;
+        if (!client.user_auth || !client.cells.length || client.disablePowers) return;
         
         if (client.user.freezator || client.checkVIP()) {
             let val = 'off';
