@@ -17,6 +17,15 @@ Coin.prototype.onEaten = function(cell) {
 	if (cell.owner) {
 		if (!cell.owner.user_auth) return;
 		if (cell.owner._token && cell.owner.gameServer.db) {
+			if (cell.owner.incVirus) {
+			    await cell.owner.gameServer.db.db('agarix-db').collection('users').updateOne({
+					access_token: cell.owner._token
+				}, {
+					$inc: {
+						coins_eaten: 1
+					}
+				});
+			}
 			cell.owner.gameServer.db.db('agarix-db').collection('users').updateOne({access_token: cell.owner._token}, {$inc: {coins: cell.owner.gameServer.config.coinApp, exp: cell.owner.gameServer.config.coinExp}});
 		}
 	}
