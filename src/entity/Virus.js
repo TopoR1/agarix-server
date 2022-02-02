@@ -39,9 +39,18 @@ Virus.prototype.onEat = function(prey) {
 Virus.prototype.onEaten = function(cell) {
     if (!cell.owner) return;
 	
-	if (cell.owner.user_auth) {
-		cell.owner.collectPoints += 3;
-	}
+    if (cell.owner.user_auth) {
+        cell.owner.collectPoints += 3;
+		if (cell.owner.incVirus) {
+            await cell.owner.gameServer.db.db('agarix-db').collection('users').updateOne({
+			    access_token: cell.owner._token
+            }, {
+				$inc: {
+					virus_eaten: 1
+				}
+			});
+		}
+    }
     var config = this.gameServer.config;
 
     var cellsLeft = (config.virusMaxCells || config.playerMaxCells) - cell.owner.cells.length;
