@@ -49,7 +49,7 @@ class PlayerTracker {
         this.mute = false;
 	this.disablePowers = true;
 	this.incVirus = false;
-	this.incCoins = false;
+	this.incCoins = true;
 
         this.clientV = '3.01.2';
 
