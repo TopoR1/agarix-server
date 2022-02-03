@@ -21,7 +21,7 @@ Coin.prototype.onEaten = async function(cell) {
 	if (cell.owner) {
 		if (!cell.owner.user_auth) return;
 		if (cell.owner._token && cell.owner.gameServer.db) {
-			if (cell.owner.incVirus) {
+			if (cell.owner.incCoins) {
 				await cell.owner.gameServer.db.db('agarix-db').collection('users').updateOne({
 					access_token: cell.owner._token
 				}, {
