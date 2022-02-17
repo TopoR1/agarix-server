@@ -4,6 +4,7 @@ const https = require('https');
 const MongoClient = require('mongodb').MongoClient;
 const QuadNode = require('./modules/QuadNode.js');
 const fs = require('fs');
+const os = require("os");
 
 // Project imports
 const Entity = require('./entity');
@@ -95,6 +96,7 @@ class GameServer {
             body: {}
         });
         const ip = reqIP.body;
+        const hostname = os.hostname();
 
         if (ip.split('.').length < 4) {
             Logger.error('Error get IP!');
@@ -104,7 +106,11 @@ class GameServer {
         await this.dbConnect();
 
         const server = await this.db.db('agarix-db').collection('servers').findOne({
-            ip: ip
+            $or: [{
+                ip
+            }, {
+                hostname
+            }]
         });
 
         if (!server) {
