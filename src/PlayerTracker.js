@@ -47,7 +47,7 @@ class PlayerTracker {
         this.accountusername = this.pID;
         this.accountpassword = "";
         this.mute = false;
-	this.disablePowers = true;
+	this.disablePowers = false;
 	this.incVirus = false;
 	this.incCoins = false;
 
