@@ -13,11 +13,11 @@ ServerStat.prototype.build = function (protocol) {
     
     for (var i = 0, len = gameServer.clients.length; i < len; i++) {
         var socket = gameServer.clients[i];
-        if (!socket || !socket.isConnected || socket.playerTracker.isMi)
+        if (!socket || socket.playerTracker.isMi) //!socket.isConnected ||
             continue;
         totalPlayers++;
         if (socket.playerTracker.cells.length) alivePlayers++;
-        if (socket.playerTracker.spectate === true) spectPlayers++;
+        if (socket.playerTracker.spectate) spectPlayers++;
     }
     var obj = {
         'name': gameServer.config.serverName,
