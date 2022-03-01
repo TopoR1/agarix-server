@@ -24,12 +24,12 @@ class BotPlayer extends PlayerTracker {
             // return this.isRemoved = true;
         }
         // Respawn if bot is dead
-        if (!this.cells.length)
+        if (!this.cells.length && (this.gameServer.tickCounter % 250) == 0)
             this.gameServer.gameMode.onPlayerSpawn(this.gameServer, this);
     }
     sendUpdate() {
         if (this.splitCooldown) this.splitCooldown--;
-        if (((this.tickCounter + 3) % 25) === 0) this.decide(this.largest(this.cells)); // Action
+        if ((this.gameServer.tickCounter % 25) == 0) this.decide(this.largest(this.cells)); // Action
     }
     decide(cell) {
         if (!cell) return; // Cell was eaten, check in the next tick (I'm too lazy)
