@@ -96,7 +96,7 @@ class BotPlayer extends PlayerTracker {
 
             // The farther they are the smaller influnce it is
             if (distance < 1) distance = 1; // Avoid NaN and positive influence with negative distance & attraction
-            influence = distance;
+            influence = distance / 2;
 
             // Splitting conditions
             if (check.cellType == 0 && cell._size > check._size * 1.15
@@ -108,13 +108,7 @@ class BotPlayer extends PlayerTracker {
                 return this.socket.packetHandler.pressSpace = true;
             } else {
                 // Produce force vector exerted by this entity on the cell
-                
-                this.mouse = new Vec2(
-                    cell.position.x + displacement.x * 800,
-                    cell.position.y + displacement.y * 800
-                );
-                return;
-                //result.add(displacement.normalize(), influence);
+                result.add(displacement.normalize(), influence);
             }
         }
         // Set bot's mouse position
