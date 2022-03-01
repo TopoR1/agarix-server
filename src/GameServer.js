@@ -1311,7 +1311,7 @@ class GameServer {
         let spectatePlayers = 0;
         for (let i = 0, len = this.clients.length; i < len; i++) {
             const socket = this.clients[i];
-            if (!socket || !socket.isConnected || socket.playerTracker.isMi)
+            if (!socket || socket.playerTracker.isMi) // !socket.isConnected ||
                 continue;
             totalPlayers++;
             if (socket.playerTracker.cells.length) alivePlayers++;
