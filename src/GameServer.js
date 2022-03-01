@@ -1315,7 +1315,7 @@ class GameServer {
                 continue;
             totalPlayers++;
             if (socket.playerTracker.cells.length) alivePlayers++;
-            else spectatePlayers++;
+            if (socket.playerTracker.spectate) spectatePlayers++;
         }
         const s = {
             'server_name': this.config.serverName,
