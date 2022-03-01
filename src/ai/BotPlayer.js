@@ -108,7 +108,13 @@ class BotPlayer extends PlayerTracker {
                 return this.socket.packetHandler.pressSpace = true;
             } else {
                 // Produce force vector exerted by this entity on the cell
-                result.add(displacement.normalize(), influence);
+                
+                this.mouse = new Vec2(
+                    cell.position.x + displacement.x * 800,
+                    cell.position.y + displacement.y * 800
+                );
+                return;
+                //result.add(displacement.normalize(), influence);
             }
         }
         // Set bot's mouse position
