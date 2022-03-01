@@ -96,7 +96,7 @@ class BotPlayer extends PlayerTracker {
 
             // The farther they are the smaller influnce it is
             if (distance < 1) distance = 1; // Avoid NaN and positive influence with negative distance & attraction
-            influence /= distance;
+            influence = distance;
 
             // Splitting conditions
             if (check.cellType == 0 && cell._size > check._size * 1.15
