@@ -29,7 +29,7 @@ class BotPlayer extends PlayerTracker {
     }
     sendUpdate() {
         if (this.splitCooldown) this.splitCooldown--;
-        this.decide(this.largest(this.cells)); // Action
+        if (((this.tickCounter + 3) % 25) === 0) this.decide(this.largest(this.cells)); // Action
     }
     decide(cell) {
         if (!cell) return; // Cell was eaten, check in the next tick (I'm too lazy)
