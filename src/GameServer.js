@@ -1297,7 +1297,7 @@ class GameServer {
         });
 
         const getStatsBind = this.getStats.bind(this);
-        this.httpServer.listen(port, '0.0.0.0',function() {
+        this.httpServer.listen(port, '::',function() {
             // Stats server
             Logger.info(`Started stats server on port ${port}`);
             setInterval(getStatsBind, this.config.serverStatsUpdate * 1000);
