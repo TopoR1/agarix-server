@@ -268,10 +268,10 @@ class GameServer {
             ws.close();
             return;
         };*/
-        console.log('new con')
-        console.log(req.socket.remoteAddress)
-        console.log(ws._socket.remoteAddress)
-        console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
+        //console.log('new con')
+        //console.log(req.socket.remoteAddress)
+        //console.log(ws._socket.remoteAddress)
+        //console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
         const logip = `${ws._socket.remoteAddress}:${ws._socket.remotePort}`;
         ws.on('error', (err) => {
             Logger.writeError(`[${logip}] ${err.stack}`);
@@ -286,10 +286,9 @@ class GameServer {
             let ipConnections = 0;
 
             for (const socket of this.clients) {
-                if (!socket.isConnected || socket.remoteAddress != ws._socket.remoteAddress)
+                if (!socket.isConnected || socket.remoteAddress != (req.headers['x-forwarded-for'] || req.connection.remoteAddress))
                     continue;
                 
-                //console.log(ws._socket)
                 ipConnections++;
             }
 
@@ -312,7 +311,7 @@ class GameServer {
         }*/
 
         ws.isConnected = true;
-        ws.remoteAddress = ws._socket.remoteAddress;
+        ws.remoteAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress; //ws._socket.remoteAddress;
         ws.remotePort = ws._socket.remotePort;
         ws.lastAliveTime = Date.now();
         Logger.write(
