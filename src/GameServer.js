@@ -262,11 +262,12 @@ class GameServer {
         process.exit(1); // Exits the program
     }
 
-    onClientSocketOpen(ws) {
+    onClientSocketOpen(ws, req) {
         /*if (this.ipTokens[ws._socket.remoteAddress] != ws.upgradeReq.url.substr(1)) {
             ws.close();
             return;
         };*/
+        console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
         const logip = `${ws._socket.remoteAddress}:${ws._socket.remotePort}`;
         ws.on('error', (err) => {
             Logger.writeError(`[${logip}] ${err.stack}`);
@@ -284,7 +285,7 @@ class GameServer {
                 if (!socket.isConnected || socket.remoteAddress != ws._socket.remoteAddress)
                     continue;
                 
-                console.log(ws._socket)
+                //console.log(ws._socket)
                 ipConnections++;
             }
 
