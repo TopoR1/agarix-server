@@ -283,6 +283,8 @@ class GameServer {
             for (const socket of this.clients) {
                 if (!socket.isConnected || socket.remoteAddress != ws._socket.remoteAddress)
                     continue;
+                
+                console.log(ws._socket.remoteAddress)
                 ipConnections++;
             }
 
