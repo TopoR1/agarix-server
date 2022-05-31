@@ -263,11 +263,15 @@ class GameServer {
     }
 
     onClientSocketOpen(ws, req) {
+        req = req || ws.upgradeReq;
         /*if (this.ipTokens[ws._socket.remoteAddress] != ws.upgradeReq.url.substr(1)) {
             ws.close();
             return;
         };*/
-        console.log(req)
+        console.log('new con')
+        console.log(req.socket.remoteAddress)
+        console.log(ws._socket.remoteAddress)
+        console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
         const logip = `${ws._socket.remoteAddress}:${ws._socket.remotePort}`;
         ws.on('error', (err) => {
             Logger.writeError(`[${logip}] ${err.stack}`);
