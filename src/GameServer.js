@@ -267,7 +267,7 @@ class GameServer {
             ws.close();
             return;
         };*/
-        console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress)
+        console.log(req)
         const logip = `${ws._socket.remoteAddress}:${ws._socket.remotePort}`;
         ws.on('error', (err) => {
             Logger.writeError(`[${logip}] ${err.stack}`);
