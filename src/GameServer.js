@@ -284,7 +284,7 @@ class GameServer {
                 if (!socket.isConnected || socket.remoteAddress != ws._socket.remoteAddress)
                     continue;
                 
-                console.log(ws._socket.remoteAddress)
+                console.log(ws._socket)
                 ipConnections++;
             }
 
