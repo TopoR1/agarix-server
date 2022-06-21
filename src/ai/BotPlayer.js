@@ -24,7 +24,7 @@ class BotPlayer extends PlayerTracker {
             // return this.isRemoved = true;
         }
         // Respawn if bot is dead
-        if (!this.cells.length)
+        if (!this.cells.length && (this.gameServer.tickCounter % 250) == 0)
             this.gameServer.gameMode.onPlayerSpawn(this.gameServer, this);
     }
     sendUpdate() {
