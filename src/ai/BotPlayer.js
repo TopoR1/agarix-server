@@ -24,12 +24,12 @@ class BotPlayer extends PlayerTracker {
             // return this.isRemoved = true;
         }
         // Respawn if bot is dead
-        if (!this.cells.length && (this.gameServer.tickCounter % 250) == 0)
+        if (!this.cells.length)
             this.gameServer.gameMode.onPlayerSpawn(this.gameServer, this);
     }
     sendUpdate() {
         if (this.splitCooldown) this.splitCooldown--;
-        if ((this.gameServer.tickCounter % 10) == 0) this.decide(this.largest(this.cells)); // Action
+        this.decide(this.largest(this.cells)); // Action
     }
     decide(cell) {
         if (!cell) return; // Cell was eaten, check in the next tick (I'm too lazy)
@@ -96,7 +96,7 @@ class BotPlayer extends PlayerTracker {
 
             // The farther they are the smaller influnce it is
             if (distance < 1) distance = 1; // Avoid NaN and positive influence with negative distance & attraction
-            //influence = distance / 4;
+            influence /= distance;
 
             // Splitting conditions
             if (check.cellType == 0 && cell._size > check._size * 1.15
